@@ -11,6 +11,7 @@
   position: absolute;
   width: 150rpx;
   height: 150rpx;
+  box-sizing: border-box; /* 边框算进宽高,避免占位超出坐标间距 */
   background: #fff7e0;
   border: 6rpx solid #ffd54f;
   border-radius: 32rpx;

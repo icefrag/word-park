@@ -1,25 +1,26 @@
-/* 翻牌配对:绝对定位棋盘(坐标 JS 计算),不依赖 flex/grid */
+/* 翻牌配对:绝对定位棋盘(坐标 JS 计算),3 列排布 3+3+2 */
 .match-board {
   position: relative;
 }
 .match-cell {
   position: absolute;
-  width: 150rpx;
-  height: 150rpx;
+  width: 170rpx;
+  height: 170rpx;
+  box-sizing: border-box; /* 边框算进宽高,避免占位超出坐标间距 */
   background: #fff7e0;
   border: 6rpx solid #ffd54f;
-  border-radius: 32rpx;
+  border-radius: 36rpx;
   text-align: center;
-  line-height: 150rpx;
+  line-height: 170rpx;
 }
 .match-cell.open {
   background: #fff;
   border-color: #7ed957;
 }
 .match-char {
-  font-size: 84rpx;
+  font-size: 96rpx;
   color: #333;
 }
 .match-back {
-  font-size: 64rpx;
+  font-size: 72rpx;
 }

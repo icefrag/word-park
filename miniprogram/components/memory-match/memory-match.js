@@ -39,23 +39,25 @@ Component({
 
   methods: {
     buildView() {
-      // 8 张牌 2 行×4 列,坐标算死:每张 150rpx、间距 16rpx,总宽 648rpx
-      const CELL = 150
-      const GAP = 16
+      // 8 张牌 3 列排布(3+3+2),坐标算死:每张 170rpx、间距 20rpx,总宽 550rpx
+      const CELL = 170
+      const GAP = 20
+      const COLS = 3
       const cells = this.data.cards.map((c, i) => {
-        const row = Math.floor(i / 4)
-        const col = i % 4
+        const row = Math.floor(i / COLS)
+        const col = i % COLS
         return {
           key: c.key,
           char: c.data.char,
           kind: c.kind,
           image: imageOf(c.data),
           i,
-          left: col * (CELL + GAP),
+          // 末行只有 2 张时整体右移半格,视觉居中
+          left: col * (CELL + GAP) + (row === 2 ? (CELL + GAP) / 2 : 0),
           top: row * (CELL + GAP),
         }
       })
-      this.setData({ cells, boardW: 4 * CELL + 3 * GAP, boardH: 2 * CELL + GAP })
+      this.setData({ cells, boardW: 3 * CELL + 2 * GAP, boardH: 3 * CELL + 2 * GAP })
     },
 
     // 重播本界面指令语音
