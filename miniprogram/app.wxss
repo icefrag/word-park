@@ -124,6 +124,9 @@ button::after {
   width: 100%;
   height: 100vh;
   gap: 48rpx;
+  /* 底部留出喇叭按钮专属区(176rpx 高 + 48rpx 边距),避免内容与其重叠 */
+  padding-bottom: 224rpx;
+  box-sizing: border-box;
 }
 
 .attribution {
