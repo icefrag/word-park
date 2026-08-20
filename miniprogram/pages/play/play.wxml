@@ -1,0 +1,9 @@
+<!-- 关卡容器:按当前轮玩法类型条件渲染对应组件,切换时组件销毁重建 -->
+<flash-card wx:if="{{round.type === 'flashcard'}}" chars="{{round.props.chars}}" bind:complete="onRoundComplete" />
+<quiz-picture wx:elif="{{round.type === 'pic2char'}}" questions="{{round.props.questions}}" bind:complete="onRoundComplete" />
+<quiz-sound wx:elif="{{round.type === 'sound2char'}}" questions="{{round.props.questions}}" bind:complete="onRoundComplete" />
+<quiz-findall wx:elif="{{round.type === 'findall'}}" grids="{{round.props.grids}}" bind:complete="onRoundComplete" />
+<memory-match wx:elif="{{round.type === 'match'}}" cards="{{round.props.cards}}" bind:complete="onRoundComplete" />
+<bubble-pop wx:elif="{{round.type === 'bubble'}}" targets="{{round.props.targets}}" bind:complete="onRoundComplete" />
+<whack-mole wx:elif="{{round.type === 'whack'}}" targets="{{round.props.targets}}" bind:complete="onRoundComplete" />
+<link-match wx:elif="{{round.type === 'link'}}" cards="{{round.props.cards}}" bind:complete="onRoundComplete" />

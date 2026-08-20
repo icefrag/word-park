@@ -1,0 +1,17 @@
+<view class="center full" style="position: relative; overflow: hidden">
+  <view style="font-size: 64rpx; color: #2c6e49; z-index: 1">
+    点泡泡:<text class="char-display" style="font-size: 108rpx">{{score}}</text> / {{targets.length}}
+  </view>
+  <button
+    wx:for="{{bubbles}}"
+    wx:key="id"
+    class="bubble {{wrongId === item.id ? 'shake' : ''}}"
+    style="left: {{item.left}}%; animation-duration: {{item.dur}}s"
+    data-id="{{item.id}}"
+    bindtap="pop"
+  >
+    {{item.char}}
+  </button>
+  <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
+  <button class="speaker-btn" bindtap="speakTarget">🔊</button>
+</view>

@@ -1,0 +1,363 @@
+/* 全局样式:由网页版 global.css 移植,尺寸 px→rpx(×2)适配手机 */
+page {
+  margin: 0;
+  padding: 0;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(180deg, #aee3ff 0%, #d8f7d8 100%);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 重置小程序 button 默认样式 */
+button {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  line-height: inherit;
+  font-weight: inherit;
+  border-radius: 0;
+}
+button::after {
+  border: none;
+}
+
+.big-btn {
+  min-width: 320rpx;
+  min-height: 192rpx;
+  font-size: 64rpx;
+  color: #fff;
+  background: linear-gradient(180deg, #ffb340, #ff8c1a);
+  border: 8rpx solid #fff;
+  border-radius: 64rpx;
+  box-shadow: 0 16rpx 0 #d96f00;
+  transition: transform 0.1s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.big-btn:active {
+  transform: translateY(12rpx);
+  box-shadow: 0 4rpx 0 #d96f00;
+}
+.big-btn[disabled] {
+  filter: grayscale(0.8);
+}
+.big-btn.green {
+  background: linear-gradient(180deg, #7ed957, #4caf50);
+  box-shadow: 0 16rpx 0 #2e7d32;
+}
+
+.card {
+  background: #fff;
+  border-radius: 64rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.12);
+}
+
+.speaker-btn {
+  position: absolute;
+  right: 48rpx;
+  bottom: 48rpx;
+  width: 176rpx;
+  height: 176rpx;
+  font-size: 96rpx;
+  background: #fff;
+  border: 8rpx solid #ffd54f;
+  border-radius: 50%;
+  box-shadow: 0 12rpx 0 #c9a227;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.char-display {
+  font-size: 288rpx;
+  line-height: 1.1;
+  color: #333;
+}
+
+.cell-btn {
+  width: 260rpx;
+  height: 260rpx;
+  background: #fff7e0;
+  border: 6rpx solid #ffd54f;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -280rpx;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff 12%, #ffd54f 40%, #ffb340 100%);
+  border: 8rpx solid #fff;
+  font-size: 115rpx;
+  color: #7a4b00;
+  animation: float-up linear forwards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star {
+  color: #ffc400;
+  font-size: 70rpx;
+  text-shadow: 0 4rpx 0 #b8860b;
+}
+.star.empty {
+  color: #d9d9d9;
+  text-shadow: none;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.full {
+  width: 100%;
+  height: 100vh;
+  gap: 48rpx;
+}
+
+.attribution {
+  position: absolute;
+  bottom: 16rpx;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-20rpx); }
+  75% { transform: translateX(20rpx); }
+}
+.shake { animation: shake 0.4s; }
+
+@keyframes pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pop { animation: pop 0.4s ease-out; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-28rpx); }
+}
+.bounce { animation: bounce 1.2s ease-in-out infinite; }
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-78vh) scale(1.1); opacity: 0.9; }
+}
+
+.confetti {
+  position: absolute;
+  top: -40rpx;
+  width: 32rpx;
+  height: 48rpx;
+  animation: confetti-fall 2.6s linear infinite;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-60rpx) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0.7; }
+}
+
+/* 打地鼠:3x3 九宫格草地洞 */
+.mole-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28rpx;
+  width: 92vw;
+  z-index: 1;
+}
+.hole {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 56rpx;
+  background: linear-gradient(180deg, #a5d66a, #7cb342);
+  border: 8rpx solid #fff;
+  box-shadow: 0 12rpx 0 #558b2f;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.hole::before {
+  /* 洞口 */
+  content: '';
+  position: absolute;
+  bottom: 4%;
+  width: 76%;
+  height: 24%;
+  background: #4e342e;
+  border-radius: 50%;
+  box-shadow: inset 0 16rpx 24rpx rgba(0, 0, 0, 0.5);
+}
+.mole-btn {
+  position: relative;
+  width: 86%;
+  height: 90%;
+  margin-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4rpx;
+  animation: mole-up 0.25s ease-out;
+}
+.mole-face {
+  font-size: 96rpx;
+  line-height: 1.1;
+}
+.mole-char {
+  font-size: 76rpx;
+  font-weight: bold;
+  color: #5d4037;
+  background: #fff;
+  border: 6rpx solid #ffd54f;
+  border-radius: 24rpx;
+  padding: 4rpx 20rpx;
+  line-height: 1.3;
+}
+.hammer {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  font-size: 96rpx;
+  z-index: 2;
+  pointer-events: none;
+  animation: hammer-hit 0.5s ease-out;
+}
+@keyframes mole-up {
+  0% { transform: translateY(110%); }
+  100% { transform: translateY(0); }
+}
+@keyframes hammer-hit {
+  0% { transform: translate(-50%, -32rpx) rotate(-70deg); opacity: 0; }
+  40% { transform: translate(-50%, 16rpx) rotate(-10deg); opacity: 1; }
+  100% { transform: translate(-50%, -12rpx) rotate(-30deg); opacity: 0; }
+}
+
+/* 答对时星星迸发粒子 */
+.star-burst {
+  position: fixed;
+  left: 50%;
+  top: 40%;
+  font-size: 128rpx;
+  pointer-events: none;
+  z-index: 50;
+  animation: star-burst 0.7s ease-out forwards;
+}
+@keyframes star-burst {
+  0% { transform: translate(-50%, 0) scale(0.3); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(-50%, -240rpx) scale(1.4); opacity: 0; }
+}
+
+/* 单元地图:已认字进度条 */
+.learned-bar {
+  width: 92vw;
+  background: #fff;
+  border-radius: 999rpx;
+  padding: 16rpx 48rpx 24rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 42rpx;
+  color: #2c6e49;
+}
+.learned-bar .track {
+  height: 28rpx;
+  border-radius: 999rpx;
+  background: #e8f5e9;
+  overflow: hidden;
+  margin-top: 12rpx;
+}
+.learned-bar .fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #7ed957, #4caf50);
+  transition: width 0.4s;
+}
+
+/* 单元地图:17 个单元的滚动网格,每行最多 4 个 */
+.unit-scroll {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  padding: 8rpx 24rpx;
+}
+.unit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  gap: 32rpx;
+}
+.unit-btn {
+  flex: 0 1 calc(25% - 24rpx);
+  min-width: 300rpx;
+  min-height: 220rpx;
+  font-size: 52rpx;
+}
+.unit-btn .star {
+  font-size: 48rpx;
+}
+
+/* 连连看:左字右图两列连线配对 */
+.link-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 100rpx;
+}
+.link-col-char,
+.link-col-img {
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+.link-card {
+  position: relative;
+  width: 280rpx;
+  height: 280rpx;
+  background: #fff;
+  border: 6rpx solid #ffd54f;
+  border-radius: 48rpx;
+  box-shadow: 0 12rpx 0 #e0b93f;
+  transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
+}
+.link-card:active {
+  transform: translateY(8rpx);
+  box-shadow: 0 4rpx 0 #e0b93f;
+}
+.link-card.selected {
+  border-color: #ff8c1a;
+  box-shadow: 0 0 0 12rpx rgba(255, 180, 64, 0.4);
+}
+.link-card.done {
+  background: #e2f7d8;
+  border-color: #7ed957;
+  box-shadow: none;
+  opacity: 0.35;
+}
+.link-card.done::after {
+  /* 右上角对勾角标 */
+  content: '✔';
+  position: absolute;
+  top: 4rpx;
+  right: 20rpx;
+  font-size: 64rpx;
+  color: #2e7d32;
+}

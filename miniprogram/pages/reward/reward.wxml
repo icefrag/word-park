@@ -1,0 +1,15 @@
+<view class="center full" style="position: relative; overflow: hidden">
+  <view
+    wx:for="{{confetti}}"
+    wx:key="index"
+    class="confetti"
+    style="left: {{item.left}}%; background: {{item.color}}; animation-delay: {{item.delay}}s"
+  ></view>
+  <image class="bounce" src="{{pandaImage}}" mode="aspectFit" style="width: 400rpx; height: 400rpx; z-index: 1" />
+  <view style="font-size: 96rpx; color: #2c6e49; z-index: 1">{{theme}} 过关啦!</view>
+  <view style="z-index: 1">
+    <text wx:for="{{[1, 2, 3]}}" wx:for-item="s" wx:key="*this" class="star pop {{s > stars ? 'empty' : ''}}" style="font-size: 128rpx">★</text>
+  </view>
+  <button class="big-btn green" style="z-index: 1" bindtap="back">回到地图</button>
+  <button class="speaker-btn" bindtap="speak">🔊</button>
+</view>

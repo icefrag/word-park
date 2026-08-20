@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/map/map",
+    "pages/play/play",
+    "pages/reward/reward"
+  ],
+  "window": {
+    "navigationBarTitleText": "汉字小乐园",
+    "navigationBarBackgroundColor": "#aee3ff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#d8f7d8",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

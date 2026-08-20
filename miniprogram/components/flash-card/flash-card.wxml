@@ -1,0 +1,10 @@
+<view class="center full">
+  <view wx:if="{{showCard}}" class="card center pop" style="padding: 80rpx 144rpx; gap: 24rpx" bindtap="speak">
+    <view class="char-display">{{chars[idx].char}}</view>
+    <view style="font-size: 44rpx; color: #888">{{chars[idx].pinyin}}</view>
+    <image class="bounce" src="{{image}}" mode="aspectFit" style="width: 400rpx; height: 400rpx" />
+    <view style="font-size: 64rpx; color: #444">{{chars[idx].word}}的{{chars[idx].char}}</view>
+  </view>
+  <button class="big-btn" bindtap="next">{{idx < chars.length - 1 ? '下一个' : '学完啦'}}</button>
+  <button class="speaker-btn" bindtap="speak">🔊</button>
+</view>

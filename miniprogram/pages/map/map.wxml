@@ -1,0 +1,38 @@
+<view class="center full">
+  <view style="font-size: 76rpx; color: #2c6e49">选一关开始吧</view>
+  <!-- 已认字进度条:learned 为已通关单元的字数和 -->
+  <view class="learned-bar">
+    <view>已认字 {{learned}}/{{total}}</view>
+    <view class="track">
+      <view class="fill" style="width: {{learnedPct}}%"></view>
+    </view>
+  </view>
+  <!-- 17 个单元一屏放不下,外层滚动容器 -->
+  <scroll-view class="unit-scroll" scroll-y>
+    <view class="unit-grid">
+      <button
+        wx:for="{{units}}"
+        wx:key="id"
+        class="big-btn unit-btn {{item.green ? 'green' : ''}}"
+        disabled="{{item.locked}}"
+        data-id="{{item.id}}"
+        bindtap="play"
+      >
+        <view style="font-size: 36rpx">第{{item.id}}单元</view>
+        <view style="font-size: 40rpx">{{item.theme}}</view>
+        <view>
+          <text wx:for="{{[1, 2, 3]}}" wx:for-item="s" wx:key="*this" class="star {{s > item.stars ? 'empty' : ''}}">★</text>
+        </view>
+        <view wx:if="{{item.locked}}" style="font-size: 64rpx">🔒</view>
+      </button>
+    </view>
+  </scroll-view>
+  <button
+    class="big-btn"
+    style="min-height: 128rpx; font-size: 40rpx; box-shadow: 0 12rpx 0 #d96f00"
+    bindtap="onReset"
+  >
+    重新开始(家长按钮)
+  </button>
+  <button class="speaker-btn" bindtap="speak">🔊</button>
+</view>

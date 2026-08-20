@@ -1,0 +1,18 @@
+<view class="center full">
+  <view style="font-size: 64rpx; color: #2c6e49">
+    找出所有的 <text class="char-display" style="font-size: 128rpx">{{grids[gi].target.char}}</text>
+  </view>
+  <view class="card" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32rpx; padding: 64rpx">
+    <button
+      wx:for="{{grids[gi].cells}}"
+      wx:key="index"
+      class="cell-btn {{wrongCell === index ? 'shake' : ''}} {{foundMap[index] ? 'found' : ''}}"
+      data-i="{{index}}"
+      bindtap="clickCell"
+    >
+      <text wx:if="{{foundMap[index]}}" class="star">★</text>
+      <text wx:else class="char-display" style="font-size: 128rpx">{{item}}</text>
+    </button>
+  </view>
+  <button class="speaker-btn" bindtap="repeat">🔊</button>
+</view>

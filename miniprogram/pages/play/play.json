@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "flash-card": "/components/flash-card/flash-card",
+    "quiz-picture": "/components/quiz-picture/quiz-picture",
+    "quiz-sound": "/components/quiz-sound/quiz-sound",
+    "quiz-findall": "/components/quiz-findall/quiz-findall",
+    "memory-match": "/components/memory-match/memory-match",
+    "bubble-pop": "/components/bubble-pop/bubble-pop",
+    "whack-mole": "/components/whack-mole/whack-mole",
+    "link-match": "/components/link-match/link-match"
+  }
+}

@@ -1,0 +1,21 @@
+<view class="center full">
+  <view style="font-size: 64rpx; color: #2c6e49; z-index: 1">
+    敲地鼠:<text class="char-display" style="font-size: 108rpx">{{score}}</text> / {{targets.length}}
+  </view>
+  <view class="mole-grid">
+    <view wx:for="{{moles}}" wx:key="index" class="hole">
+      <text wx:if="{{hammerIndex === index}}" class="hammer">🔨</text>
+      <button
+        wx:if="{{item}}"
+        class="mole-btn {{wrongIndex === index ? 'shake' : ''}}"
+        data-i="{{index}}"
+        bindtap="whack"
+      >
+        <text class="mole-face">🐭</text>
+        <text class="mole-char">{{item.char}}</text>
+      </button>
+    </view>
+  </view>
+  <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
+  <button class="speaker-btn" bindtap="speakTarget">🔊</button>
+</view>
