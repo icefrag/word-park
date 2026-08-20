@@ -1,4 +1,4 @@
-/* 找一找:九宫格改 flex 换行(grid 在部分环境列塌缩),3 列自动排布 */
+/* 找一找:九宫格 flex 换行(3 列),格子 160rpx 单屏装下 */
 .findall-card {
   width: 100%;
   box-sizing: border-box;
@@ -9,11 +9,11 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 24rpx;
-  padding: 32rpx;
+  padding: 24rpx;
   box-sizing: border-box;
 }
 .findall-char {
-  font-size: 96rpx;
+  font-size: 80rpx;
   line-height: 1.1;
   color: #333;
 }

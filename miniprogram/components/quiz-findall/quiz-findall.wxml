@@ -11,7 +11,7 @@
         data-i="{{index}}"
         bindtap="clickCell"
       >
-        <text wx:if="{{foundMap[index]}}" class="star" style="font-size: 80rpx">★</text>
+        <text wx:if="{{foundMap[index]}}" class="star" style="font-size: 64rpx">★</text>
         <text wx:else class="findall-char">{{item}}</text>
       </button>
     </view>

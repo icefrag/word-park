@@ -4,8 +4,8 @@ page {
   padding: 0;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   background: linear-gradient(180deg, #aee3ff 0%, #d8f7d8 100%);
-  /* 不设固定高度:page 锁高会让超屏内容无法滚动(小程序特殊行为) */
-  overflow-x: hidden;
+  /* 单屏游戏:锁定滚动(各玩法尺寸已按最小主流屏高核算,内容不超屏) */
+  overflow: hidden;
 }
 
 /* 重置小程序 button 默认样式 */
@@ -100,11 +100,11 @@ button::after {
 }
 
 .cell-btn {
-  width: 200rpx;
-  height: 200rpx;
+  width: 160rpx;
+  height: 160rpx;
   background: #fff7e0;
   border: 6rpx solid #ffd54f;
-  border-radius: 48rpx;
+  border-radius: 40rpx;
   display: flex;
   align-items: center;
   justify-content: center;
