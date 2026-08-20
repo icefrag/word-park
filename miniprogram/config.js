@@ -1,7 +1,5 @@
-// 素材基地址:
-// - 开发期(模拟器):本地包内 '/assets'
-// - 素材上传云存储后:改为云存储 HTTPS 直链前缀,如 'https://<envId>.tcb.qcloud.la/assets'
-//   (云开发控制台 -> 存储 -> 权限设置 -> 所有用户可读,即可用该直链访问)
-const ASSET_BASE = '/assets'
+// 素材基地址:已上传云存储(权限:所有用户可读),HTTPS 直链访问
+// 云开发控制台 -> 存储 -> 文件详情的下载地址,取到 /assets 为止的前缀
+const ASSET_BASE = 'https://636c-cloudbase-d8gyy2qjqef096442-1471843187.tcb.qcloud.la/assets'
 
 module.exports = { ASSET_BASE }

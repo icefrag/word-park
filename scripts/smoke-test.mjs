@@ -31,7 +31,8 @@ const { CHARACTERS, TOTAL_UNITS, imageOf, byUnit, assetName } = require('./chara
 check('100 字', CHARACTERS.length === 100)
 check('17 个单元', TOTAL_UNITS === 17 && byUnit(17).length === 7)
 check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 100)
-check('每字都有图', CHARACTERS.every((c) => existsSync(join(__dirname, '../miniprogram', imageOf(c)))))
+// 素材已上云:本地仅验证 URL 格式与命名;云端可达性由 curl 抽查
+check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png$/.test(imageOf(c))))
 
 // --- levels ---
 const { LEVELS } = require('./levels')
@@ -72,11 +73,13 @@ check('重置回到起点', !isUnlocked(2))
 
 // --- audio ---
 const { fileUrl } = require('./audio')
-const audioDir = join(__dirname, '../miniprogram/assets/audio')
-const audioFiles = new Set(readdirSync(audioDir))
 const names = ['日', '日-word', 'voice-welcome', 'voice-praise-1', 'sfx-correct', 'voice-instr-whack', 'voice-try-again', 'voice-level-complete']
-check('音频 URL 与实际文件对应', names.every((n) => audioFiles.has(fileUrl(n).split('/').pop())))
-check('文件名全 ASCII', [...audioFiles].every((f) => /^[\x20-\x7e]+$/.test(f)) && assetName('日-word') === '65e5-word')
+check('音频 URL 命名正确', names.every((n) => {
+  const url = fileUrl(n)
+  return /^https:\/\/.+\/assets\/audio\/[0-9a-z-]+\.wav$/.test(url) &&
+    (n === '日' ? url.endsWith('/65e5.wav') : n === '日-word' ? url.endsWith('/65e5-word.wav') : url.endsWith(`/${n}.wav`))
+}))
+check('文件名全 ASCII', assetName('日-word') === '65e5-word')
 
 console.log(failed === 0 ? '\n全部通过' : `\n${failed} 项失败`)
 process.exit(failed === 0 ? 0 : 1)
