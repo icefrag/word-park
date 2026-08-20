@@ -30,3 +30,9 @@
   font-size: 60rpx;
   color: #ffc400;
 }
+
+/* view 卡片的按压反馈(替代 button 原生 :active) */
+.cell-hover {
+  transform: scale(0.94);
+  opacity: 0.9;
+}

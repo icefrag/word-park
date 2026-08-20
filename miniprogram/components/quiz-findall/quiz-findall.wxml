@@ -4,17 +4,18 @@
   </view>
   <view class="card findall-card">
     <view class="findall-board" style="width: {{boardW}}rpx; height: {{boardH}}rpx">
-      <button
+      <view
         wx:for="{{cells}}"
         wx:key="i"
         class="findall-cell {{wrongCell === item.i ? 'shake' : ''}} {{foundMap[item.i] ? 'found' : ''}}"
         style="left: {{item.left}}rpx; top: {{item.top}}rpx"
         data-i="{{item.i}}"
         bindtap="clickCell"
+        hover-class="cell-hover"
       >
         <text wx:if="{{foundMap[item.i]}}" class="findall-star">★</text>
         <text wx:else class="findall-char">{{item.ch}}</text>
-      </button>
+      </view>
     </view>
   </view>
   <button class="speaker-btn" bindtap="repeat">🔊</button>

@@ -1,20 +1,21 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">字和图片配成一对</view>
   <view class="match-board" style="width: {{boardW}}rpx; height: {{boardH}}rpx">
-    <button
+    <view
       wx:for="{{cells}}"
       wx:key="i"
       class="match-cell {{flippedMap[item.i] || matchedMap[item.char] ? 'open' : ''}} {{wrongPairMap[item.i] ? 'shake' : ''}}"
       style="left: {{item.left}}rpx; top: {{item.top}}rpx"
       data-cell="{{item}}"
       bindtap="flip"
+      hover-class="cell-hover"
     >
       <block wx:if="{{flippedMap[item.i] || matchedMap[item.char]}}">
         <image wx:if="{{item.kind === 'image'}}" src="{{item.image}}" mode="aspectFit" class="match-img" />
         <text wx:else class="match-char">{{item.char}}</text>
       </block>
       <text wx:else class="match-back">🐼</text>
-    </button>
+    </view>
   </view>
   <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
   <button class="speaker-btn" bindtap="speak">🔊</button>

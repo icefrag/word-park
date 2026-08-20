@@ -2,26 +2,28 @@
   <view style="font-size: 64rpx; color: #2c6e49">把字和图片连起来</view>
   <view class="link-board">
     <view class="link-col">
-      <button
+      <view
         wx:for="{{charCards}}"
         wx:key="key"
         class="link-card {{selected === item.key ? 'selected' : ''}} {{matchedMap[item.char] ? 'done' : ''}} {{wrongPairMap[item.key] ? 'shake' : ''}}"
         data-card="{{item}}"
         bindtap="pickChar"
+        hover-class="cell-hover"
       >
         <text class="link-char">{{item.char}}</text>
-      </button>
+      </view>
     </view>
     <view class="link-col">
-      <button
+      <view
         wx:for="{{imgCards}}"
         wx:key="key"
         class="link-card {{matchedMap[item.char] ? 'done' : ''}} {{wrongPairMap[item.key] ? 'shake' : ''}}"
         data-card="{{item}}"
         bindtap="pickImage"
+        hover-class="cell-hover"
       >
         <image src="{{item.image}}" mode="aspectFit" class="link-img" />
-      </button>
+      </view>
     </view>
   </view>
   <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
