@@ -69,6 +69,27 @@ button::after {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
+}
+.speaker-btn:active {
+  transform: scale(0.92);
+}
+/* 涟漪光环:向外扩散提示"可以点我重听" */
+.speaker-btn::after {
+  content: '';
+  position: absolute;
+  left: -8rpx;
+  top: -8rpx;
+  right: -8rpx;
+  bottom: -8rpx;
+  border: 6rpx solid rgba(255, 213, 79, 0.85);
+  border-radius: 50%;
+  animation: speaker-ripple 2s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes speaker-ripple {
+  0% { transform: scale(0.92); opacity: 0.85; }
+  100% { transform: scale(1.45); opacity: 0; }
 }
 
 .char-display {

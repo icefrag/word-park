@@ -1,1 +1,25 @@
-/* 识字卡样式复用 app.wxss 全局类 */
+/* 识字卡"下一个"按钮:胶囊形 + 光泽渐变 + 轻微呼吸动画吸引点击 */
+.next-btn {
+  min-width: 420rpx;
+  min-height: 150rpx;
+  padding: 0 80rpx;
+  font-size: 56rpx;
+  color: #fff;
+  background: linear-gradient(180deg, #ffd24d 0%, #ff9f1a 55%, #ff8c1a 100%);
+  border: 6rpx solid #fff;
+  border-radius: 999rpx;
+  box-shadow: 0 14rpx 0 #d96f00, 0 24rpx 48rpx rgba(217, 111, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: next-breathe 2s ease-in-out infinite;
+}
+.next-btn:active {
+  animation: none;
+  transform: translateY(10rpx);
+  box-shadow: 0 4rpx 0 #d96f00;
+}
+@keyframes next-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
