@@ -1,35 +1,31 @@
-/* 找一找:JS 切行(3 行×3 列),样式全部自包含不依赖全局类 */
+/* 找一找:绝对定位棋盘(坐标 JS 计算),不依赖 flex/grid */
 .findall-card {
-  width: 100%;
-  box-sizing: border-box;
   border-radius: 48rpx;
-  padding: 16rpx;
+  padding: 20rpx;
 }
-.findall-row {
-  display: flex;
-  justify-content: center;
+.findall-board {
+  position: relative;
+  margin: 0 auto;
 }
 .findall-cell {
-  width: 160rpx;
-  height: 160rpx;
-  margin: 8rpx;
-  /* 行内块兜底:即使 flex 异常也保持横排 */
-  display: inline-block;
-  text-align: center;
-  line-height: 160rpx;
+  position: absolute;
+  width: 150rpx;
+  height: 150rpx;
   background: #fff7e0;
   border: 6rpx solid #ffd54f;
-  border-radius: 40rpx;
+  border-radius: 32rpx;
+  text-align: center;
+  line-height: 150rpx;
 }
 .findall-cell.found {
   background: #e2f7d8;
   border-color: #7ed957;
 }
 .findall-char {
-  font-size: 80rpx;
+  font-size: 76rpx;
   color: #333;
 }
 .findall-star {
-  font-size: 64rpx;
+  font-size: 60rpx;
   color: #ffc400;
 }

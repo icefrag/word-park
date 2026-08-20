@@ -7,7 +7,9 @@ Component({
   },
 
   data: {
-    rows: [], // 视图模型切 2 行×4 列:[{key, char, kind, image, i}] — 行结构保证横排
+    cells: [], // 视图模型:{key, char, kind, image, i, left, top} — 绝对定位坐标,布局不依赖任何 flex/grid
+    boardW: 0,
+    boardH: 0,
     flippedMap: {}, // 已翻开卡片 index → true
     matchedMap: {}, // 已配对成功的 char → true
     wrongPairMap: {}, // 当前不匹配的两张牌 index → true(shake 抖动)
@@ -37,16 +39,23 @@ Component({
 
   methods: {
     buildView() {
-      const flat = this.data.cards.map((c, i) => ({
-        key: c.key,
-        char: c.data.char,
-        kind: c.kind,
-        image: imageOf(c.data),
-        i,
-      }))
-      const rows = []
-      for (let r = 0; r < 2; r++) rows.push(flat.slice(r * 4, r * 4 + 4))
-      this.setData({ rows })
+      // 8 张牌 2 行×4 列,坐标算死:每张 150rpx、间距 16rpx,总宽 648rpx
+      const CELL = 150
+      const GAP = 16
+      const cells = this.data.cards.map((c, i) => {
+        const row = Math.floor(i / 4)
+        const col = i % 4
+        return {
+          key: c.key,
+          char: c.data.char,
+          kind: c.kind,
+          image: imageOf(c.data),
+          i,
+          left: col * (CELL + GAP),
+          top: row * (CELL + GAP),
+        }
+      })
+      this.setData({ cells, boardW: 4 * CELL + 3 * GAP, boardH: 2 * CELL + GAP })
     },
 
     // 重播本界面指令语音

@@ -7,7 +7,9 @@ Component({
 
   data: {
     gi: 0,
-    rows: [], // 9 格切成 3 行×3 列:[{ch, i}] — 行结构保证任何环境都横排
+    cells: [], // 9 格视图模型:{ch, i, left, top} — 绝对定位坐标,布局不依赖任何 flex/grid
+    boardW: 0,
+    boardH: 0,
     foundMap: {}, // 已点中的格子下标 → true(WXML 不支持 indexOf,用对象查找)
     wrongCell: -1,
     gridDone: false,
@@ -31,7 +33,7 @@ Component({
   observers: {
     'grids, gi'() {
       this.calcTotal()
-      this.buildRows()
+      this.buildBoard()
     },
   },
 
@@ -42,16 +44,18 @@ Component({
       this.setData({ total: g.cells.filter((c) => c === g.target.char).length })
     },
 
-    buildRows() {
+    buildBoard() {
       const g = this.data.grids[this.data.gi]
       if (!g) return
-      const rows = []
-      for (let r = 0; r < 3; r++) {
-        rows.push(
-          g.cells.slice(r * 3, r * 3 + 3).map((ch, ci) => ({ ch, i: r * 3 + ci }))
-        )
-      }
-      this.setData({ rows })
+      // 9 格 3 行×3 列,坐标算死:每格 150rpx、间距 16rpx,总宽 482rpx
+      const CELL = 150
+      const GAP = 16
+      const cells = g.cells.map((ch, i) => {
+        const row = Math.floor(i / 3)
+        const col = i % 3
+        return { ch, i, left: col * (CELL + GAP), top: row * (CELL + GAP) }
+      })
+      this.setData({ cells, boardW: 3 * CELL + 2 * GAP, boardH: 3 * CELL + 2 * GAP })
     },
 
     repeat() {

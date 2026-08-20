@@ -1,17 +1,17 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">字和图片配成一对</view>
-  <view class="match-row" wx:for="{{rows}}" wx:key="index" wx:for-item="row">
+  <view class="match-board" style="width: {{boardW}}rpx; height: {{boardH}}rpx">
     <button
-      wx:for="{{row}}"
+      wx:for="{{cells}}"
       wx:key="i"
-      wx:for-item="cell"
-      class="match-cell {{flippedMap[cell.i] || matchedMap[cell.char] ? 'open' : ''}} {{wrongPairMap[cell.i] ? 'shake' : ''}}"
-      data-cell="{{cell}}"
+      class="match-cell {{flippedMap[item.i] || matchedMap[item.char] ? 'open' : ''}} {{wrongPairMap[item.i] ? 'shake' : ''}}"
+      style="left: {{item.left}}rpx; top: {{item.top}}rpx"
+      data-cell="{{item}}"
       bindtap="flip"
     >
-      <block wx:if="{{flippedMap[cell.i] || matchedMap[cell.char]}}">
-        <image wx:if="{{cell.kind === 'image'}}" src="{{cell.image}}" mode="aspectFit" style="width: 120rpx; height: 120rpx" />
-        <text wx:else class="match-char">{{cell.char}}</text>
+      <block wx:if="{{flippedMap[item.i] || matchedMap[item.char]}}">
+        <image wx:if="{{item.kind === 'image'}}" src="{{item.image}}" mode="aspectFit" style="width: 110rpx; height: 110rpx; vertical-align: middle" />
+        <text wx:else class="match-char">{{item.char}}</text>
       </block>
       <text wx:else class="match-back">🐼</text>
     </button>
