@@ -3,6 +3,9 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24rpx;
+  /* 显式宽度必需:grid 在 flex 子项中无 definite 宽度时 iOS 列计算塌掉 */
+  width: 100%;
+  justify-items: center;
 }
 .match-cell {
   width: 160rpx;
