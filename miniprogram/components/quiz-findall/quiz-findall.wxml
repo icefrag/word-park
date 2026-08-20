@@ -1,6 +1,6 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">
-    找出所有的 <text class="char-display" style="font-size: 128rpx">{{grids[gi].target.char}}</text>
+    找出所有的 <text class="char-display" style="font-size: 96rpx">{{grids[gi].target.char}}</text>
   </view>
   <view class="card" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24rpx; padding: 32rpx">
     <button

@@ -5,7 +5,9 @@ page {
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   background: linear-gradient(180deg, #aee3ff 0%, #d8f7d8 100%);
   height: 100%;
-  overflow: hidden;
+  /* 内容超屏时允许纵向滚动(找一找等在小屏机型会被裁),禁止横向滚动 */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* 重置小程序 button 默认样式 */
@@ -55,7 +57,7 @@ button::after {
 }
 
 .speaker-btn {
-  position: absolute;
+  position: fixed;
   right: 48rpx;
   bottom: 48rpx;
   width: 176rpx;
@@ -143,9 +145,18 @@ button::after {
 }
 .full {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   gap: 48rpx;
   /* 底部留出喇叭按钮专属区(176rpx 高 + 48rpx 边距),避免内容与其重叠 */
+  padding-bottom: 224rpx;
+  box-sizing: border-box;
+}
+
+/* 固定单屏容器(内容自带内部滚动区,页面不滚):单元地图用 */
+.full-fixed {
+  width: 100%;
+  height: 100vh;
+  gap: 48rpx;
   padding-bottom: 224rpx;
   box-sizing: border-box;
 }

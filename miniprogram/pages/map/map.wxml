@@ -1,4 +1,4 @@
-<view class="center full">
+<view class="center full-fixed">
   <view style="font-size: 76rpx; color: #2c6e49">选一关开始吧</view>
   <!-- 已认字进度条:learned 为已通关单元的字数和 -->
   <view class="learned-bar">
