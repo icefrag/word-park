@@ -13,5 +13,5 @@
     </button>
   </view>
   <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
-  <button class="speaker-btn" bindtap="repeat">🔊</button>
+  <view class="speaker-btn" bindtap="repeat" hover-class="speaker-hover"><text>🔊</text></view>
 </view>

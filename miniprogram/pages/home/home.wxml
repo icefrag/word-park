@@ -3,6 +3,6 @@
   <view style="font-size: 128rpx; color: #2c6e49">汉字小乐园</view>
   <view style="font-size: 52rpx; color: #555">和熊猫宝宝一起认汉字</view>
   <button class="big-btn" bindtap="start">开 始</button>
-  <button class="speaker-btn" bindtap="speak">🔊</button>
+  <view class="speaker-btn" bindtap="speak" hover-class="speaker-hover"><text>🔊</text></view>
   <view class="attribution">图片素材:OpenMoji(CC BY-SA 4.0)</view>
 </view>

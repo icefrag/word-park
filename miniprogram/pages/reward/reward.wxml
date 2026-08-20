@@ -11,5 +11,5 @@
     <text wx:for="{{[1, 2, 3]}}" wx:for-item="s" wx:key="*this" class="star pop {{s > stars ? 'empty' : ''}}" style="font-size: 128rpx">★</text>
   </view>
   <button class="big-btn green" style="z-index: 1" bindtap="back">回到地图</button>
-  <button class="speaker-btn" bindtap="speak">🔊</button>
+  <view class="speaker-btn" bindtap="speak" hover-class="speaker-hover"><text>🔊</text></view>
 </view>
