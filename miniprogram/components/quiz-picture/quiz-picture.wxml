@@ -1,12 +1,11 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">这是哪个字?</view>
-  <image class="card bounce" src="{{image}}" mode="aspectFit" style="width: 480rpx; height: 480rpx; padding: 32rpx" />
-  <view style="display: flex; gap: 64rpx">
+  <image class="card bounce" src="{{image}}" mode="aspectFit" style="width: 420rpx; height: 420rpx; padding: 32rpx" />
+  <view class="options-row">
     <button
       wx:for="{{questions[qi].options}}"
       wx:key="*this"
-      class="big-btn {{wrongPick === item ? 'shake' : ''}}"
-      style="min-width: 280rpx; font-size: 144rpx"
+      class="opt-btn {{wrongPick === item ? 'shake' : ''}}"
       data-ch="{{item}}"
       bindtap="pick"
     >

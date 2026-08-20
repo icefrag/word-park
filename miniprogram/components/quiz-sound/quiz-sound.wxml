@@ -1,12 +1,11 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">听一听,是哪个字?</view>
   <button class="card" style="width: 400rpx; height: 400rpx; font-size: 192rpx; display: flex; align-items: center; justify-content: center" bindtap="playTarget">🔊</button>
-  <view style="display: flex; gap: 64rpx">
+  <view class="options-row">
     <button
       wx:for="{{questions[qi].options}}"
       wx:key="*this"
-      class="big-btn {{wrongPick === item ? 'shake' : ''}}"
-      style="min-width: 280rpx; font-size: 144rpx"
+      class="opt-btn {{wrongPick === item ? 'shake' : ''}}"
       data-ch="{{item}}"
       bindtap="pick"
     >

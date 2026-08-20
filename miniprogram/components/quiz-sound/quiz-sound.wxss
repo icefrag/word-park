@@ -1,1 +1,26 @@
-/* 听音选字样式复用 app.wxss 全局类 */
+/* 选项行:超出屏宽自动换行(4 选项变 2x2),按钮缩小适配手机 */
+.options-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40rpx;
+  width: 92vw;
+}
+.opt-btn {
+  min-width: 210rpx;
+  min-height: 210rpx;
+  font-size: 128rpx;
+  color: #fff;
+  background: linear-gradient(180deg, #ffb340, #ff8c1a);
+  border: 8rpx solid #fff;
+  border-radius: 48rpx;
+  box-shadow: 0 14rpx 0 #d96f00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24rpx;
+}
+.opt-btn:active {
+  transform: translateY(10rpx);
+  box-shadow: 0 4rpx 0 #d96f00;
+}
