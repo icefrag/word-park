@@ -1,1 +1,6 @@
-/* 连连看样式复用 app.wxss 全局类 */
+/* 连连看卡片内容:字号适配 200rpx 卡片(卡片样式在 app.wxss .link-card) */
+.link-char {
+  font-size: 96rpx;
+  line-height: 1.1;
+  color: #333;
+}

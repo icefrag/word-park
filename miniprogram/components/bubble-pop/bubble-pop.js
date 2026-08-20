@@ -61,7 +61,8 @@ Component({
         Math.random() < 0.45
           ? this.currentTarget
           : shuffle(this.ALL.filter((c) => c !== this.currentTarget))[0]
-      const b = { id: this.uid++, char, left: 8 + Math.random() * 74, dur: 5.5 + Math.random() * 3 }
+      // left 范围 8%~65%:气泡宽约 35% 屏宽,再大会溢出右边缘
+      const b = { id: this.uid++, char, left: 8 + Math.random() * 57, dur: 5.5 + Math.random() * 3 }
       this.setData({ bubbles: [...this.data.bubbles, b] })
       this.timers.push(
         setTimeout(() => {

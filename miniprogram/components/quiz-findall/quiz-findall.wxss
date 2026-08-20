@@ -1,1 +1,6 @@
-/* 找一找样式复用 app.wxss 全局类 */
+/* 找一找:字号适配 200rpx 格子 */
+.findall-char {
+  font-size: 96rpx;
+  line-height: 1.1;
+  color: #333;
+}

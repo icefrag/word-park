@@ -1,1 +1,28 @@
-/* 翻牌配对样式复用 app.wxss 全局类 */
+/* 翻牌配对:4 列小卡(160rpx),总宽 712rpx 适配手机 */
+.match-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24rpx;
+}
+.match-cell {
+  width: 160rpx;
+  height: 160rpx;
+  background: #fff7e0;
+  border: 6rpx solid #ffd54f;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.match-cell.open {
+  background: #fff;
+  border-color: #7ed957;
+}
+.match-char {
+  font-size: 96rpx;
+  line-height: 1.1;
+  color: #333;
+}
+.match-back {
+  font-size: 72rpx;
+}
