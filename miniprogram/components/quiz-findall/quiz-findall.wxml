@@ -3,16 +3,17 @@
     找出所有的 <text class="char-display" style="font-size: 96rpx">{{grids[gi].target.char}}</text>
   </view>
   <view class="card findall-card">
-    <view class="findall-grid">
+    <view class="findall-row" wx:for="{{rows}}" wx:key="index" wx:for-item="row">
       <button
-        wx:for="{{grids[gi].cells}}"
-        wx:key="index"
-        class="cell-btn {{wrongCell === index ? 'shake' : ''}} {{foundMap[index] ? 'found' : ''}}"
-        data-i="{{index}}"
+        wx:for="{{row}}"
+        wx:key="i"
+        wx:for-item="cell"
+        class="findall-cell {{wrongCell === cell.i ? 'shake' : ''}} {{foundMap[cell.i] ? 'found' : ''}}"
+        data-i="{{cell.i}}"
         bindtap="clickCell"
       >
-        <text wx:if="{{foundMap[index]}}" class="star" style="font-size: 64rpx">★</text>
-        <text wx:else class="findall-char">{{item}}</text>
+        <text wx:if="{{foundMap[cell.i]}}" class="findall-star">★</text>
+        <text wx:else class="findall-char">{{cell.ch}}</text>
       </button>
     </view>
   </view>

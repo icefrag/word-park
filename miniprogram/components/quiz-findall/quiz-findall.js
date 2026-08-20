@@ -7,6 +7,7 @@ Component({
 
   data: {
     gi: 0,
+    rows: [], // 9 格切成 3 行×3 列:[{ch, i}] — 行结构保证任何环境都横排
     foundMap: {}, // 已点中的格子下标 → true(WXML 不支持 indexOf,用对象查找)
     wrongCell: -1,
     gridDone: false,
@@ -30,6 +31,7 @@ Component({
   observers: {
     'grids, gi'() {
       this.calcTotal()
+      this.buildRows()
     },
   },
 
@@ -38,6 +40,18 @@ Component({
       const g = this.data.grids[this.data.gi]
       if (!g) return
       this.setData({ total: g.cells.filter((c) => c === g.target.char).length })
+    },
+
+    buildRows() {
+      const g = this.data.grids[this.data.gi]
+      if (!g) return
+      const rows = []
+      for (let r = 0; r < 3; r++) {
+        rows.push(
+          g.cells.slice(r * 3, r * 3 + 3).map((ch, ci) => ({ ch, i: r * 3 + ci }))
+        )
+      }
+      this.setData({ rows })
     },
 
     repeat() {

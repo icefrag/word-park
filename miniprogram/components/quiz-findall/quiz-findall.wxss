@@ -1,19 +1,35 @@
-/* 找一找:九宫格 flex 换行(3 列),格子 160rpx 单屏装下 */
+/* 找一找:JS 切行(3 行×3 列),样式全部自包含不依赖全局类 */
 .findall-card {
   width: 100%;
   box-sizing: border-box;
   border-radius: 48rpx;
+  padding: 16rpx;
 }
-.findall-grid {
+.findall-row {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 24rpx;
-  padding: 24rpx;
-  box-sizing: border-box;
+}
+.findall-cell {
+  width: 160rpx;
+  height: 160rpx;
+  margin: 8rpx;
+  /* 行内块兜底:即使 flex 异常也保持横排 */
+  display: inline-block;
+  text-align: center;
+  line-height: 160rpx;
+  background: #fff7e0;
+  border: 6rpx solid #ffd54f;
+  border-radius: 40rpx;
+}
+.findall-cell.found {
+  background: #e2f7d8;
+  border-color: #7ed957;
 }
 .findall-char {
   font-size: 80rpx;
-  line-height: 1.1;
   color: #333;
+}
+.findall-star {
+  font-size: 64rpx;
+  color: #ffc400;
 }

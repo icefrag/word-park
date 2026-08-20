@@ -7,9 +7,8 @@ Component({
   },
 
   data: {
-    view: [], // 视图模型:{key, char, kind, image} — WXML 不能调函数,图片地址预计算
-    flipped: [], // 已翻开卡片的 index(逻辑判断用)
-    flippedMap: {}, // 同上 → true(WXML 渲染用,不支持 indexOf)
+    rows: [], // 视图模型切 2 行×4 列:[{key, char, kind, image, i}] — 行结构保证横排
+    flippedMap: {}, // 已翻开卡片 index → true
     matchedMap: {}, // 已配对成功的 char → true
     wrongPairMap: {}, // 当前不匹配的两张牌 index → true(shake 抖动)
     starBurst: false, // 答对星星粒子开关
@@ -20,6 +19,7 @@ Component({
       this.mistakes = 0
       this.matchedCount = 0
       this.lock = false
+      this.flippedCards = [] // 当前翻开的两张牌对象
       this.timers = []
       this.buildView()
       playVoice('voice-instr-match')
@@ -37,14 +37,16 @@ Component({
 
   methods: {
     buildView() {
-      this.setData({
-        view: this.data.cards.map((c) => ({
-          key: c.key,
-          char: c.data.char,
-          kind: c.kind,
-          image: imageOf(c.data),
-        })),
-      })
+      const flat = this.data.cards.map((c, i) => ({
+        key: c.key,
+        char: c.data.char,
+        kind: c.kind,
+        image: imageOf(c.data),
+        i,
+      }))
+      const rows = []
+      for (let r = 0; r < 2; r++) rows.push(flat.slice(r * 4, r * 4 + 4))
+      this.setData({ rows })
     },
 
     // 重播本界面指令语音
@@ -61,25 +63,25 @@ Component({
     },
 
     flip(e) {
-      const i = e.currentTarget.dataset.i
-      if (this.lock || this.data.flippedMap[i] || this.data.matchedMap[this.data.view[i].char]) return
+      const cell = e.currentTarget.dataset.cell
+      if (this.lock || this.data.flippedMap[cell.i] || this.data.matchedMap[cell.char]) return
       playSfx('sfx-flip')
-      const flipped = [...this.data.flipped, i]
-      this.setData({ flipped, flippedMap: { ...this.data.flippedMap, [i]: true } })
-      if (flipped.length !== 2) return
+      this.flippedCards = [...this.flippedCards, cell]
+      this.setData({ flippedMap: { ...this.data.flippedMap, [cell.i]: true } })
+      if (this.flippedCards.length !== 2) return
 
       this.lock = true
-      const a = this.data.view[flipped[0]]
-      const b = this.data.view[flipped[1]]
+      const a = this.flippedCards[0]
+      const b = this.flippedCards[1]
       if (a.char === b.char && a.kind !== b.kind) {
         this.timers.push(
           setTimeout(() => {
             this.matchedCount++
             this.setData({
               matchedMap: { ...this.data.matchedMap, [a.char]: true },
-              flipped: [],
               flippedMap: {},
             })
+            this.flippedCards = []
             this.lock = false
             playSfx('sfx-correct')
             this.showStar() // 配对成功:星星粒子正反馈
@@ -91,12 +93,11 @@ Component({
         )
       } else {
         this.mistakes++
-        const wrongPairMap = {}
-        flipped.forEach((k) => (wrongPairMap[k] = true))
-        this.setData({ wrongPairMap }) // 标记不匹配的两张牌触发抖动
+        this.setData({ wrongPairMap: { [a.i]: true, [b.i]: true } }) // 标记不匹配的两张牌触发抖动
         this.timers.push(
           setTimeout(() => {
-            this.setData({ flipped: [], flippedMap: {}, wrongPairMap: {} })
+            this.setData({ flippedMap: {}, wrongPairMap: {} })
+            this.flippedCards = []
             this.lock = false
             playSfx('sfx-wrong')
             playVoice('voice-try-again')
