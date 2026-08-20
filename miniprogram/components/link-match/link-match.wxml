@@ -20,7 +20,7 @@
         data-card="{{item}}"
         bindtap="pickImage"
       >
-        <image src="{{item.image}}" mode="aspectFit" style="width: 110rpx; height: 110rpx" />
+        <image src="{{item.image}}" mode="aspectFit" class="link-img" />
       </button>
     </view>
   </view>

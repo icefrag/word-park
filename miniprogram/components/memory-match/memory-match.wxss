@@ -17,6 +17,12 @@
   background: #fff;
   border-color: #7ed957;
 }
+/* 图片尺寸必须写在样式表:行内 style 的尺寸在 button 内不生效 */
+.match-cell image {
+  width: 126rpx;
+  height: 126rpx;
+  vertical-align: middle;
+}
 .match-char {
   font-size: 96rpx;
   color: #333;

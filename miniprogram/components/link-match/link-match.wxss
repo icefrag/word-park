@@ -24,6 +24,8 @@
   line-height: 150rpx;
 }
 .link-card image {
+  width: 110rpx;
+  height: 110rpx;
   vertical-align: middle;
 }
 .link-card.selected {
