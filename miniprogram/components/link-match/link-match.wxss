@@ -1,6 +1,51 @@
-/* 连连看卡片内容:字号适配 200rpx 卡片(卡片样式在 app.wxss .link-card) */
+/* 连连看:两列卡片,样式全部自包含不依赖全局类 */
+.link-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48rpx;
+}
+.link-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+.link-card {
+  position: relative;
+  width: 150rpx;
+  height: 150rpx;
+  background: #fff;
+  border: 6rpx solid #ffd54f;
+  border-radius: 32rpx;
+  box-shadow: 0 10rpx 0 #e0b93f;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: inline-block;
+  text-align: center;
+  line-height: 150rpx;
+}
+.link-card image {
+  vertical-align: middle;
+}
+.link-card.selected {
+  border-color: #ff8c1a;
+  box-shadow: 0 0 0 10rpx rgba(255, 180, 64, 0.4);
+}
+.link-card.done {
+  background: #e2f7d8;
+  border-color: #7ed957;
+  box-shadow: none;
+  opacity: 0.35;
+}
+.link-card.done::after {
+  /* 右上角对勾角标 */
+  content: '✔';
+  position: absolute;
+  top: 2rpx;
+  right: 12rpx;
+  font-size: 44rpx;
+  color: #2e7d32;
+}
 .link-char {
-  font-size: 96rpx;
-  line-height: 1.1;
+  font-size: 72rpx;
   color: #333;
 }

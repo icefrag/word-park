@@ -1,6 +1,6 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">听一听,是哪个字?</view>
-  <button class="card" style="width: 400rpx; height: 400rpx; font-size: 192rpx; display: flex; align-items: center; justify-content: center" bindtap="playTarget">🔊</button>
+  <button class="card" style="width: 360rpx; height: 360rpx; font-size: 160rpx; display: flex; align-items: center; justify-content: center" bindtap="playTarget">🔊</button>
   <view class="options-row">
     <button
       wx:for="{{questions[qi].options}}"

@@ -1,6 +1,6 @@
 <view class="center full">
   <view style="font-size: 64rpx; color: #2c6e49">这是哪个字?</view>
-  <image class="card bounce" src="{{image}}" mode="aspectFit" style="width: 400rpx; height: 400rpx; padding: 32rpx" />
+  <image class="card bounce" src="{{image}}" mode="aspectFit" style="width: 360rpx; height: 360rpx; padding: 28rpx" />
   <view class="options-row">
     <button
       wx:for="{{questions[qi].options}}"
