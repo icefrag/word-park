@@ -1,11 +1,9 @@
-/* 翻牌配对:4 列小卡(160rpx),总宽 712rpx 适配手机 */
+/* 翻牌配对:4 列小卡(160rpx),flex 换行布局(grid 在部分环境列塌缩) */
 .match-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24rpx;
-  /* 显式宽度必需:grid 在 flex 子项中无 definite 宽度时 iOS 列计算塌掉 */
-  width: 100%;
-  justify-items: center;
 }
 .match-cell {
   width: 160rpx;
