@@ -19,14 +19,14 @@
 }
 /* 图片尺寸必须写在样式表:行内 style 的尺寸在 button 内不生效 */
 .match-cell image {
-  width: 126rpx;
-  height: 126rpx;
+  width: 140rpx;
+  height: 140rpx;
   vertical-align: middle;
 }
 .match-char {
-  font-size: 96rpx;
+  font-size: 104rpx;
   color: #333;
 }
 .match-back {
-  font-size: 72rpx;
+  font-size: 96rpx;
 }
