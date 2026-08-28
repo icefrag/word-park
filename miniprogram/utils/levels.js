@@ -46,11 +46,11 @@ const LEGACY = [
   },
 ]
 
-// v2 新增单元(6-17)的主题
+// v2 新增单元(6-19)的主题
 const UNIT_THEMES = {
   6: '一家人', 7: '我的家', 8: '好吃的', 9: '动一动', 10: '穿戴上',
   11: '出门去', 12: '颜色', 13: '大自然', 14: '动物园', 15: '一天四季',
-  16: '方位', 17: '小身体与文具',
+  16: '方位', 17: '小身体与文具', 18: '数字乐园', 19: '象形字乐园',
 }
 
 // 生成单元的玩法轮换模板:按单元序号取模轮换,新玩法与旧玩法交替,难度由选项数渐升
@@ -86,6 +86,6 @@ function generateUnit(unit) {
   return { id: unit, theme, rounds }
 }
 
-const LEVELS = [...LEGACY, ...Array.from({ length: 12 }, (_, i) => generateUnit(i + 6))]
+const LEVELS = [...LEGACY, ...Array.from({ length: 14 }, (_, i) => generateUnit(i + 6))]
 
 module.exports = { LEVELS }

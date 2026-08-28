@@ -28,15 +28,15 @@ const check = (name, cond) => {
 
 // --- characters ---
 const { CHARACTERS, TOTAL_UNITS, imageOf, byUnit, assetName } = require('./characters')
-check('100 字', CHARACTERS.length === 100)
-check('17 个单元', TOTAL_UNITS === 17 && byUnit(17).length === 7)
-check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 100)
+check('132 字', CHARACTERS.length === 132)
+check('19 个单元', TOTAL_UNITS === 19 && byUnit(18).length === 10 && byUnit(17).length === 7)
+check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 132)
 // 素材已上云:本地仅验证 URL 格式与命名;云端可达性由 curl 抽查
 check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png$/.test(imageOf(c))))
 
 // --- levels ---
 const { LEVELS } = require('./levels')
-check('17 个关卡', LEVELS.length === 17)
+check('19 个关卡', LEVELS.length === 19)
 check('每关 flashcard 开头', LEVELS.every((l) => l.rounds[0].type === 'flashcard'))
 check('玩法类型合法', LEVELS.every((l) =>
   l.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match', 'bubble', 'whack', 'link'].includes(r.type))
@@ -66,8 +66,8 @@ check('3 星规则', starsForMistakes(0) === 3 && starsForMistakes(3) === 2 && s
 check('通关解锁下一关', isUnlocked(2) && s3 === 3)
 completeLevel(2, 2)
 check('已认字数 = 单元1(5)+单元2(5)', learnedCharCount() === 10)
-completeLevel(17, 0)
-check('最后一关不解锁第 18 关', !isUnlocked(18))
+completeLevel(19, 0)
+check('最后一关不解锁第 20 关', !isUnlocked(20))
 resetProgress()
 check('重置回到起点', !isUnlocked(2))
 

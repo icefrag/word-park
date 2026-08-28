@@ -2,3 +2,5 @@ node_modules/
 dist/
 .DS_Store
 Thumbs.db
+# 素材生成产物(可由 gen-new-assets.mjs 复现,上传云存储后即可删除)
+scripts/new-assets/assets/

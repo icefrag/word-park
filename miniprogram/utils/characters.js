@@ -37,6 +37,8 @@ const CHARACTERS = [
   { char: '奶', pinyin: 'nǎi', word: '奶奶', emojiCode: '1f475', unit: 6 },
   { char: '哥', pinyin: 'gē', word: '哥哥', emojiCode: '1f466', unit: 6 },
   { char: '姐', pinyin: 'jiě', word: '姐姐', emojiCode: '1f467', unit: 6 },
+  { char: '弟', pinyin: 'dì', word: '弟弟', emojiCode: '1f9d2', unit: 6 },
+  { char: '妹', pinyin: 'mèi', word: '妹妹', emojiCode: '1f467', unit: 6 },
   // 单元 7:我的家
   { char: '家', pinyin: 'jiā', word: '回家', emojiCode: '1f3e0', unit: 7 },
   { char: '门', pinyin: 'mén', word: '大门', emojiCode: '1f6aa', unit: 7 },
@@ -44,6 +46,8 @@ const CHARACTERS = [
   { char: '床', pinyin: 'chuáng', word: '小床', emojiCode: '1f6cf', unit: 7 },
   { char: '灯', pinyin: 'dēng', word: '台灯', emojiCode: '1f4a1', unit: 7 },
   { char: '椅', pinyin: 'yǐ', word: '椅子', emojiCode: '1fa91', unit: 7 },
+  { char: '桌', pinyin: 'zhuō', word: '饭桌', emojiCode: '1f37d', unit: 7 },
+  { char: '被', pinyin: 'bèi', word: '被子', emojiCode: '1f6cc', unit: 7 },
   // 单元 8:好吃的
   { char: '米', pinyin: 'mǐ', word: '米饭', emojiCode: '1f35a', unit: 8 },
   { char: '面', pinyin: 'miàn', word: '面条', emojiCode: '1f35c', unit: 8 },
@@ -61,6 +65,10 @@ const CHARACTERS = [
   { char: '跳', pinyin: 'tiào', word: '跳绳', emojiCode: '1f938', unit: 9 },
   { char: '笑', pinyin: 'xiào', word: '大笑', emojiCode: '1f604', unit: 9 },
   { char: '哭', pinyin: 'kū', word: '大哭', emojiCode: '1f62d', unit: 9 },
+  { char: '吃', pinyin: 'chī', word: '吃饭', emojiCode: '1f372', unit: 9 },
+  { char: '喝', pinyin: 'hē', word: '喝水', emojiCode: '1f964', unit: 9 },
+  { char: '玩', pinyin: 'wán', word: '玩具', emojiCode: '1f9f8', unit: 9 },
+  { char: '听', pinyin: 'tīng', word: '听话', emojiCode: '1f442', unit: 9 },
   // 单元 10:穿戴上
   { char: '衣', pinyin: 'yī', word: '衣服', emojiCode: '1f455', unit: 10 },
   { char: '裤', pinyin: 'kù', word: '裤子', emojiCode: '1f456', unit: 10 },
@@ -88,6 +96,10 @@ const CHARACTERS = [
   { char: '风', pinyin: 'fēng', word: '大风', emojiCode: '1f32c', unit: 13 },
   { char: '冰', pinyin: 'bīng', word: '冰块', emojiCode: '1f9ca', unit: 13 },
   { char: '河', pinyin: 'hé', word: '小河', emojiCode: '1f30a', unit: 13 },
+  { char: '雷', pinyin: 'léi', word: '打雷', emojiCode: '1f329', unit: 13 },
+  { char: '电', pinyin: 'diàn', word: '闪电', emojiCode: '26a1', unit: 13 },
+  { char: '雾', pinyin: 'wù', word: '大雾', emojiCode: '1f32b', unit: 13 },
+  { char: '晴', pinyin: 'qíng', word: '晴天', emojiCode: '1f324', unit: 13 },
   // 单元 14:动物园
   { char: '狗', pinyin: 'gǒu', word: '小狗', emojiCode: '1f436', unit: 14 },
   { char: '猫', pinyin: 'māo', word: '小猫', emojiCode: '1f431', unit: 14 },
@@ -110,6 +122,10 @@ const CHARACTERS = [
   { char: '右', pinyin: 'yòu', word: '右边', emojiCode: '27a1', unit: 16 },
   { char: '前', pinyin: 'qián', word: '前面', emojiCode: '23e9', unit: 16 },
   { char: '后', pinyin: 'hòu', word: '后面', emojiCode: '23ea', unit: 16 },
+  { char: '里', pinyin: 'lǐ', word: '里面', emojiCode: '1f4e6', unit: 16 },
+  { char: '外', pinyin: 'wài', word: '外面', emojiCode: '1f9f2', unit: 16 },
+  { char: '大', pinyin: 'dà', word: '大树', emojiCode: '1f334', unit: 16 },
+  { char: '小', pinyin: 'xiǎo', word: '小蚂蚁', emojiCode: '1f41c', unit: 16 },
   // 单元 17:小身体与文具
   { char: '牙', pinyin: 'yá', word: '牙齿', emojiCode: '1f9b7', unit: 17 },
   { char: '鼻', pinyin: 'bí', word: '鼻子', emojiCode: '1f443', unit: 17 },
@@ -118,10 +134,28 @@ const CHARACTERS = [
   { char: '笔', pinyin: 'bǐ', word: '铅笔', emojiCode: '270f', unit: 17 },
   { char: '纸', pinyin: 'zhǐ', word: '白纸', emojiCode: '1f4c4', unit: 17 },
   { char: '画', pinyin: 'huà', word: '画画', emojiCode: '1f3a8', unit: 17 },
+  // 单元 18:数字乐园(配图 OpenMoji keycap 数字)
+  { char: '一', pinyin: 'yī', word: '一个', emojiCode: '0031-fe0f-20e3', unit: 18 },
+  { char: '二', pinyin: 'èr', word: '二十', emojiCode: '0032-fe0f-20e3', unit: 18 },
+  { char: '三', pinyin: 'sān', word: '三个', emojiCode: '0033-fe0f-20e3', unit: 18 },
+  { char: '四', pinyin: 'sì', word: '四个', emojiCode: '0034-fe0f-20e3', unit: 18 },
+  { char: '五', pinyin: 'wǔ', word: '五个', emojiCode: '0035-fe0f-20e3', unit: 18 },
+  { char: '六', pinyin: 'liù', word: '六个', emojiCode: '0036-fe0f-20e3', unit: 18 },
+  { char: '七', pinyin: 'qī', word: '七个', emojiCode: '0037-fe0f-20e3', unit: 18 },
+  { char: '八', pinyin: 'bā', word: '八个', emojiCode: '0038-fe0f-20e3', unit: 18 },
+  { char: '九', pinyin: 'jiǔ', word: '九个', emojiCode: '0039-fe0f-20e3', unit: 18 },
+  { char: '十', pinyin: 'shí', word: '十个', emojiCode: '1f51f', unit: 18 },
+  // 单元 19:象形字乐园(字形与实物高度相似的象形字)
+  { char: '鱼', pinyin: 'yú', word: '小鱼', emojiCode: '1f41f', unit: 19 },
+  { char: '鸟', pinyin: 'niǎo', word: '小鸟', emojiCode: '1f426', unit: 19 },
+  { char: '竹', pinyin: 'zhú', word: '竹子', emojiCode: '1f38b', unit: 19 },
+  { char: '叶', pinyin: 'yè', word: '叶子', emojiCode: '1f343', unit: 19 },
+  { char: '土', pinyin: 'tǔ', word: '泥土', emojiCode: '1f9f1', unit: 19 },
+  { char: '田', pinyin: 'tián', word: '田野', emojiCode: '1f33e', unit: 19 },
 ]
 
 // 单元总数(v2 主题单元制)
-const TOTAL_UNITS = 17
+const TOTAL_UNITS = 19
 
 const { ASSET_BASE } = require('../config')
 
