@@ -169,7 +169,7 @@ const CHARACTERS = [
   { char: '蒜', pinyin: 'suàn', word: '大蒜', emojiCode: '1f9c4', stage: 1, unit: 11 },
   { char: '椒', pinyin: 'jiāo', word: '辣椒', emojiCode: '1f336', stage: 1, unit: 11 },
   { char: '碗', pinyin: 'wǎn', word: '饭碗', emojiCode: '1f963', stage: 1, unit: 12 },
-  { char: '筷', pinyin: 'kuài', word: '筷子', emojiCode: '1fa62', stage: 1, unit: 12 },
+  { char: '筷', pinyin: 'kuài', word: '筷子', emojiCode: '1f962', stage: 1, unit: 12 },
   { char: '勺', pinyin: 'sháo', word: '勺子', emojiCode: '1f944', stage: 1, unit: 12 },
   { char: '杯', pinyin: 'bēi', word: '杯子', emojiCode: '1f943', stage: 1, unit: 12 },
   { char: '叉', pinyin: 'chā', word: '叉子', emojiCode: '1f374', stage: 1, unit: 12 },
