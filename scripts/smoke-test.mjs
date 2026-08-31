@@ -27,19 +27,33 @@ const check = (name, cond) => {
 }
 
 // --- characters ---
-const { CHARACTERS, TOTAL_UNITS, imageOf, byUnit, assetName } = require('./characters')
+const { CHARACTERS, TOTAL_UNITS, imageOf, byUnit, byStage, assetName } = require('./characters')
 check('132 字', CHARACTERS.length === 132)
-check('19 个单元', TOTAL_UNITS === 19 && byUnit(18).length === 10 && byUnit(17).length === 7)
+check('67 个单元号', TOTAL_UNITS === 67)
 check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 132)
-// 素材已上云:本地仅验证 URL 格式与命名;云端可达性由 curl 抽查
+check('无 level 遗留字段', CHARACTERS.every((c) => c.level === undefined))
+check('阶段字量 55/77/0', byStage(1).length === 55 && byStage(2).length === 77 && byStage(3).length === 0)
 check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png$/.test(imageOf(c))))
+check('重编号抽查', byUnit(7).length === 7 && byUnit(7).some((c) => c.char === '狗')
+  && byUnit(38).length === 7 && byUnit(37).length === 10 && byUnit(29).length === 8 && byUnit(8).some((c) => c.char === '五'))
 
 // --- levels ---
-const { LEVELS } = require('./levels')
-check('19 个关卡', LEVELS.length === 19)
+const { LEVELS, STAGES } = require('./levels')
+const stageOfLevel = (l) => (l.type === 'review' ? l.stage : STAGES.find((s) => s.units.includes(l.id)).id)
+check('关卡数 22(数据补齐前框架态)', LEVELS.length === 22)
 check('每关 flashcard 开头', LEVELS.every((l) => l.rounds[0].type === 'flashcard'))
 check('玩法类型合法', LEVELS.every((l) =>
   l.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match', 'bubble', 'whack', 'link'].includes(r.type))
+))
+check('复习单元 28/51/67', LEVELS.filter((l) => l.type === 'review').map((l) => l.id).join() === '28,51,67')
+check('字 stage 与 STAGES 区间一致', CHARACTERS.every((c) => STAGES[c.stage - 1].units.includes(c.unit)))
+check('小班生成单元玩法温和', [6, 7, 8, 9].every((u) => {
+  const lv = LEVELS.find((l) => l.id === u)
+  return lv.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall'].includes(r.type))
+}))
+// voice 仅 stage ≥ 2 的 findall/bubble/whack 轮次携带 true;stage 1(含手工关)不带该字段,!!undefined → false
+check('语音模式按阶段', LEVELS.every((l) =>
+  l.rounds.every((r) => !['findall', 'bubble', 'whack'].includes(r.type) || !!r.voice === (stageOfLevel(l) >= 2))
 ))
 
 // --- engine ---
@@ -66,8 +80,8 @@ check('3 星规则', starsForMistakes(0) === 3 && starsForMistakes(3) === 2 && s
 check('通关解锁下一关', isUnlocked(2) && s3 === 3)
 completeLevel(2, 2)
 check('已认字数 = 单元1(5)+单元2(5)', learnedCharCount() === 10)
-completeLevel(19, 0)
-check('最后一关不解锁第 20 关', !isUnlocked(20))
+completeLevel(67, 0)
+check('最后一关不解锁第 68 关', !isUnlocked(68))
 resetProgress()
 check('重置回到起点', !isUnlocked(2))
 
