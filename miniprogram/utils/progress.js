@@ -1,7 +1,7 @@
-const { LEVELS } = require('./levels')
+const { LEVELS, STAGES } = require('./levels')
 const { byUnit } = require('./characters')
 
-const KEY = 'hanzi-paradise-v1'
+const KEY = 'hanzi-paradise-v2'
 
 function read() {
   try {
@@ -27,12 +27,17 @@ function starsForMistakes(mistakes) {
   return mistakes <= 1 ? 3 : mistakes <= 4 ? 2 : 1
 }
 
+// 通关后解锁"关卡顺序中的下一个"(跳过数据未就绪的编号空档)
+function nextUnitId(levelId) {
+  const i = LEVELS.findIndex((l) => l.id === levelId)
+  return LEVELS[i + 1]?.id ?? LEVELS[LEVELS.length - 1].id
+}
+
 function completeLevel(levelId, mistakes) {
   const p = loadProgress()
   const stars = starsForMistakes(mistakes)
   p.stars[levelId] = Math.max(p.stars[levelId] ?? 0, stars)
-  // 解锁上限动态等于 LEVELS 数量,不再硬编码 5
-  p.unlockedLevel = Math.max(p.unlockedLevel, Math.min(levelId + 1, LEVELS.length))
+  p.unlockedLevel = Math.max(p.unlockedLevel, nextUnitId(levelId))
   saveProgress(p)
   return stars
 }
@@ -55,13 +60,20 @@ function resetProgress() {
   saveProgress({ unlockedLevel: 1, stars: {} })
 }
 
+// 阶段解锁 = 线性解锁推进到本阶段首单元(展示层派生,不落盘)
+function stageUnlocked(stageId) {
+  return loadProgress().unlockedLevel >= STAGES[stageId - 1].units[0]
+}
+
+// 阶段进度:只统计数据已就绪(存在于 LEVELS)的单元
+function stageProgress(stageId) {
+  const s = STAGES[stageId - 1]
+  const ids = [...s.units, s.review].filter((u) => LEVELS.some((l) => l.id === u))
+  const { stars } = loadProgress()
+  return { done: ids.filter((u) => stars[u]).length, total: ids.length }
+}
+
 module.exports = {
-  loadProgress,
-  saveProgress,
-  starsForMistakes,
-  completeLevel,
-  isUnlocked,
-  totalStars,
-  learnedCharCount,
-  resetProgress,
+  loadProgress, saveProgress, starsForMistakes, completeLevel, isUnlocked,
+  totalStars, learnedCharCount, resetProgress, stageUnlocked, stageProgress,
 }
