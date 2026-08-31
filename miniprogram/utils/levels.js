@@ -128,7 +128,7 @@ function generateReview(stage) {
   const defs = {
     1: [['sound2char', { count: 4 }], ['findall', { count: 2 }]],
     2: [['pic2char', { count: 4 }], ['findall', { count: 3 }]],
-    3: [['findall', { count: 3 }], ['whack', { target: 10 }], ['link', { pairs: 5 }]],
+    3: [['findall', { count: 3 }], ['whack', { target: 10 }], ['sound2char', { count: 5 }]],
   }[stage]
   const rounds = [{ type: 'flashcard' }]
   for (const [t, p] of defs) {
