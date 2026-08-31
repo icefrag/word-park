@@ -50,6 +50,11 @@ function buildBubbleTargets(poolChars, total) {
   return Array.from({ length: total }, () => poolChars[Math.floor(Math.random() * poolChars.length)])
 }
 
+// 有图字(emojiCode 非空):pic2char/match/link 的目标字必须从中抽
+function imageChars(chars) {
+  return chars.filter((c) => c.emojiCode)
+}
+
 module.exports = {
   shuffle,
   pickDistractors,
@@ -58,4 +63,5 @@ module.exports = {
   buildFindAllGrid,
   buildMatchCards,
   buildBubbleTargets,
+  imageChars,
 }

@@ -1,11 +1,7 @@
 const { LEVELS } = require('../../utils/levels')
-const { CHARACTERS, byUnit } = require('../../utils/characters')
+const { CHARACTERS, byUnit, byStage } = require('../../utils/characters')
 const {
-  buildQuestions,
-  buildFindAllGrid,
-  buildMatchCards,
-  buildBubbleTargets,
-  shuffle,
+  buildQuestions, buildFindAllGrid, buildMatchCards, buildBubbleTargets, shuffle, imageChars,
 } = require('../../utils/engine')
 const { completeLevel } = require('../../utils/progress')
 
@@ -27,20 +23,31 @@ Page({
     this.setData({ round: this.buildRound() })
   },
 
-  // 干扰项只用已学过的字(旧字 unit 与 level 同值,新字只有 unit)
+  // 干扰项只用已学过的字(unit 即学习顺序)
   poolFor(lv) {
-    return CHARACTERS.filter((c) => (c.unit ?? c.level) <= lv.id).map((c) => c.char)
+    return CHARACTERS.filter((c) => c.unit <= lv.id).map((c) => c.char)
+  },
+
+  // 复习单元:本阶段已学字随机抽样并缓存(切轮不重抽,轮间字池稳定)
+  charsFor(lv) {
+    if (lv.type !== 'review') return byUnit(lv.id)
+    if (!this._reviewPool) this._reviewPool = shuffle(byStage(lv.stage)).slice(0, 12)
+    return this._reviewPool
   },
 
   buildRound() {
     const lv = this.level
-    const lvChars = byUnit(lv.id)
+    const lvChars = this.charsFor(lv)
     const pool = this.poolFor(lv)
     const r = lv.rounds[this.roundIndex]
+    const withVoice = (props) => (r.voice ? { ...props, voice: true } : props)
     switch (r.type) {
       case 'flashcard':
         return { type: r.type, props: { chars: lvChars } }
-      case 'pic2char':
+      case 'pic2char': {
+        const targets = shuffle(imageChars(lvChars).map((c) => c.char)).slice(0, r.count)
+        return { type: r.type, props: { questions: buildQuestions(targets, pool, r.options) } }
+      }
       case 'sound2char': {
         const targets = shuffle(lvChars.map((c) => c.char)).slice(0, r.count)
         return { type: r.type, props: { questions: buildQuestions(targets, pool, r.options) } }
@@ -48,23 +55,21 @@ Page({
       case 'findall':
         return {
           type: r.type,
-          props: {
+          props: withVoice({
             grids: shuffle(lvChars)
               .slice(0, r.count)
               .map((c) => ({ target: c, cells: buildFindAllGrid(c.char, pool, 9, 3) })),
-          },
+          }),
         }
       case 'match':
-        return { type: r.type, props: { cards: buildMatchCards(shuffle(lvChars).slice(0, r.pairs)) } }
+        return { type: r.type, props: { cards: buildMatchCards(shuffle(imageChars(lvChars)).slice(0, r.pairs)) } }
       case 'bubble':
-        // 气泡目标字同样只用已学池(曾用全字表导致出现未学过的字)
-        return { type: r.type, props: { targets: buildBubbleTargets(pool, r.target) } }
+        // 气泡目标字只用已学池;组件内部再用全字表造干扰
+        return { type: r.type, props: withVoice({ targets: buildBubbleTargets(pool, r.target) }) }
       case 'whack':
-        // 打地鼠:目标字从已学池抽取,组件内部再用全字表造干扰
-        return { type: r.type, props: { targets: buildBubbleTargets(pool, r.target) } }
+        return { type: r.type, props: withVoice({ targets: buildBubbleTargets(pool, r.target) }) }
       case 'link':
-        // 连连看:本单元字抽 pairs 对,生成字牌+图牌
-        return { type: r.type, props: { cards: buildMatchCards(shuffle(lvChars).slice(0, r.pairs)) } }
+        return { type: r.type, props: { cards: buildMatchCards(shuffle(imageChars(lvChars)).slice(0, r.pairs)) } }
       default:
         return { type: r.type, props: {} }
     }

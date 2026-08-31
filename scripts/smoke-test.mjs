@@ -70,6 +70,8 @@ check('配对:8 张含字牌图牌', cards.length === 8 &&
   cards.filter((c) => c.kind === 'char').length === 4)
 const targets = buildBubbleTargets(pool, 8)
 check('目标序列长度', targets.length === 8)
+const { imageChars } = require('./engine')
+check('有图字过滤', imageChars([{ emojiCode: '1f600' }, { emojiCode: null }, {}]).length === 1)
 
 // --- progress ---
 const { completeLevel, isUnlocked, learnedCharCount, resetProgress, starsForMistakes, stageUnlocked, stageProgress } = require('./progress')
