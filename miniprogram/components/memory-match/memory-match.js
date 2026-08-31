@@ -1,4 +1,5 @@
 const { playVoice, playSfx, playPraise } = require('../../utils/audio')
+const { rpx2px } = require('../../utils/layout')
 const { imageOf } = require('../../utils/characters')
 
 Component({
@@ -10,6 +11,10 @@ Component({
     cells: [], // 视图模型:{key, char, kind, image, i, left, top} — 绝对定位坐标,布局不依赖任何 flex/grid
     boardW: 0,
     boardH: 0,
+    cell: 0, // 单牌边长 px(随屏宽缩放封顶,行内样式使用)
+    imgSize: 0,
+    charFont: 0,
+    backFont: 0,
     flippedMap: {}, // 已翻开卡片 index → true
     matchedMap: {}, // 已配对成功的 char → true
     wrongPairMap: {}, // 当前不匹配的两张牌 index → true(shake 抖动)
@@ -39,9 +44,10 @@ Component({
 
   methods: {
     buildView() {
-      // 8 张牌 3 列排布(3+3+2),坐标算死:每张 170rpx、间距 20rpx,总宽 550rpx
-      const CELL = 170
-      const GAP = 20
+      // 8 张牌 3 列排布(3+3+2),像素坐标随屏宽缩放封顶(utils/layout)
+      const px = rpx2px()
+      const CELL = px(170)
+      const GAP = px(20)
       const COLS = 3
       const cells = this.data.cards.map((c, i) => {
         const row = Math.floor(i / COLS)
@@ -57,7 +63,15 @@ Component({
           top: row * (CELL + GAP),
         }
       })
-      this.setData({ cells, boardW: 3 * CELL + 2 * GAP, boardH: 3 * CELL + 2 * GAP })
+      this.setData({
+        cells,
+        boardW: 3 * CELL + 2 * GAP,
+        boardH: 3 * CELL + 2 * GAP,
+        cell: CELL, // 尺寸走行内 px,样式表不再写死 rpx,平板大屏不爆版
+        imgSize: Math.round(CELL * 0.82),
+        charFont: Math.round(CELL * 0.61),
+        backFont: Math.round(CELL * 0.56),
+      })
     },
 
     // 重播本界面指令语音

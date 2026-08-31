@@ -33,12 +33,13 @@ const CHARACTERS = [
   // 单元 6:一家人
   { char: '爸', pinyin: 'bà', word: '爸爸', emojiCode: '1f468', unit: 6 },
   { char: '妈', pinyin: 'mā', word: '妈妈', emojiCode: '1f469', unit: 6 },
-  { char: '爷', pinyin: 'yé', word: '爷爷', emojiCode: '1f473', unit: 6 },
+  { char: '爷', pinyin: 'yé', word: '爷爷', emojiCode: '1f474', unit: 6 },
   { char: '奶', pinyin: 'nǎi', word: '奶奶', emojiCode: '1f475', unit: 6 },
   { char: '哥', pinyin: 'gē', word: '哥哥', emojiCode: '1f466', unit: 6 },
   { char: '姐', pinyin: 'jiě', word: '姐姐', emojiCode: '1f467', unit: 6 },
   { char: '弟', pinyin: 'dì', word: '弟弟', emojiCode: '1f9d2', unit: 6 },
-  { char: '妹', pinyin: 'mèi', word: '妹妹', emojiCode: '1f467', unit: 6 },
+  // 家人图区分度:妹原用 1f467 与姐完全同图,改婴儿图;爷改白胡子老爷爷拉开与爸的差别
+  { char: '妹', pinyin: 'mèi', word: '妹妹', emojiCode: '1f476', unit: 6 },
   // 单元 7:我的家
   { char: '家', pinyin: 'jiā', word: '回家', emojiCode: '1f3e0', unit: 7 },
   { char: '门', pinyin: 'mén', word: '大门', emojiCode: '1f6aa', unit: 7 },

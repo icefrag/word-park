@@ -1,1 +1,27 @@
-/* 首页样式已全部复用 app.wxss 全局类 */
+/* 首页:点熊猫可重听欢迎语 */
+.home-panda {
+  width: 440rpx;
+  height: 440rpx;
+}
+.home-title {
+  font-size: 128rpx;
+  color: #2c6e49;
+}
+.home-sub {
+  font-size: 52rpx;
+  color: #555;
+}
+
+/* 平板大屏:尺寸缩回接近手机像素 */
+@media (min-width: 600px) {
+  .home-panda {
+    width: 260rpx;
+    height: 260rpx;
+  }
+  .home-title {
+    font-size: 76rpx;
+  }
+  .home-sub {
+    font-size: 32rpx;
+  }
+}

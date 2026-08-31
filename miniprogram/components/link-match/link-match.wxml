@@ -1,5 +1,5 @@
 <view class="center full">
-  <view style="font-size: 64rpx; color: #2c6e49">把字和图片连起来</view>
+  <view class="quiz-title" bindtap="speak" hover-class="press">把字和图片连起来</view>
   <view class="link-board">
     <view class="link-col">
       <view
@@ -27,5 +27,4 @@
     </view>
   </view>
   <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
-  <view class="speaker-btn" bindtap="speak" hover-class="speaker-hover"><text>🔊</text></view>
 </view>

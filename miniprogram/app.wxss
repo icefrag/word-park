@@ -55,52 +55,10 @@ button::after {
   box-sizing: border-box;
 }
 
-.speaker-btn {
-  position: fixed;
-  right: 48rpx;
-  bottom: 48rpx;
-  width: 176rpx;
-  height: 176rpx;
-  background: #fff;
-  border: 8rpx solid #ffd54f;
-  border-radius: 50%;
-  box-shadow: 0 12rpx 0 #c9a227;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-}
-.speaker-btn text {
-  font-size: 96rpx;
-  line-height: 1;
-}
-/* view 按压反馈(替代 button 原生 :active) */
-.speaker-hover {
-  transform: scale(0.92);
-}
-/* 涟漪光环:贴按钮小圈轻扩散,提示"可以点我重听" */
-.speaker-btn::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  border: 4rpx solid rgba(255, 213, 79, 0.8);
-  border-radius: 50%;
-  animation: speaker-ripple 2s ease-out infinite;
-  pointer-events: none;
-}
-@keyframes speaker-ripple {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(1.18); opacity: 0; }
-}
-
-.char-display {
-  font-size: 288rpx;
-  line-height: 1.1;
-  color: #333;
+/* view 按压反馈(替代 button 原生 :active):点图/点提示区重听发音时用 */
+.press {
+  transform: scale(0.94);
+  opacity: 0.9;
 }
 
 .cell-btn {
@@ -113,6 +71,7 @@ button::after {
   align-items: center;
   justify-content: center;
 }
+/* 注:.char-display 已随固定喇叭/提示栏改造移除,各玩法字面尺寸就地声明 */
 
 .bubble {
   position: absolute;
@@ -150,8 +109,8 @@ button::after {
   width: 100%;
   min-height: 100vh;
   gap: 48rpx;
-  /* 底部留出喇叭按钮专属区(176rpx 高 + 48rpx 边距),避免内容与其重叠 */
-  padding-bottom: 224rpx;
+  /* 底部只留系统手势条安全区 */
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -160,7 +119,7 @@ button::after {
   width: 100%;
   height: 100vh;
   gap: 48rpx;
-  padding-bottom: 224rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -353,4 +312,58 @@ button::after {
 }
 .unit-btn .star {
   font-size: 48rpx;
+}
+
+/* ===== 平板等大屏(≥600px):rpx 随屏宽放大约2.2倍,统一缩回接近手机的像素尺寸 ===== */
+@media (min-width: 600px) {
+  .full,
+  .full-fixed {
+    gap: 24rpx;
+  }
+  .big-btn {
+    min-width: 200rpx;
+    min-height: 120rpx;
+    font-size: 40rpx;
+    border: 5rpx solid #fff;
+    border-radius: 40rpx;
+    box-shadow: 0 10rpx 0 #d96f00;
+  }
+  .big-btn:active {
+    transform: translateY(8rpx);
+    box-shadow: 0 3rpx 0 #d96f00;
+  }
+  .big-btn.green {
+    box-shadow: 0 10rpx 0 #2e7d32;
+  }
+  .bubble {
+    width: 190rpx;
+    height: 190rpx;
+    font-size: 84rpx;
+    bottom: -240rpx;
+    border: 6rpx solid #fff;
+  }
+  .star {
+    font-size: 52rpx;
+    text-shadow: 0 3rpx 0 #b8860b;
+  }
+  .star-burst {
+    font-size: 88rpx;
+  }
+  .mole-grid {
+    gap: 16rpx;
+    width: 74vw;
+  }
+  .hole {
+    border-radius: 36rpx;
+    border: 5rpx solid #fff;
+    box-shadow: 0 8rpx 0 #558b2f;
+  }
+  .mole-face {
+    font-size: 64rpx;
+  }
+  .mole-char {
+    font-size: 46rpx;
+    border: 4rpx solid #ffd54f;
+    border-radius: 16rpx;
+  }
 }

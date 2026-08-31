@@ -1,1 +1,49 @@
-/* 地图页样式已全部复用 app.wxss 全局类 */
+/* 地图页专属样式(其余复用 app.wxss 全局类) */
+.map-title {
+  font-size: 76rpx;
+  color: #2c6e49;
+}
+.map-reset-btn {
+  min-height: 128rpx;
+  font-size: 40rpx;
+  box-shadow: 0 12rpx 0 #d96f00;
+}
+
+/* 大屏平板竖屏:rpx 随宽度放大导致头部/底部固定元素占高过多、滚动区只剩一行多。
+   收紧地图页各元素尺寸,把高度还给单元网格 */
+@media (min-width: 600px) {
+  .map-title {
+    font-size: 48rpx;
+  }
+  .learned-bar {
+    font-size: 30rpx;
+    padding: 8rpx 32rpx 14rpx;
+  }
+  .learned-bar .track {
+    height: 20rpx;
+    margin-top: 8rpx;
+  }
+  .unit-scroll {
+    padding: 4rpx 12rpx;
+  }
+  .unit-grid {
+    gap: 20rpx;
+  }
+  .unit-btn {
+    min-width: 230rpx;
+    min-height: 150rpx;
+    font-size: 34rpx;
+    border-radius: 40rpx;
+  }
+  .unit-btn .star {
+    font-size: 32rpx;
+  }
+  .map-reset-btn {
+    min-height: 84rpx;
+    font-size: 28rpx;
+    box-shadow: 0 8rpx 0 #d96f00;
+  }
+  .full-fixed {
+    gap: 20rpx;
+  }
+}

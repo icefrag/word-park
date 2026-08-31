@@ -1,6 +1,6 @@
 <view class="center full">
-  <view style="font-size: 64rpx; color: #2c6e49">这是哪个字?</view>
-  <image class="card bounce" src="{{image}}" mode="aspectFit" style="width: 360rpx; height: 360rpx; padding: 28rpx" />
+  <view class="quiz-title">这是哪个字?</view>
+  <image class="card bounce quiz-image" src="{{image}}" mode="aspectFit" bindtap="repeat" hover-class="press" />
   <view class="options-row">
     <button
       wx:for="{{questions[qi].options}}"
@@ -13,5 +13,4 @@
     </button>
   </view>
   <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
-  <view class="speaker-btn" bindtap="repeat" hover-class="speaker-hover"><text>🔊</text></view>
 </view>

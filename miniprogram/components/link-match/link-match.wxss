@@ -1,4 +1,8 @@
 /* 连连看:两列卡片,样式全部自包含不依赖全局类 */
+.quiz-title {
+  font-size: 64rpx;
+  color: #2c6e49;
+}
 .link-board {
   display: flex;
   align-items: center;
@@ -56,4 +60,40 @@
 .cell-hover {
   transform: scale(0.94);
   opacity: 0.9;
+}
+
+/* 平板大屏:尺寸缩回接近手机像素 */
+@media (min-width: 600px) {
+  .quiz-title {
+    font-size: 40rpx;
+  }
+  .link-board {
+    gap: 28rpx;
+  }
+  .link-col {
+    gap: 14rpx;
+  }
+  .link-card {
+    width: 100rpx;
+    height: 100rpx;
+    border: 4rpx solid #ffd54f;
+    border-radius: 22rpx;
+    box-shadow: 0 7rpx 0 #e0b93f;
+    line-height: 100rpx;
+  }
+  .link-card image {
+    width: 74rpx;
+    height: 74rpx;
+  }
+  .link-card.selected {
+    box-shadow: 0 0 0 7rpx rgba(255, 180, 64, 0.4);
+  }
+  .link-card.done::after {
+    top: 1rpx;
+    right: 8rpx;
+    font-size: 30rpx;
+  }
+  .link-char {
+    font-size: 48rpx;
+  }
 }

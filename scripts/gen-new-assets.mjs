@@ -34,7 +34,8 @@ const NEW_CHARS = [
   { char: '田', pinyin: 'tián', word: '田野', emojiCode: '1f33e' },
   // 补齐既有单元
   { char: '弟', pinyin: 'dì', word: '弟弟', emojiCode: '1f9d2', unit: 6 },
-  { char: '妹', pinyin: 'mèi', word: '妹妹', emojiCode: '1f467', unit: 6 },
+  { char: '妹', pinyin: 'mèi', word: '妹妹', emojiCode: '1f476', unit: 6 },
+  { char: '爷', pinyin: 'yé', word: '爷爷', emojiCode: '1f474', unit: 6 },
   { char: '桌', pinyin: 'zhuō', word: '饭桌', emojiCode: '1f37d', unit: 7 },
   { char: '被', pinyin: 'bèi', word: '被子', emojiCode: '1f6cc', unit: 7 },
   { char: '吃', pinyin: 'chī', word: '吃饭', emojiCode: '1f372', unit: 9 },

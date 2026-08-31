@@ -1,4 +1,5 @@
 const { playVoice, playChar, playSfx, playPraise } = require('../../utils/audio')
+const { rpx2px } = require('../../utils/layout')
 
 Component({
   properties: {
@@ -10,6 +11,9 @@ Component({
     cells: [], // 9 格视图模型:{ch, i, left, top} — 绝对定位坐标,布局不依赖任何 flex/grid
     boardW: 0,
     boardH: 0,
+    cell: 0, // 单格边长 px(随屏宽缩放封顶,行内样式使用)
+    charFont: 0,
+    starFont: 0,
     foundMap: {}, // 已点中的格子下标 → true(WXML 不支持 indexOf,用对象查找)
     wrongCell: -1,
     gridDone: false,
@@ -47,15 +51,23 @@ Component({
     buildBoard() {
       const g = this.data.grids[this.data.gi]
       if (!g) return
-      // 9 格 3 行×3 列,坐标算死:每格 150rpx、间距 16rpx,总宽 482rpx
-      const CELL = 150
-      const GAP = 16
+      // 9 格 3 行×3 列,像素坐标随屏宽缩放封顶(utils/layout)
+      const px = rpx2px()
+      const CELL = px(150)
+      const GAP = px(16)
       const cells = g.cells.map((ch, i) => {
         const row = Math.floor(i / 3)
         const col = i % 3
         return { ch, i, left: col * (CELL + GAP), top: row * (CELL + GAP) }
       })
-      this.setData({ cells, boardW: 3 * CELL + 2 * GAP, boardH: 3 * CELL + 2 * GAP })
+      this.setData({
+        cells,
+        boardW: 3 * CELL + 2 * GAP,
+        boardH: 3 * CELL + 2 * GAP,
+        cell: CELL,
+        charFont: Math.round(CELL * 0.5),
+        starFont: Math.round(CELL * 0.4),
+      })
     },
 
     repeat() {

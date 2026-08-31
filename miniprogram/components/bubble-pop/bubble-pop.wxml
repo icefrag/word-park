@@ -1,6 +1,7 @@
 <view class="center full" style="position: relative; overflow: hidden">
-  <view style="font-size: 64rpx; color: #2c6e49; z-index: 1">
-    点泡泡:<text class="char-display" style="font-size: 108rpx">{{score}}</text> / {{targets.length}}
+  <view class="quiz-title prompt" bindtap="speakTarget" hover-class="press">
+    点<text class="target-char">{{target || '?'}}</text>泡泡<text class="hint-icon">🔊</text>
+    <text class="score-text">{{score}} / {{targets.length}}</text>
   </view>
   <button
     wx:for="{{bubbles}}"
@@ -13,5 +14,4 @@
     {{item.char}}
   </button>
   <view wx:if="{{starBurst}}" class="star-burst">⭐</view>
-  <view class="speaker-btn" bindtap="speakTarget" hover-class="speaker-hover"><text>🔊</text></view>
 </view>

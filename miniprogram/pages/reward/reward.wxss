@@ -1,1 +1,31 @@
-/* 奖励页样式已全部复用 app.wxss 全局类 */
+/* 奖励页:点熊猫可重听过关鼓励语;撒花彩带层不参与点击 */
+.reward-panda {
+  width: 400rpx;
+  height: 400rpx;
+  z-index: 1;
+}
+.reward-title {
+  font-size: 96rpx;
+  color: #2c6e49;
+  z-index: 1;
+}
+.reward-stars {
+  z-index: 1;
+}
+.reward-stars .star {
+  font-size: 128rpx;
+}
+
+/* 平板大屏:尺寸缩回接近手机像素 */
+@media (min-width: 600px) {
+  .reward-panda {
+    width: 240rpx;
+    height: 240rpx;
+  }
+  .reward-title {
+    font-size: 60rpx;
+  }
+  .reward-stars .star {
+    font-size: 76rpx;
+  }
+}

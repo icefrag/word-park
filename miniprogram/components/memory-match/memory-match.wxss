@@ -1,38 +1,43 @@
-/* 翻牌配对:绝对定位棋盘(坐标 JS 计算),3 列排布 3+3+2 */
+.quiz-title {
+  font-size: 64rpx;
+  color: #2c6e49;
+}
+/* 翻牌配对:绝对定位棋盘(坐标与尺寸 JS 计算 px,随屏宽缩放封顶) */
 .match-board {
   position: relative;
 }
 .match-cell {
   position: absolute;
-  width: 170rpx;
-  height: 170rpx;
   box-sizing: border-box; /* 边框算进宽高,避免占位超出坐标间距 */
   background: #fff7e0;
   border: 6rpx solid #ffd54f;
   border-radius: 36rpx;
   text-align: center;
-  line-height: 170rpx;
 }
 .match-cell.open {
   background: #fff;
   border-color: #7ed957;
 }
-/* 图片尺寸必须写在样式表:行内 style 的尺寸在 button 内不生效 */
 .match-cell image {
-  width: 140rpx;
-  height: 140rpx;
   vertical-align: middle;
 }
 .match-char {
-  font-size: 104rpx;
   color: #333;
-}
-.match-back {
-  font-size: 96rpx;
 }
 
 /* view 卡片的按压反馈(替代 button 原生 :active) */
 .cell-hover {
   transform: scale(0.94);
   opacity: 0.9;
+}
+
+/* 平板大屏:标题与边框装饰缩小(牌面尺寸由 JS px 控制) */
+@media (min-width: 600px) {
+  .quiz-title {
+    font-size: 40rpx;
+  }
+  .match-cell {
+    border: 4rpx solid #ffd54f;
+    border-radius: 24rpx;
+  }
 }

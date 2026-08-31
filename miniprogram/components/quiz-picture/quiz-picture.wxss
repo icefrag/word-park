@@ -1,3 +1,15 @@
+.quiz-title {
+  font-size: 64rpx;
+  color: #2c6e49;
+}
+/* 题图可点:重听玩法指令 */
+.quiz-image {
+  width: 360rpx;
+  height: 360rpx;
+  padding: 28rpx;
+  box-sizing: border-box;
+}
+
 /* 选项行:超出屏宽自动换行(4 选项变 2x2),按钮缩小适配手机 */
 .options-row {
   display: flex;
@@ -23,4 +35,32 @@
 .opt-btn:active {
   transform: translateY(10rpx);
   box-shadow: 0 4rpx 0 #d96f00;
+}
+
+/* 平板大屏:尺寸缩回接近手机像素 */
+@media (min-width: 600px) {
+  .quiz-title {
+    font-size: 40rpx;
+  }
+  .quiz-image {
+    width: 230rpx;
+    height: 230rpx;
+    padding: 16rpx;
+  }
+  .options-row {
+    gap: 24rpx;
+  }
+  .opt-btn {
+    min-width: 120rpx;
+    min-height: 120rpx;
+    font-size: 72rpx;
+    border: 5rpx solid #fff;
+    border-radius: 30rpx;
+    box-shadow: 0 8rpx 0 #d96f00;
+    padding: 0 14rpx;
+  }
+  .opt-btn:active {
+    transform: translateY(6rpx);
+    box-shadow: 0 3rpx 0 #d96f00;
+  }
 }

@@ -1,10 +1,10 @@
 <view class="center full">
-  <view wx:if="{{showCard}}" class="card center pop" style="padding: 48rpx 96rpx; gap: 20rpx" bindtap="speak">
-    <view class="char-display" style="font-size: 224rpx">{{chars[idx].char}}</view>
-    <view style="font-size: 44rpx; color: #888">{{chars[idx].pinyin}}</view>
-    <image class="bounce" src="{{image}}" mode="aspectFit" style="width: 280rpx; height: 280rpx" />
-    <view style="font-size: 64rpx; color: #444">{{chars[idx].word}}的{{chars[idx].char}}</view>
+  <view wx:if="{{showCard}}" class="card center pop flash-box" bindtap="speak" hover-class="press">
+    <text class="flash-hint">🔊</text>
+    <view class="flash-char">{{chars[idx].char}}</view>
+    <view class="flash-pinyin">{{chars[idx].pinyin}}</view>
+    <image class="bounce flash-img" src="{{image}}" mode="aspectFit" />
+    <view class="flash-word">{{chars[idx].word}}的{{chars[idx].char}}</view>
   </view>
   <button class="next-btn" bindtap="next">{{idx < chars.length - 1 ? '下一个 ➜' : '学完啦 🎉'}}</button>
-  <view class="speaker-btn" bindtap="speak" hover-class="speaker-hover"><text>🔊</text></view>
 </view>

@@ -8,5 +8,6 @@
     "bubble-pop": "/components/bubble-pop/bubble-pop",
     "whack-mole": "/components/whack-mole/whack-mole",
     "link-match": "/components/link-match/link-match"
-  }
+  },
+  "pageOrientation": "portrait"
 }

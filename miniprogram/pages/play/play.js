@@ -57,7 +57,8 @@ Page({
       case 'match':
         return { type: r.type, props: { cards: buildMatchCards(shuffle(lvChars).slice(0, r.pairs)) } }
       case 'bubble':
-        return { type: r.type, props: { targets: buildBubbleTargets(CHARACTERS.map((c) => c.char), r.target) } }
+        // 气泡目标字同样只用已学池(曾用全字表导致出现未学过的字)
+        return { type: r.type, props: { targets: buildBubbleTargets(pool, r.target) } }
       case 'whack':
         // 打地鼠:目标字从已学池抽取,组件内部再用全字表造干扰
         return { type: r.type, props: { targets: buildBubbleTargets(pool, r.target) } }

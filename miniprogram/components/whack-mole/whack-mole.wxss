@@ -1,1 +1,40 @@
-/* 打地鼠样式复用 app.wxss 全局类 */
+/* 打地鼠:提示栏展示目标字,整栏可点重听;洞口/地鼠样式复用 app.wxss 全局类 */
+.quiz-title {
+  font-size: 64rpx;
+  color: #2c6e49;
+  z-index: 1;
+}
+.prompt {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.target-char {
+  font-size: 108rpx;
+  color: #333;
+  line-height: 1.1;
+}
+.hint-icon {
+  font-size: 44rpx;
+  opacity: 0.5;
+}
+.score-text {
+  font-size: 52rpx;
+  color: #2c6e49;
+}
+
+/* 平板大屏:尺寸缩回接近手机像素 */
+@media (min-width: 600px) {
+  .quiz-title {
+    font-size: 40rpx;
+  }
+  .target-char {
+    font-size: 68rpx;
+  }
+  .hint-icon {
+    font-size: 30rpx;
+  }
+  .score-text {
+    font-size: 34rpx;
+  }
+}

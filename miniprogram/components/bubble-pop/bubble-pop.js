@@ -10,6 +10,7 @@ Component({
   data: {
     bubbles: [], // [{id, char, left, dur}]
     score: 0,
+    target: '', // 当前目标字(提示栏展示,可点读)
     wrongId: -1,
     starBurst: false, // 答对星星粒子开关
   },
@@ -52,6 +53,7 @@ Component({
 
     newTarget() {
       this.currentTarget = this.data.targets[Math.min(this.data.score, this.data.targets.length - 1)]
+      this.setData({ target: this.currentTarget })
       this.speakTarget()
     },
 

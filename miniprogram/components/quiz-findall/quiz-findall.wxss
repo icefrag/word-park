@@ -1,4 +1,12 @@
-/* 找一找:绝对定位棋盘(坐标 JS 计算),不依赖 flex/grid */
+.quiz-title {
+  font-size: 64rpx;
+  color: #2c6e49;
+}
+.target-char {
+  font-size: 96rpx;
+  color: #333;
+}
+/* 找一找:绝对定位棋盘(坐标与尺寸 JS 计算 px,随屏宽缩放封顶) */
 .findall-card {
   border-radius: 48rpx;
   padding: 20rpx;
@@ -9,25 +17,20 @@
 }
 .findall-cell {
   position: absolute;
-  width: 150rpx;
-  height: 150rpx;
   box-sizing: border-box; /* 边框算进宽高,避免占位超出坐标间距 */
   background: #fff7e0;
   border: 6rpx solid #ffd54f;
   border-radius: 32rpx;
   text-align: center;
-  line-height: 150rpx;
 }
 .findall-cell.found {
   background: #e2f7d8;
   border-color: #7ed957;
 }
 .findall-char {
-  font-size: 76rpx;
   color: #333;
 }
 .findall-star {
-  font-size: 60rpx;
   color: #ffc400;
 }
 
@@ -35,4 +38,22 @@
 .cell-hover {
   transform: scale(0.94);
   opacity: 0.9;
+}
+
+/* 平板大屏:标题与边框装饰缩小(格面尺寸由 JS px 控制) */
+@media (min-width: 600px) {
+  .quiz-title {
+    font-size: 40rpx;
+  }
+  .target-char {
+    font-size: 60rpx;
+  }
+  .findall-card {
+    border-radius: 32rpx;
+    padding: 12rpx;
+  }
+  .findall-cell {
+    border: 4rpx solid #ffd54f;
+    border-radius: 22rpx;
+  }
 }
