@@ -5,6 +5,7 @@ const { CHARACTERS } = require('../../utils/characters')
 Component({
   properties: {
     targets: { type: Array, value: [] }, // 目标字序列(字符串数组)
+    voice: { type: Boolean, value: false }, // 语音提示模式:不显示目标字,只听音
   },
 
   data: {
@@ -97,6 +98,7 @@ Component({
         playSfx('sfx-wrong')
         playVoice('voice-try-again') // 答错语音提示
         this.timers.push(setTimeout(() => this.setData({ wrongId: -1 }), 500))
+        if (this.data.voice) this.timers.push(setTimeout(() => this.speakTarget(), 1200))
       }
     },
   },

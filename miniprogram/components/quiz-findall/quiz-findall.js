@@ -4,6 +4,7 @@ const { rpx2px } = require('../../utils/layout')
 Component({
   properties: {
     grids: { type: Array, value: [] }, // [{target(字对象), cells: [char,...]}]
+    voice: { type: Boolean, value: false }, // 语音提示模式:不显示目标字,只听音
   },
 
   data: {
@@ -103,6 +104,7 @@ Component({
         playSfx('sfx-wrong')
         playVoice('voice-try-again')
         this.timers.push(setTimeout(() => this.setData({ wrongCell: -1 }), 500))
+        if (this.data.voice) this.timers.push(setTimeout(() => this.repeat(), 1200))
       }
     },
   },

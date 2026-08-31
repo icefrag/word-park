@@ -9,6 +9,7 @@ const SPAWN_INTERVAL = 1000 // 地鼠出洞间隔(ms)
 Component({
   properties: {
     targets: { type: Array, value: [] }, // 目标字序列(字符串数组)
+    voice: { type: Boolean, value: false }, // 语音提示模式:不显示目标字,只听音
   },
 
   data: {
@@ -124,6 +125,7 @@ Component({
         clearTimeout(this.wrongTimer)
         this.wrongTimer = setTimeout(() => this.setData({ wrongIndex: -1 }), 500)
         this.timers.push(this.wrongTimer)
+        if (this.data.voice) this.timers.push(setTimeout(() => this.speakTarget(), 1200))
       }
     },
   },

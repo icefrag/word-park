@@ -1,6 +1,7 @@
 <view class="center full">
   <view class="quiz-title" bindtap="repeat" hover-class="press">
-    找出所有的 <text class="target-char">{{grids[gi].target.char}}</text>
+    <block wx:if="{{voice}}">🔊 听一听,找出所有的字</block>
+    <block wx:else>找出所有的 <text class="target-char">{{grids[gi].target.char}}</text></block>
   </view>
   <view class="card findall-card">
     <view class="findall-board" style="width: {{boardW}}px; height: {{boardH}}px">
