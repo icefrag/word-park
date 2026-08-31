@@ -87,6 +87,7 @@ const STAGE_PLAY = {
       ['whack', 'link'],
       ['pic2char', 'match'],
       ['link', 'whack'],
+      ['bubble', 'sound2char'],
     ],
   },
   3: {
@@ -96,6 +97,7 @@ const STAGE_PLAY = {
       ['pic2char', 'findall', 'whack'],
       ['match', 'sound2char', 'link'],
       ['findall', 'link', 'whack'],
+      ['bubble', 'findall', 'whack'],
     ],
   },
 }
@@ -112,6 +114,7 @@ function roundParams(type, n, optCap) {
   if (type === 'findall') return { count: 2 }
   if (type === 'match' || type === 'link') return { pairs: Math.min(4, n) }
   if (type === 'whack') return { target: 8 }
+  if (type === 'bubble') return { target: 10 }
   return { count: Math.min(n, 4), options: Array(3).fill(optCap) }
 }
 
