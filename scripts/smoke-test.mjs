@@ -28,11 +28,11 @@ const check = (name, cond) => {
 
 // --- characters ---
 const { CHARACTERS, TOTAL_UNITS, imageOf, byUnit, byStage, assetName } = require('./characters')
-check('227 字', CHARACTERS.length === 227)
+check('300 字', CHARACTERS.length === 300)
 check('67 个单元号', TOTAL_UNITS === 67)
-check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 227)
+check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 300)
 check('无 level 遗留字段', CHARACTERS.every((c) => c.level === undefined))
-check('阶段字量 150/77/0', byStage(1).length === 150 && byStage(2).length === 77 && byStage(3).length === 0)
+check('阶段字量 150/150/0', byStage(1).length === 150 && byStage(2).length === 150 && byStage(3).length === 0)
 check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png$/.test(imageOf(c))))
 check('重编号抽查', byUnit(7).length === 7 && byUnit(7).some((c) => c.char === '狗')
   && byUnit(38).length === 7 && byUnit(37).length === 10 && byUnit(29).length === 8 && byUnit(8).some((c) => c.char === '五'))
@@ -43,7 +43,8 @@ check('emojiCode 全库唯一', new Set(CHARACTERS.filter((c) => c.emojiCode).ma
 // --- levels ---
 const { LEVELS, STAGES } = require('./levels')
 const stageOfLevel = (l) => (l.type === 'review' ? l.stage : STAGES.find((s) => s.units.includes(l.id)).id)
-check('关卡数 40', LEVELS.length === 40)
+// 关卡数 = 28 小班 + 23 中班(22 单元 + 复习 51) + 1 大班复习;brief 写 51 系算术笔误
+check('关卡数 52', LEVELS.length === 52)
 check('每关 flashcard 开头', LEVELS.every((l) => l.rounds[0].type === 'flashcard'))
 check('玩法类型合法', LEVELS.every((l) =>
   l.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match', 'bubble', 'whack', 'link'].includes(r.type))
@@ -58,6 +59,10 @@ check('小班生成单元玩法温和', [6, 7, 8, 9].every((u) => {
 check('语音模式按阶段', LEVELS.every((l) =>
   l.rounds.every((r) => !['findall', 'bubble', 'whack'].includes(r.type) || !!r.voice === (stageOfLevel(l) >= 2))
 ))
+check('无图字单元自动换纯字玩法', [41, 42, 43].every((u) => {
+  const lv = LEVELS.find((l) => l.id === u)
+  return lv.rounds.every((r) => !['pic2char', 'match', 'link'].includes(r.type))
+}))
 
 // --- engine ---
 const { buildQuestions, buildFindAllGrid, buildMatchCards, buildBubbleTargets, makeOptions } = require('./engine')
