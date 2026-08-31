@@ -7,7 +7,11 @@ function read() {
   try {
     // wx.getStorageSync 对不存在的 key 返回 '',等价 web 的 null
     const p = wx.getStorageSync(KEY)
-    if (!p) return null
+    if (!p) {
+      // v2 键不存在时顺手清理 v1 孤儿旧键
+      try { wx.removeStorageSync('hanzi-paradise-v1') } catch (e) { /* 忽略:清理失败不影响功能 */ }
+      return null
+    }
     if (typeof p.unlockedLevel !== 'number' || typeof p.stars !== 'object') return null
     return p
   } catch (e) {

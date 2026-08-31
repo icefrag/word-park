@@ -13,6 +13,7 @@ const store = new Map()
 globalThis.wx = {
   getStorageSync: (k) => (store.has(k) ? store.get(k) : ''),
   setStorageSync: (k, v) => store.set(k, v),
+  removeStorageSync: (k) => store.delete(k),
   _audioCount: 0,
   createInnerAudioContext: () => {
     globalThis.wx._audioCount++
@@ -49,6 +50,7 @@ check('玩法类型合法', LEVELS.every((l) =>
   l.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match', 'bubble', 'whack', 'link'].includes(r.type))
 ))
 check('复习单元 28/51/67', LEVELS.filter((l) => l.type === 'review').map((l) => l.id).join() === '28,51,67')
+check('复习单元 id 与阶段区间对应', LEVELS.filter((l) => l.type === 'review').every((l) => STAGES[l.stage - 1].review === l.id))
 check('字 stage 与 STAGES 区间一致', CHARACTERS.every((c) => STAGES[c.stage - 1].units.includes(c.unit)))
 check('小班生成单元玩法温和', [6, 7, 8, 9].every((u) => {
   const lv = LEVELS.find((l) => l.id === u)
