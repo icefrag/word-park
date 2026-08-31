@@ -7,25 +7,51 @@
       <view class="fill" style="width: {{learnedPct}}%"></view>
     </view>
   </view>
-  <!-- 17 个单元一屏放不下,外层滚动容器 -->
-  <scroll-view class="unit-scroll" scroll-y>
-    <view class="unit-grid">
-      <button
-        wx:for="{{units}}"
-        wx:key="id"
-        class="big-btn unit-btn {{item.green ? 'green' : ''}}"
-        disabled="{{item.locked}}"
-        data-id="{{item.id}}"
-        bindtap="play"
-      >
-        <view style="font-size: 36rpx">第{{item.id}}单元</view>
-        <view style="font-size: 40rpx">{{item.theme}}</view>
-        <view>
-          <text wx:for="{{[1, 2, 3]}}" wx:for-item="s" wx:key="*this" class="star {{s > item.stars ? 'empty' : ''}}">★</text>
-        </view>
-        <view wx:if="{{item.locked}}" style="font-size: 64rpx">🔒</view>
-      </button>
+  <!-- 阶段页签:锁定的灰显带锁 -->
+  <view class="stage-tabs">
+    <view
+      wx:for="{{stages}}"
+      wx:key="id"
+      class="stage-tab {{item.id === activeStage ? 'active' : ''}} {{item.unlocked ? '' : 'locked'}}"
+      data-id="{{item.id}}"
+      bindtap="switchStage"
+      hover-class="press"
+    >
+      {{item.name}}{{item.unlocked ? '' : ' 🔒'}}
     </view>
+  </view>
+  <!-- 当前阶段:标题 + 阶段进度 + 单元卡片网格 -->
+  <scroll-view class="unit-scroll" scroll-y>
+    <block wx:for="{{stages}}" wx:key="id" wx:for-item="stage">
+      <view wx:if="{{stage.id === activeStage}}">
+        <view class="stage-head">
+          <text class="stage-name">{{stage.name}} · {{stage.subtitle}}</text>
+          <text class="stage-age">{{stage.age}}</text>
+        </view>
+        <view class="stage-bar">
+          <view>{{stage.done}}/{{stage.total}}</view>
+          <view class="track">
+            <view class="fill" style="width: {{stage.pct}}%"></view>
+          </view>
+        </view>
+        <view class="unit-grid">
+          <button
+            wx:for="{{stage.units}}"
+            wx:key="id"
+            class="big-btn unit-btn {{item.green ? 'green' : ''}} {{item.review ? 'review-btn' : ''}}"
+            disabled="{{item.locked}}"
+            data-id="{{item.id}}"
+            bindtap="play"
+          >
+            <view style="font-size: 40rpx">{{item.review ? '🔁 ' : ''}}{{item.theme}}</view>
+            <view>
+              <text wx:for="{{[1, 2, 3]}}" wx:for-item="s" wx:key="*this" class="star {{s > item.stars ? 'empty' : ''}}">★</text>
+            </view>
+            <view wx:if="{{item.locked}}" style="font-size: 64rpx">🔒</view>
+          </button>
+        </view>
+      </view>
+    </block>
   </scroll-view>
   <button class="big-btn map-reset-btn" bindtap="onReset">
     重新开始(家长按钮)

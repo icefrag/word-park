@@ -47,3 +47,57 @@
     gap: 20rpx;
   }
 }
+
+/* 阶段页签 */
+.stage-tabs {
+  display: flex;
+  gap: 16rpx;
+  padding: 0 24rpx;
+}
+.stage-tab {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 36rpx;
+  border-radius: 32rpx;
+  background: #e8f0e2;
+  color: #2c6e49;
+  border: 4rpx solid transparent;
+}
+.stage-tab.active {
+  background: #2c6e49;
+  color: #fff;
+}
+.stage-tab.locked {
+  background: #eee;
+  color: #aaa;
+}
+/* 阶段标题与阶段进度条 */
+.stage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 16rpx 32rpx 0;
+}
+.stage-name {
+  font-size: 44rpx;
+  color: #2c6e49;
+  font-weight: bold;
+}
+.stage-age {
+  font-size: 28rpx;
+  color: #888;
+}
+.stage-bar {
+  font-size: 30rpx;
+  color: #555;
+  padding: 8rpx 32rpx 12rpx;
+}
+.stage-bar .track {
+  height: 22rpx;
+  margin-top: 6rpx;
+}
+/* 复习单元卡片 */
+.review-btn {
+  box-shadow: 0 10rpx 0 #7c5cbf;
+}
