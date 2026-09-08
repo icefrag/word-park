@@ -36,7 +36,7 @@ const HANDMADE = {
     theme: '汉字小达人',
     rounds: [
       { type: 'flashcard' },
-      { type: 'bubble', target: 10 },
+      { type: 'findall', count: 2 },
     ],
   },
 }
@@ -79,7 +79,7 @@ const THEMES = {
 
 // 阶段玩法配置:小班温和(3 选项 2 练习,无操作类),中班全池轮换(3→4 选项),大班拉满(5 选项 3 练习,偏重操作玩法)
 const STAGE_PLAY = {
-  1: { templates: [['pic2char', 'sound2char'], ['sound2char', 'findall'], ['pic2char', 'findall']] },
+  1: { templates: [['pic2char', 'sound2char'], ['sound2char', 'findall'], ['pic2char', 'match'], ['sound2char', 'match']] },
   2: {
     templates: [
       ['pic2char', 'sound2char'],

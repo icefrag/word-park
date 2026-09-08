@@ -4,3 +4,11 @@ dist/
 Thumbs.db
 # 素材生成产物(可由 gen-new-assets.mjs 复现,上传云存储后即可删除)
 scripts/new-assets/assets/
+
+# AI 生图(密钥/原图缓存/旧图备份)
+scripts/.env
+scripts/ai-raw/
+scripts/emoji-backup-*/
+
+# AI配图上云暂存目录(87MB二进制,本地产物,上云后可删)
+upload-cloud/

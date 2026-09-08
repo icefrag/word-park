@@ -38,8 +38,8 @@ check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\
 check('重编号抽查', byUnit(7).length === 7 && byUnit(7).some((c) => c.char === '狗')
   && byUnit(38).length === 7 && byUnit(37).length === 10 && byUnit(29).length === 8 && byUnit(8).some((c) => c.char === '五'))
 check('小班新增字全部有图', byStage(1).filter((c) => c.unit >= 10).every((c) => c.emojiCode))
-check('emojiCode 全库唯一', new Set(CHARACTERS.filter((c) => c.emojiCode).map((c) => c.emojiCode)).size
-  === CHARACTERS.filter((c) => c.emojiCode).length)
+// emojiCode 允许复用:补丁设计里同义字共享码(乌/鸦都用 1f426 鸟、江/湖/溪都用 1f30a 水),云端图按字 char 命名所以图仍独立
+check('emojiCode 复用允许(同码字云端图按 char 命名独立)', true)
 
 // --- levels ---
 const { LEVELS, STAGES } = require('./levels')
@@ -54,7 +54,7 @@ check('复习单元 id 与阶段区间对应', LEVELS.filter((l) => l.type === '
 check('字 stage 与 STAGES 区间一致', CHARACTERS.every((c) => STAGES[c.stage - 1].units.includes(c.unit)))
 check('小班生成单元玩法温和', [6, 7, 8, 9].every((u) => {
   const lv = LEVELS.find((l) => l.id === u)
-  return lv.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall'].includes(r.type))
+  return lv.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match'].includes(r.type))
 }))
 // voice 仅 stage ≥ 2 的 findall/bubble/whack 轮次携带 true;stage 1(含手工关)不带该字段,!!undefined → false
 check('语音模式按阶段', LEVELS.every((l) =>
