@@ -118,20 +118,41 @@ function roundParams(type, n, optCap) {
   return { count: Math.min(n, 4), options: Array(3).fill(optCap) }
 }
 
+// 单个练习轮:图玩法降级按本段字判定,语音提示按阶段(spec P0-4 起段与全单元共用)
+function practiceRound(seg, i, tpls, optCap, stage) {
+  let t = tpls[i % tpls.length]
+  const imgCount = seg.filter((c) => c.emojiCode).length
+  if (PIC_FALLBACK[t] && imgCount < (t === 'pic2char' ? 3 : 4)) t = PIC_FALLBACK[t]
+  const r = { type: t, ...roundParams(t, seg.length, optCap) }
+  if (VOICE_TYPES.includes(t) && stage >= 2) r.voice = true
+  return r
+}
+
+// 大班 20 字一关过重,拆段 5 字/段:每段=识字卡+1练习,段间休息过场(spec P0-4)
+const SEGMENT = 5
+
 function generateUnit(unit) {
   const stage = unitStage(unit)
   const s = STAGES[stage - 1]
   const idx = s.units.indexOf(unit)
   const optCap = stage === 1 ? 3 : stage === 2 ? Math.min(4, 3 + Math.floor(idx / 4)) : 5
   const chars = byUnit(unit)
-  const imgCount = chars.filter((c) => c.emojiCode).length
-  const rounds = [{ type: 'flashcard' }]
-  for (let t of STAGE_PLAY[stage].templates[idx % STAGE_PLAY[stage].templates.length]) {
-    if (PIC_FALLBACK[t] && imgCount < (t === 'pic2char' ? 3 : 4)) t = PIC_FALLBACK[t]
-    const r = { type: t, ...roundParams(t, chars.length, optCap) }
-    if (VOICE_TYPES.includes(t) && stage >= 2) r.voice = true
-    rounds.push(r)
+  const tpls = STAGE_PLAY[stage].templates[idx % STAGE_PLAY[stage].templates.length]
+  if (stage === 3) {
+    const segs = Array.from({ length: Math.ceil(chars.length / SEGMENT) }, (_, i) =>
+      chars.slice(i * SEGMENT, (i + 1) * SEGMENT))
+    const rounds = []
+    segs.forEach((seg, i) => {
+      rounds.push({ type: 'flashcard', band: i })
+      const practice = practiceRound(seg, i, tpls, optCap, stage)
+      practice.band = i
+      rounds.push(practice)
+      if (i < segs.length - 1) rounds.push({ type: 'break' })
+    })
+    return { id: unit, theme: THEMES[unit], rounds }
   }
+  const rounds = [{ type: 'flashcard' }]
+  tpls.forEach((_, i) => rounds.push(practiceRound(chars, i, tpls, optCap, stage)))
   return { id: unit, theme: THEMES[unit], rounds }
 }
 
@@ -161,4 +182,4 @@ const LEVELS = [
   ]),
 ]
 
-module.exports = { LEVELS, STAGES, THEMES, unitStage }
+module.exports = { LEVELS, STAGES, THEMES, SEGMENT, unitStage }

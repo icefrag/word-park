@@ -47,7 +47,7 @@ const stageOfLevel = (l) => (l.type === 'review' ? l.stage : STAGES.find((s) => 
 check('关卡数 67', LEVELS.length === 67)
 check('每关 flashcard 开头', LEVELS.every((l) => l.rounds[0].type === 'flashcard'))
 check('玩法类型合法', LEVELS.every((l) =>
-  l.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match', 'bubble', 'whack', 'link'].includes(r.type))
+  l.rounds.every((r) => ['flashcard', 'pic2char', 'sound2char', 'findall', 'match', 'bubble', 'whack', 'link', 'break'].includes(r.type))
 ))
 check('复习单元 28/51/67', LEVELS.filter((l) => l.type === 'review').map((l) => l.id).join() === '28,51,67')
 check('复习单元 id 与阶段区间对应', LEVELS.filter((l) => l.type === 'review').every((l) => STAGES[l.stage - 1].review === l.id))
@@ -64,10 +64,23 @@ check('无图字单元自动换纯字玩法', [41, 42, 43].every((u) => {
   const lv = LEVELS.find((l) => l.id === u)
   return lv.rounds.every((r) => !['pic2char', 'match', 'link'].includes(r.type))
 }))
-check('大班单元 3 练习 5 选项', STAGES[2].units.every((u) => {
+check('大班单元拆4段(11轮:识字卡+练习×4,段间break)', STAGES[2].units.every((u) => {
   const lv = LEVELS.find((l) => l.id === u)
-  return lv.rounds.length === 4 && lv.rounds.every((r) => r.type !== 'pic2char' && r.type !== 'sound2char'
+  const fcs = lv.rounds.filter((r) => r.type === 'flashcard')
+  return lv.rounds.length === 11
+    && fcs.length === 4 && fcs.every((r, i) => r.band === i)
+    && lv.rounds.filter((r) => r.type === 'break').length === 3
+    && lv.rounds[lv.rounds.length - 1].type !== 'break'
+    && [0, 1, 2, 3].every((i) => lv.rounds.filter((r) => r.band === i).length === 2)
+}))
+check('大班段练5选项', STAGES[2].units.every((u) => {
+  const lv = LEVELS.find((l) => l.id === u)
+  return lv.rounds.every((r) => r.type !== 'pic2char' && r.type !== 'sound2char'
     || r.options.every((o) => o === 5))
+}))
+check('小中班生成单元不分段', [6, 7, 8, 9, 30, 45].every((u) => {
+  const lv = LEVELS.find((l) => l.id === u)
+  return lv.rounds[0].type === 'flashcard' && lv.rounds.every((r) => r.band === undefined && r.type !== 'break')
 }))
 
 // --- engine ---

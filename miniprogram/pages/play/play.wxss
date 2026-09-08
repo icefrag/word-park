@@ -1,1 +1,43 @@
 /* 关卡容器:玩法组件自带样式,复用 app.wxss 全局类 */
+
+/* 段间休息过场(大班拆段):全屏遮罩 + 居中卡片 */
+.break-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 248, 235, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.break-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 80rpx;
+  background: #fff;
+  border-radius: 40rpx;
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.08);
+}
+
+.break-panda {
+  width: 260rpx;
+  height: 260rpx;
+}
+
+.break-text {
+  margin-top: 24rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #5b4636;
+}
+
+.break-hint {
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: #b09a85;
+}

@@ -1,5 +1,5 @@
-const { LEVELS, unitStage } = require('../../utils/levels')
-const { CHARACTERS, byUnit, byStage, CONFUSABLE } = require('../../utils/characters')
+const { LEVELS, unitStage, SEGMENT } = require('../../utils/levels')
+const { CHARACTERS, byUnit, byStage, CONFUSABLE, pandaImage } = require('../../utils/characters')
 const {
   buildQuestions, buildFindAllGrid, buildMatchCards, buildBubbleTargets, shuffle, imageChars,
   pickReviewTargets, mixTargets,
@@ -35,7 +35,12 @@ Page({
     this.wrongChars = []
     this._miniDone = false
     this._mini = false
-    this.setData({ round: this.buildRound() })
+    this._breakTimer = null
+    this.goRound()
+  },
+
+  onUnload() {
+    clearTimeout(this._breakTimer)
   },
 
   // 干扰项只用已学过的字(unit 即学习顺序)
@@ -71,9 +76,13 @@ Page({
 
   buildRound() {
     const lv = this.level
-    const lvChars = this.charsFor(lv)
-    const pool = this.poolFor(lv)
     const r = lv.rounds[this.roundIndex]
+    if (r.type === 'break') return { type: 'break', props: { panda: pandaImage } }
+    // 段轮(大班)只喂本段 5 字;其余轮用整单元/复习字池
+    const lvChars = r.band != null
+      ? byUnit(lv.id).slice(r.band * SEGMENT, (r.band + 1) * SEGMENT)
+      : this.charsFor(lv)
+    const pool = this.poolFor(lv)
     const opts = this.distractOpts(lv)
     const withVoice = (props) => (r.voice ? { ...props, voice: true } : props)
     switch (r.type) {
@@ -115,11 +124,32 @@ Page({
     if (ch && !this.wrongChars.includes(ch)) this.wrongChars.push(ch)
   },
 
+  // 轮切换统一入口:进入 break 轮 4s 自动继续,其余轮渲染组件
+  goRound() {
+    clearTimeout(this._breakTimer)
+    const round = this.buildRound()
+    this.setData({ round })
+    if (round.type === 'break') {
+      this._breakTimer = setTimeout(() => {
+        this.roundIndex++
+        this.goRound()
+      }, 4000)
+    }
+  },
+
+  // 段间过场:点击立即继续
+  onBreakTap() {
+    if (this.data.round.type !== 'break') return
+    clearTimeout(this._breakTimer)
+    this.roundIndex++
+    this.goRound()
+  },
+
   onRoundComplete(e) {
     if (!this._mini) this.mistakes += e.detail.mistakes ?? 0
     if (this.roundIndex < this.level.rounds.length - 1) {
       this.roundIndex++
-      this.setData({ round: this.buildRound() })
+      this.goRound()
     } else if (this.wrongChars.length && !this._miniDone) {
       // 关末 mini 复习轮:错字再练一次,该轮错误不计星级(零惩罚,只跑一次)
       this._miniDone = true

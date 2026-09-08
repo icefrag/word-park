@@ -7,3 +7,12 @@
 <bubble-pop wx:elif="{{round.type === 'bubble'}}" targets="{{round.props.targets}}" voice="{{round.props.voice}}" bind:complete="onRoundComplete" />
 <whack-mole wx:elif="{{round.type === 'whack'}}" targets="{{round.props.targets}}" voice="{{round.props.voice}}" bind:complete="onRoundComplete" />
 <link-match wx:elif="{{round.type === 'link'}}" cards="{{round.props.cards}}" bind:complete="onRoundComplete" />
+
+<!-- 段间休息过场(大班拆段):点击或 4s 自动继续 -->
+<view wx:elif="{{round.type === 'break'}}" class="break-mask" bindtap="onBreakTap">
+  <view class="break-card">
+    <image class="break-panda" src="{{round.props.panda}}" mode="aspectFit" />
+    <text class="break-text">休息一下,喝口水</text>
+    <text class="break-hint">点一下继续</text>
+  </view>
+</view>
