@@ -1,4 +1,4 @@
-const { LEVELS, STAGE_RHYTHM, unitStage, SEGMENT } = require('../../utils/levels')
+const { LEVELS, STAGE_RHYTHM, unitStage, SEGMENT, poolFor } = require('../../utils/levels')
 const { CHARACTERS, byUnit, byStage, CONFUSABLE, pandaImage } = require('../../utils/characters')
 const {
   buildQuestions, buildFindAllGrid, buildMatchCards, buildBubbleTargets, shuffle, imageChars,
@@ -43,10 +43,7 @@ Page({
     clearTimeout(this._breakTimer)
   },
 
-  // 干扰项只用已学过的字(unit 即学习顺序)
-  poolFor(lv) {
-    return CHARACTERS.filter((c) => c.unit <= lv.id).map((c) => c.char)
-  },
+  // 干扰项/操作类目标只用已学过的字(unit 即学习顺序);band 轮收缩到已教段(levels.poolFor)
 
   // 复习单元:本阶段已学字按遗忘风险抽样并缓存(切轮不重抽,轮间字池稳定)
   charsFor(lv) {
@@ -82,7 +79,7 @@ Page({
     const lvChars = r.band != null
       ? byUnit(lv.id).slice(r.band * SEGMENT, (r.band + 1) * SEGMENT)
       : this.charsFor(lv)
-    const pool = this.poolFor(lv)
+    const pool = poolFor(lv.id, r.band)
     const opts = this.distractOpts(lv)
     const withVoice = (props) => (r.voice ? { ...props, voice: true } : props)
     switch (r.type) {
@@ -171,7 +168,7 @@ Page({
   buildMiniRound() {
     return {
       type: 'sound2char',
-      props: { questions: buildQuestions(this.wrongChars.slice(0, 3), this.poolFor(this.level), [3, 3, 3], this.distractOpts(this.level)) },
+      props: { questions: buildQuestions(this.wrongChars.slice(0, 3), poolFor(this.level.id, null), [3, 3, 3], this.distractOpts(this.level)) },
     }
   },
 })

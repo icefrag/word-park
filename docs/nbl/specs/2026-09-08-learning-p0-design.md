@@ -42,7 +42,8 @@
 
 - `sound2char` / `findall` 轮:mixTargets 混入(pic2char 的旧字仅取有图字)
 - 复习单元 `charsFor`:`shuffle().slice(0,12)` → `pickReviewTargets(byStage(stage), reviewId, 12, stats)`
-- **不改**:bubble/whack 目标本就从全已学池均匀随机(天然无偏复习,加权属过度设计);match/link 配对需图且 4 对上限,单元内最稳
+- **不改**:bubble/whack 目标本就从已学池均匀随机(天然无偏复习,加权属过度设计);match/link 配对需图且 4 对上限,单元内最稳
+  - 修订(P0-4 拆段后):"已学池"按段收缩——band 轮的池 = 之前单元全部字 + 本单元已教段(`levels.poolFor(unit, band)`),否则第 1 段的 bubble/whack 会抽到第 2-4 段未教字,破坏先学后练
 
 ## P0-2 错字回流
 
@@ -76,6 +77,7 @@
 - round 携带 `band` 索引,play.js 按段切字(flashcard 只显示本段 5 字;练习目标 = 本段字 + 掺旧字)
 - break 轮:play.wxml 内联过场(熊猫休息文案),点击或 4s 自动继续,计时器 onUnload 清理
 - 每段 ≈ 2 分钟,单关 8 分钟内且每段有自然退出点;小班/中班/手工关/复习关结构不变
+- **不变量**:band 轮可抽字池(目标+干扰)不含未教段字(`poolFor`,冒烟有断言)
 - 练习密度说明:大班每字曝光 = 段内识字卡 + 段练 ~80%,缺口由 P0-1 旧字回流在后续关卡补足(这正是间隔效应的设计意图)
 
 ## 非目标

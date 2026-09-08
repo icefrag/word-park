@@ -42,7 +42,7 @@ check('小班新增字全部有图', byStage(1).filter((c) => c.unit >= 10).ever
 check('emojiCode 复用允许(同码字云端图按 char 命名独立)', true)
 
 // --- levels ---
-const { LEVELS, STAGES } = require('./levels')
+const { LEVELS, STAGES, SEGMENT, poolFor } = require('./levels')
 const stageOfLevel = (l) => (l.type === 'review' ? l.stage : STAGES.find((s) => s.units.includes(l.id)).id)
 check('关卡数 67', LEVELS.length === 67)
 check('每关 flashcard 开头', LEVELS.every((l) => l.rounds[0].type === 'flashcard'))
@@ -81,6 +81,14 @@ check('大班段练5选项', STAGES[2].units.every((u) => {
 check('小中班生成单元不分段', [6, 7, 8, 9, 30, 45].every((u) => {
   const lv = LEVELS.find((l) => l.id === u)
   return lv.rounds[0].type === 'flashcard' && lv.rounds.every((r) => r.band === undefined && r.type !== 'break')
+}))
+check('band轮字池不含未教段字(先学后练不变量)', STAGES[2].units.every((u) => {
+  const lv = LEVELS.find((l) => l.id === u)
+  return lv.rounds.filter((r) => r.band != null).every((r) => {
+    const p = poolFor(u, r.band)
+    const untaught = byUnit(u).slice((r.band + 1) * SEGMENT).map((c) => c.char)
+    return untaught.every((c) => !p.includes(c))
+  })
 }))
 
 // --- engine ---
@@ -135,7 +143,8 @@ for (const [a, b] of CONFUSABLE) {
   ;(CONF[a] = CONF[a] || []).push(b)
   ;(CONF[b] = CONF[b] || []).push(a)
 }
-check('干扰:opts贯通buildQuestions', buildQuestions(['妈'], pool, [3], { pinyin: PY, confusable: CONF }).every((q) => q.options.includes('马')))
+check('干扰:opts贯通buildQuestions', buildQuestions(['妈'], pool, [3], { pinyin: PY, confusable: CONF }).every((q) =>
+  q.options.some((ch) => ch !== q.target && stripTone(PY[ch]) === stripTone(PY[q.target]))))
 
 // --- progress ---
 const { completeLevel, isUnlocked, learnedCharCount, resetProgress, starsForMistakes, stageUnlocked, stageProgress, loadProgress, saveProgress } = require('./progress')
@@ -166,14 +175,13 @@ check('重置回到起点', !isUnlocked(2) && !stageUnlocked(2))
 // --- progress: charStats(P0-1) ---
 resetProgress()
 completeLevel(1, 1, ['日'])
-const cs = loadProgress().charStats
-check('charStats:单元字刷新lastUnit+错字wrong+1', byUnit(1).every((c) => cs[c.char] && cs[c.char].lastUnit === 1)
-  && cs['日'].wrong === 1)
+check('charStats:单元字刷新lastUnit+错字wrong+1', byUnit(1).every((c) => loadProgress().charStats[c.char] && loadProgress().charStats[c.char].lastUnit === 1)
+  && loadProgress().charStats['日'].wrong === 1)
 completeLevel(2, 0, [])
-check('charStats:再通关不误增wrong', cs['日'].wrong === 1 && cs['日'].lastUnit === 1)
+check('charStats:再通关不误增wrong', loadProgress().charStats['日'].wrong === 1 && loadProgress().charStats['日'].lastUnit === 1)
 check('charStats:无图大班单元也记录', (() => {
   completeLevel(58, 0, [])
-  return byUnit(58).every((c) => cs[c.char] && cs[c.char].lastUnit === 58)
+  return byUnit(58).every((c) => loadProgress().charStats[c.char] && loadProgress().charStats[c.char].lastUnit === 58)
 })())
 saveProgress({ unlockedLevel: 3, stars: { 1: 3 } }) // 旧档(无 charStats 字段)
 check('charStats:旧档读取补默认空表', typeof loadProgress().charStats === 'object' && loadProgress().charStats !== null)

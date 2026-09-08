@@ -1,4 +1,4 @@
-const { byUnit } = require('./characters')
+const { CHARACTERS, byUnit } = require('./characters')
 
 // 手工关卡(体验已验证):轮次随主题保留,编号按新学习顺序摆放为 1-5
 const HANDMADE = {
@@ -136,6 +136,14 @@ function practiceRound(seg, i, tpls, optCap, stage) {
 // 大班 20 字一关过重,拆段 5 字/段:每段=识字卡+1练习,段间休息过场(spec P0-4)
 const SEGMENT = 5
 
+// 关卡可抽字池:普通轮=unit 及之前全部字;band 轮=之前单元全部字+本单元已教段
+// (先学后练不变量:拆段后 bubble/whack/quiz 干扰都不许碰未教段字)
+function poolFor(unit, band) {
+  if (band == null) return CHARACTERS.filter((c) => c.unit <= unit).map((c) => c.char)
+  return CHARACTERS.filter((c) => c.unit < unit).map((c) => c.char)
+    .concat(byUnit(unit).slice(0, (band + 1) * SEGMENT).map((c) => c.char))
+}
+
 function generateUnit(unit) {
   const stage = unitStage(unit)
   const s = STAGES[stage - 1]
@@ -187,4 +195,4 @@ const LEVELS = [
   ]),
 ]
 
-module.exports = { LEVELS, STAGES, THEMES, SEGMENT, STAGE_RHYTHM, unitStage }
+module.exports = { LEVELS, STAGES, THEMES, SEGMENT, STAGE_RHYTHM, poolFor, unitStage }
