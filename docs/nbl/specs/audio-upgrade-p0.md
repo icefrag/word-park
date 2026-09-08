@@ -18,18 +18,21 @@
 | Q5 | 固定文案 | 21 条全部重写为宝宝向文案 | 原文案不在仓库，重写零成本且可升级表达 |
 | Q6 | BGM 场景 | 仅主页/地图/奖励页，玩法页静音 | 玩法页一半是听音辨字（quiz-sound/bubble-pop/whack-mole stage≥2 只听音），BGM 干扰辨音 |
 | Q7 | 音乐接口替代 | Pixabay（而非 MiniMax Audio 网页版） | 大王拍板 |
+| Q8 | 音色配置化 | 4 个音色全量生成，用户在设置中选择；默认「精品甜美女声」 | 大王拍板「1-4 都要」；增量成本约 4.5 元、云端约 +50MB，可接受。置 Q4 的单选终裁 |
 
 默认拍板项：模型 `speech-2.8-hd`（3.5 元/万字符，汉字×2 计费，全量约 1.5 元/遍）；输出 mp3 32kHz/128kbps/单声道；语速 0.9；夸奖 happy 情绪、指令/欢迎 calm；单字条目用 characters.js 的 pinyin 生成 pronunciation_dict 强制正音；文件命名与调用方式完全不变（纯素材替换）。
 
 ## 3. 资产清单
 
+voiceKey 取值：`tianmei`（精品甜美女声，默认）/ `xiaoling`（甜心小玲）/ `warm`（温暖少女）/ `tong`（萌萌女童）。
+
 | 类别 | 数量 | 命名 | 文本来源 |
 |---|---|---|---|
-| 单字读音 | 600 | `{hex码点}.mp3` | characters.js char 字段，pinyin 进 pronunciation_dict |
-| 字词播报 | 600 | `{hex码点}-word.mp3` | 「{char}，{word}」，依赖词上下文自然消歧 |
-| 固定提示语 | 17 | `voice-*.mp3` | 本文第 4 节清单 |
-| UI 音效 | 4 | `sfx-*.mp3` | Pixabay 下载替换（correct/wrong/flip/win） |
-| BGM | 1-2 | `bgm-main.mp3`（可选 `bgm-reward.mp3`） | Pixabay 挑选 |
+| 单字读音 | 600×4 | `audio/{voiceKey}/{hex码点}.mp3` | characters.js char 字段，pinyin 进 pronunciation_dict |
+| 字词播报 | 600×4 | `audio/{voiceKey}/{hex码点}-word.mp3` | 「{char}，{word}」，依赖词上下文自然消歧 |
+| 固定提示语 | 17×4 | `audio/{voiceKey}/voice-*.mp3` | 本文第 4 节清单 |
+| UI 音效 | 4 | `audio/sfx-*.mp3`（根目录，不分音色） | 免版权音效库下载替换（correct/wrong/flip/win） |
+| BGM | 1-2 | `audio/bgm-*.mp3`（根目录，不分音色） | 免版权曲库挑选 |
 
 ## 4. 固定文案清单 v1（待大王过目）
 
@@ -55,14 +58,16 @@
 
 （flash-card 无指令语音，播 `{char}-word`。）
 
-## 5. 音色小样（待大王试听终裁）
+## 5. 音色（4 个全部启用，大王拍板）
 
-`scripts/audio-samples/`，4 音色 × 4 段真实文案（欢迎/指令/字词/夸奖）：
+`scripts/audio-samples/` 留有 16 个试听小样（4 音色 × 欢迎/指令/字词/夸奖）：
 
-1. `female-tianmei-jingpin` 精品甜美女声
-2. `tianxin_xiaoling` 甜心小玲
-3. `Chinese (Mandarin)_Warm_Girl` 温暖少女
-4. `lovely_girl` 萌萌女童（童声对照）
+| voiceKey | voice_id | 显示名 | 备注 |
+|---|---|---|---|
+| tianmei | `female-tianmei-jingpin` | 甜美女声 | **默认** |
+| xiaoling | `tianxin_xiaoling` | 甜心小玲 | |
+| warm | `Chinese (Mandarin)_Warm_Girl` | 温暖姐姐 | |
+| tong | `lovely_girl` | 萌萌童声 | 童声，宝宝可切换当「小伙伴」 |
 
 ## 6. Pixabay 候选（待大王试听定稿）
 
@@ -80,17 +85,20 @@
 
 - 脚本：`scripts/gen-voice-audio.mjs`（已建 samples 模式；batch 模式评审后扩展）——调 `/v1/t2a_v2`，双域名轮换、限流退避、key 读 `scripts/.env`，范式同 `gen-ai-images.mjs`。
 - batch 模式要点：
-  - manifest = 600 单字 + 600 字词 + 17 固定文案（文案表内置于脚本，含情绪标注）。
-  - pinyin 声调符号（rì）→ 数字声调（ri4）转换函数，单字条目附 `pronunciation_dict` 强制正音；字词条目靠词上下文自然消歧。
-  - 字词停顿先用「中文逗号」，批量前用 2-3 个字对比 `日，太阳` vs `日<#0.4#>太阳` 效果再定。
-  - 产物双写 `scripts/new-assets/assets/audio/` + `upload-cloud/audio/`（.mp3，与旧 .wav 共存不覆盖）。
-- BGM/音效：大王下载丢 `scripts/new-assets/raw-audio/` → 统一转 32kHz 单声道 mp3（必要时 BGM 裁剪循环段）→ 按第 3 节命名落位。
+  - manifest = (600 单字 + 600 字词 + 17 固定文案) × 4 音色 = 4868 条；3 并发跑，单条失败不中断，结尾汇总；双写目录已存在即跳过（断点续跑）。
+  - pinyin 声调符号（rì）→ 数字声调（ri4）转换函数，ü 统一转 v（nǚ→nv3，smoke 阶段验证接口接受度）；单字条目附 `pronunciation_dict` 强制正音；字词条目靠词上下文自然消歧。
+  - 字词停顿先用「中文逗号」（与旧版行为一致）；`<#0.4#>` 停顿标记留作后续调优项。
+  - 产物双写 `scripts/new-assets/assets/audio/{voiceKey}/` + `upload-cloud/audio/{voiceKey}/`（.mp3，与旧 .wav 共存不覆盖）。
+- BGM/音效：小美代选免授权来源（Mixkit/Kenney 免登录直下优先，Pixabay 需登录作后备）→ 丢 `scripts/new-assets/raw-audio/` → 统一按第 3 节命名落位（源文件已是 mp3 则直接用）。
 
 ## 8. 代码改动（外科手术式）
 
-1. `miniprogram/utils/audio.js`：`fileUrl()` 扩展名 `.wav` → `.mp3`（一行，覆盖全部播报与音效）。
-2. `miniprogram/utils/audio.js`：新增 BGM 管理器（`wx.createInnerAudioContext` loop 单例，导出 `playBgm()/pauseBgm()`），home/map/reward 页 onShow 播放、onHide 暂停；play 页不接。
-3. 调用方（4 页 + 8 玩法组件）零改动——文件名不变。
+1. `miniprogram/utils/audio.js`：`fileUrl()` 改造——播报类（字/词/voice-*）走 `audio/{voiceKey}/{名}.mp3`（voiceKey 读本地存储 `voiceKey`，无则默认 `tianmei`），音效/BGM 走根目录 `.mp3`；导出 `VOICES` 配置表（key/显示名）与 `currentVoice()/setVoice(key)`。
+2. 主页设置入口：右上角小齿轮 → 半屏弹层列出 4 个音色（当前项打勾），点选即切换并试听该音色的欢迎语，即时生效（wx.setStorageSync）。
+3. `miniprogram/utils/audio.js`：新增 BGM 管理器（`wx.createInnerAudioContext` loop 单例，导出 `playBgm()/pauseBgm()`），home/map/reward 页 onShow 播放、onHide 暂停；play 页不接。
+4. 玩法组件与页面调用方零改动——文件名规则由 `fileUrl()` 内部消化。
+
+> 前置：`audio.js` 当前有并行任务（配图线）未提交改动，本节动手前须确认其已提交，避免踩脚。
 
 ## 9. 上云与验收
 
@@ -101,10 +109,9 @@
 
 ## 10. 执行顺序与状态
 
-- [x] 音乐 API 实测（2153 关死，兜底 Pixabay）
-- [x] 音色小样 16 个（`scripts/audio-samples/`，待终裁）
-- [x] 21 条文案 v1（第 4 节，待过目）
-- [x] Pixabay 候选（第 6 节，待试听）
-- [ ] 大王三项终裁
-- [ ] batch 模式批量合成 1221 条 + 上云 + 两步核对
-- [ ] audio.js 改 mp3 + BGM 管理器 + smoke-test
+- [x] 音乐 API 实测（2153 关死，兜底免版权曲库）
+- [x] 音色小样 16 个（大王反馈「效果不错」→ 拍板 4 音色全上做配置）
+- [x] 21 条文案 v1（大王过目通过）
+- [x] Pixabay 候选（大王嫌麻烦 → 小美代下载代选，游戏内不满意随时换文件）
+- [ ] batch 模式批量合成 4868 条 + 上云 + 两步核对
+- [ ] audio.js 音色配置 + 主页设置入口 + BGM 管理器 + smoke-test
