@@ -102,16 +102,30 @@ voiceKey 取值：`tianmei`（精品甜美女声，默认）/ `xiaoling`（甜�
 
 ## 9. 上云与验收
 
-- 上云：`cloudbase storage upload upload-cloud/audio assets/audio -e 636c-cloudbase-d8gyy2qjqef096442-1471843187`。
-- 两步核对（项目惯例）：① `node -e` 统计 upload-cloud/audio 与 scripts/new-assets/assets/audio 的 mp3 数量对账（预期 1221 + BGM）；② curl 对云端 base URL 抽样 HEAD 8-10 个文件（含 voice-*/sfx-*/码点混合）确认 200。
-- `node scripts/smoke-test.mjs` 回归（含 audio URL 断言）。
-- 旧 .wav 确认无引用后择期清理，不阻塞本期。
+- 上云由大王手动执行（小美 shell 里 cloudbase CLI 认不到登录态，2026-09-08 实测只打印帮助未上传）。本地素材已就绪并通过双目录对账，逐条执行：
+
+  ```
+  cloudbase storage upload upload-cloud/audio/tianmei  assets/audio/tianmei  -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/xiaoling assets/audio/xiaoling -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/warm     assets/audio/warm     -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/tong     assets/audio/tong     -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/sfx-correct.wav assets/audio/sfx-correct.wav -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/sfx-wrong.wav   assets/audio/sfx-wrong.wav   -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/sfx-flip.wav    assets/audio/sfx-flip.wav    -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/sfx-win.wav     assets/audio/sfx-win.wav     -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  cloudbase storage upload upload-cloud/audio/bgm-main.mp3    assets/audio/bgm-main.mp3    -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
+  ```
+
+  注意：根目录 4 个 `sfx-*.wav` 会覆盖云端旧版（ASSET_VER 已升 `20260908-2`，强制全端刷缓存）；旧的单字/字词 WAV（根目录 1221 个）暂不删，作为回滚保障，稳定后再清理。
+- 两步核对：① 本地对账已通过（4×1217 mp3 + 5 根文件，upload-cloud 与 new-assets 双目录一致）；② 上云后 HEAD 抽样：各音色 `65e5.mp3`、`5973.mp3`（女，ü 正音）、`voice-welcome.mp3`，根 `sfx-correct.wav`（新文件约 338KB，旧版仅 35KB 可据此区分）、`bgm-main.mp3`，应全 200。
+- `node scripts/smoke-test.mjs` 已全绿（含音色切换/非法值/URL 规则断言）。
 
 ## 10. 执行顺序与状态
 
 - [x] 音乐 API 实测（2153 关死，兜底免版权曲库）
 - [x] 音色小样 16 个（大王反馈「效果不错」→ 拍板 4 音色全上做配置）
 - [x] 21 条文案 v1（大王过目通过）
-- [x] Pixabay 候选（大王嫌麻烦 → 小美代下载代选，游戏内不满意随时换文件）
-- [ ] batch 模式批量合成 4868 条 + 上云 + 两步核对
-- [ ] audio.js 音色配置 + 主页设置入口 + BGM 管理器 + smoke-test
+- [x] BGM/音效选型下载（Mixkit，第 6 节）
+- [x] 批量合成 4868/4868（0 失败，4 音色 × 1217 条）
+- [x] audio.js 音色配置 + 主页设置入口 + BGM 管理器 + smoke-test 全绿
+- [ ] 上云（大王手动执行，命令见第 9 节）+ 上云后 HEAD 抽样
