@@ -46,11 +46,10 @@ function completeLevel(levelId, mistakes, wrongChars = []) {
   const stars = starsForMistakes(mistakes)
   p.stars[levelId] = Math.max(p.stars[levelId] ?? 0, stars)
   p.unlockedLevel = Math.max(p.unlockedLevel, nextUnitId(levelId))
-  const wrongs = new Set(wrongChars)
-  for (const ch of new Set([...byUnit(levelId).map((c) => c.char), ...wrongs])) {
+  for (const ch of new Set([...byUnit(levelId).map((c) => c.char), ...wrongChars])) {
     const s = p.charStats[ch] || { lastUnit: levelId, wrong: 0 }
     s.lastUnit = levelId
-    if (wrongs.has(ch)) s.wrong += 1
+    if (wrongChars.includes(ch)) s.wrong += 1
     p.charStats[ch] = s
   }
   saveProgress(p)
