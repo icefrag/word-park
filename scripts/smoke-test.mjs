@@ -34,7 +34,7 @@ check('67 个单元号', TOTAL_UNITS === 67)
 check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 600)
 check('无 level 遗留字段', CHARACTERS.every((c) => c.level === undefined))
 check('阶段字量 150/150/300', byStage(1).length === 150 && byStage(2).length === 150 && byStage(3).length === 300)
-check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png(\?v=\d+)?$/.test(imageOf(c))))
+check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png(\?v=[\w-]+)?$/.test(imageOf(c))))
 check('重编号抽查', byUnit(7).length === 7 && byUnit(7).some((c) => c.char === '狗')
   && byUnit(38).length === 7 && byUnit(37).length === 10 && byUnit(29).length === 8 && byUnit(8).some((c) => c.char === '五'))
 check('小班新增字全部有图', byStage(1).filter((c) => c.unit >= 10).every((c) => c.emojiCode))
@@ -126,13 +126,19 @@ resetProgress()
 check('重置回到起点', !isUnlocked(2) && !stageUnlocked(2))
 
 // --- audio ---
-const { fileUrl } = require('./audio')
-const names = ['日', '日-word', 'voice-welcome', 'voice-praise-1', 'sfx-correct', 'voice-instr-whack', 'voice-try-again', 'voice-level-complete']
-check('音频 URL 命名正确', names.every((n) => {
-  const url = fileUrl(n).replace(/\?v=\d+$/, '')
-  return /^https:\/\/.+\/assets\/audio\/[0-9a-z-]+\.wav$/.test(url) &&
-    (n === '日' ? url.endsWith('/65e5.wav') : n === '日-word' ? url.endsWith('/65e5-word.wav') : url.endsWith(`/${n}.wav`))
-}))
+const { fileUrl, VOICES, currentVoice, setVoice } = require('./audio')
+const vurl = (n) => fileUrl(n).replace(/\?v=[\w-]+$/, '')
+check('播报 URL 走音色目录 mp3', ['日', '日-word', 'voice-welcome', 'voice-praise-1', 'voice-instr-whack', 'voice-try-again', 'voice-level-complete']
+  .every((n) => new RegExp(`^https://.+\\/assets\\/audio\\/${currentVoice()}\\/[0-9a-z-]+\\.mp3$`).test(vurl(n))))
+check('字词播报文件名(hex 码点)', vurl('日').endsWith('/tianmei/65e5.mp3') && vurl('日-word').endsWith('/tianmei/65e5-word.mp3'))
+check('音效 URL 走根目录 wav', ['sfx-correct', 'sfx-wrong', 'sfx-flip', 'sfx-win']
+  .every((n) => new RegExp(`^https://.+\\/assets\\/audio\\/${n}\\.wav$`).test(vurl(n))))
+check('音色配置 4 个且 key 唯一', VOICES.length === 4 && new Set(VOICES.map((v) => v.key)).size === 4)
+check('默认音色 tianmei', currentVoice() === 'tianmei')
+setVoice('tong')
+check('切换音色后播报 URL 跟随', currentVoice() === 'tong' && vurl('日').endsWith('/tong/65e5.mp3'))
+setVoice('not-a-voice')
+check('非法音色被忽略', currentVoice() === 'tong')
 check('文件名全 ASCII', assetName('日-word') === '65e5-word')
 
 console.log(failed === 0 ? '\n全部通过' : `\n${failed} 项失败`)

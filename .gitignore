@@ -15,3 +15,6 @@ upload-cloud/
 
 # 音色试听小样(评审用,可由 gen-voice-audio.mjs samples 随时重生成)
 scripts/audio-samples/
+
+# 音效/BGM 原始下载(mixkit wav/kenney zip,可重新下载,成品已按最终命名落 assets/audio)
+scripts/new-assets/raw-audio/

@@ -69,17 +69,17 @@ voiceKey 取值：`tianmei`（精品甜美女声，默认）/ `xiaoling`（甜�
 | warm | `Chinese (Mandarin)_Warm_Girl` | 温暖姐姐 | |
 | tong | `lovely_girl` | 萌萌童声 | 童声，宝宝可切换当「小伙伴」 |
 
-## 6. Pixabay 候选（待大王试听定稿）
+## 6. BGM 与音效最终选型（Mixkit License 可商用免署名；源文件在 `scripts/new-assets/raw-audio/`）
 
-试听：搜索页内直接点播放；定稿后下载 mp3 丢 `scripts/new-assets/raw-audio/`，小美统一处理上云。
-
-| 用途 | 搜索页 | 候选（页面内按名搜索） |
+| 用途 | 落位文件 | 来源（Mixkit） |
 |---|---|---|
-| BGM | pixabay.com/zh/music 搜 `kids happy` | Kids Happy - Happy Kids (PaulYudin, 1:15)；Happy Kids (The_Mountain, 1:23)；Kids - Kids Happy Music (alex-morgan, 1:47)；Happy Ukulele (SigmaMusicArt, 1:29) |
-| sfx-correct | 搜 `correct` | Correct (DRAGON-STUDIO)；Chime Positive-tone；Correct Right Accurate |
-| sfx-wrong | 搜 `wrong` | Wrong Answer (Universfield 0:03 按钮音)；Error/Mistake (Lesiakower)；Error 08 (Universfield)。挑温和不吓人的，避开刺耳 buzzer |
-| sfx-flip | 搜 `flip` | flipCard (freesound)；Page Flip |
-| sfx-win | 搜 `win` | Level win (0:03)；You Win Sequence 2 (floraphonic 0:07)；Marimba Win F 2 (木琴，很童趣) |
+| BGM | audio/bgm-main.mp3 | Owies Ukulele 2:40（Children/Folk Pop/Happy），assets.mixkit.co/music/1072/1072.mp3 |
+| sfx-correct | audio/sfx-correct.wav | Correct answer tone 0:01，assets.mixkit.co/active_storage/sfx/2870/2870.wav |
+| sfx-wrong | audio/sfx-wrong.wav | Wrong answer fail notification 0:01（温和款），sfx/946/946.wav |
+| sfx-flip | audio/sfx-flip.wav | Tile game reveal 0:02，sfx/960/960.wav |
+| sfx-win | audio/sfx-win.wav | Arcade game complete 0:01，sfx/205/205.wav |
+
+备选（raw-audio/，同名替换即换，代码零改动）：mixkit-952（Correct answer reward）、mixkit-948（Wrong bass buzzer）、mixkit-226（Medieval fanfare 8s）、kenney_music-jingles.zip（CC0）。
 
 ## 7. 生成流水线（复用现有素材线）
 

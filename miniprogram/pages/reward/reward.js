@@ -1,5 +1,5 @@
 const { LEVELS } = require('../../utils/levels')
-const { playVoice, playSfx } = require('../../utils/audio')
+const { playVoice, playSfx, playBgm, pauseBgm } = require('../../utils/audio')
 const { pandaImage } = require('../../utils/characters')
 
 const CONFETTI_COLORS = ['#ff6b81', '#ffd54f', '#7ed957', '#4dabf7', '#b197fc']
@@ -23,6 +23,14 @@ Page({
 
     playSfx('sfx-win')
     playVoice('voice-level-complete')
+  },
+
+  onShow() {
+    playBgm()
+  },
+
+  onHide() {
+    pauseBgm()
   },
 
   // 重播本界面过关语音

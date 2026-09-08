@@ -3,7 +3,7 @@ const { CHARACTERS } = require('../../utils/characters')
 const {
   loadProgress, resetProgress, learnedCharCount, isUnlocked, stageUnlocked, stageProgress,
 } = require('../../utils/progress')
-const { playVoice } = require('../../utils/audio')
+const { playVoice, playBgm, pauseBgm } = require('../../utils/audio')
 
 Page({
   data: {
@@ -23,7 +23,12 @@ Page({
 
   // 从 reward 返回时刷新星级/进度(map 页面常驻栈中,onLoad 不会再触发)
   onShow() {
+    playBgm()
     this.refresh()
+  },
+
+  onHide() {
+    pauseBgm()
   },
 
   refresh() {

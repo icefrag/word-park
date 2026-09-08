@@ -51,6 +51,61 @@
   }
 }
 
+/* 音色设置:右上角齿轮 + 底部弹层(点选即切换并试听) */
+.voice-gear {
+  position: absolute;
+  top: 40rpx;
+  right: 40rpx;
+  z-index: 5;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  color: #2c6e49;
+}
+.settings-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.35);
+}
+.settings-panel {
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 24rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 32rpx 24rpx 40rpx;
+}
+.settings-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #2c6e49;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+.voice-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26rpx 36rpx;
+  margin: 16rpx 0;
+  border-radius: 20rpx;
+  font-size: 38rpx;
+  color: #35543f;
+  background: #f1f7f2;
+}
+.voice-row.on {
+  background: #2c6e49;
+  color: #fff;
+}
+
 /* 平板大屏:尺寸缩回接近手机像素 */
 @media (min-width: 600px) {
   .home-panda {
@@ -62,5 +117,14 @@
   }
   .home-sub {
     font-size: 32rpx;
+  }
+  .voice-gear {
+    width: 64rpx;
+    height: 64rpx;
+    font-size: 36rpx;
+  }
+  .settings-panel {
+    left: 20%;
+    right: 20%;
   }
 }
