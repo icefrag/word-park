@@ -102,6 +102,28 @@ check('mixTargets:错字挤占旧字配额', (() => {
   return t.filter((c) => !'abc'.includes(c)).length === 2
 })())
 
+// --- engine: 音近/形近干扰(P0-3) ---
+const { pickDistractors, stripTone } = require('./engine')
+const { CONFUSABLE } = require('./characters')
+check('形近表 25 对字全在库', CONFUSABLE.length === 25 && CONFUSABLE.flat().every((ch) => new Set(CHARACTERS.map((c) => c.char)).has(ch)))
+const pyMap = { 妈: 'mā', 马: 'mǎ', 蚂: 'mǎ', 跑: 'pǎo', 高: 'gāo', 目: 'mù', 田: 'tián', 日: 'rì' }
+const confMap = { 日: ['目', '白'], 目: ['日'], 白: ['日'] }
+check('声调剥离', stripTone('mā') === 'ma' && stripTone('lǜ') === 'lv' && stripTone('gāo') === 'gao')
+check('干扰:音近优先(同音不同调)', pickDistractors('妈', ['马', '跑', '高'], 2, { pinyin: pyMap, confusable: confMap }).includes('马'))
+check('干扰:形近次优先', pickDistractors('日', ['目', '跑', '高'], 2, { pinyin: pyMap, confusable: confMap }).includes('目'))
+check('干扰:无opts纯随机不炸', (() => {
+  const d = pickDistractors('日', ['目', '跑', '高'], 2)
+  return d.length === 2 && !d.includes('日')
+})())
+check('干扰:候选不足回退', pickDistractors('日', ['目'], 2, { pinyin: pyMap, confusable: confMap }).length === 1)
+const PY = Object.fromEntries(CHARACTERS.map((c) => [c.char, c.pinyin]))
+const CONF = {}
+for (const [a, b] of CONFUSABLE) {
+  ;(CONF[a] = CONF[a] || []).push(b)
+  ;(CONF[b] = CONF[b] || []).push(a)
+}
+check('干扰:opts贯通buildQuestions', buildQuestions(['妈'], pool, [3], { pinyin: PY, confusable: CONF }).every((q) => q.options.includes('马')))
+
 // --- progress ---
 const { completeLevel, isUnlocked, learnedCharCount, resetProgress, starsForMistakes, stageUnlocked, stageProgress, loadProgress, saveProgress } = require('./progress')
 resetProgress()

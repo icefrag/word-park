@@ -1,5 +1,5 @@
-const { LEVELS } = require('../../utils/levels')
-const { CHARACTERS, byUnit, byStage } = require('../../utils/characters')
+const { LEVELS, unitStage } = require('../../utils/levels')
+const { CHARACTERS, byUnit, byStage, CONFUSABLE } = require('../../utils/characters')
 const {
   buildQuestions, buildFindAllGrid, buildMatchCards, buildBubbleTargets, shuffle, imageChars,
   pickReviewTargets, mixTargets,
@@ -7,6 +7,15 @@ const {
 const { completeLevel, loadProgress } = require('../../utils/progress')
 
 const CHAR_MAP = Object.fromEntries(CHARACTERS.map((c) => [c.char, c]))
+
+// 音近/形近干扰策略(中班起启用,小班纯随机 — spec P0-3):音近=拼音去调相同,形近=CONFUSABLE 手工表
+const PY_MAP = Object.fromEntries(CHARACTERS.map((c) => [c.char, c.pinyin]))
+const CONF_MAP = {}
+for (const [a, b] of CONFUSABLE) {
+  ;(CONF_MAP[a] = CONF_MAP[a] || []).push(b)
+  ;(CONF_MAP[b] = CONF_MAP[b] || []).push(a)
+}
+const CONF_OPTS = { pinyin: PY_MAP, confusable: CONF_MAP }
 
 Page({
   data: {
@@ -65,24 +74,25 @@ Page({
     const lvChars = this.charsFor(lv)
     const pool = this.poolFor(lv)
     const r = lv.rounds[this.roundIndex]
+    const opts = this.distractOpts(lv)
     const withVoice = (props) => (r.voice ? { ...props, voice: true } : props)
     switch (r.type) {
       case 'flashcard':
         return { type: r.type, props: { chars: lvChars } }
       case 'pic2char': {
         const targets = this.quizTargets(lv, imageChars(lvChars), r, true)
-        return { type: r.type, props: { questions: buildQuestions(targets, pool, r.options) } }
+        return { type: r.type, props: { questions: buildQuestions(targets, pool, r.options, opts) } }
       }
       case 'sound2char': {
         const targets = this.quizTargets(lv, lvChars, r, false)
-        return { type: r.type, props: { questions: buildQuestions(targets, pool, r.options) } }
+        return { type: r.type, props: { questions: buildQuestions(targets, pool, r.options, opts) } }
       }
       case 'findall':
         return {
           type: r.type,
           props: withVoice({
             grids: this.quizTargets(lv, lvChars, r, false)
-              .map((t) => ({ target: CHAR_MAP[t], cells: buildFindAllGrid(t, pool, 9, 3) })),
+              .map((t) => ({ target: CHAR_MAP[t], cells: buildFindAllGrid(t, pool, 9, 3, opts) })),
           }),
         }
       case 'match':
@@ -121,11 +131,17 @@ Page({
     }
   },
 
+  // 干扰策略:中班起(含复习单元)启用音近/形近,小班 undefined=纯随机
+  distractOpts(lv) {
+    const stage = lv.type === 'review' ? lv.stage : unitStage(lv.id)
+    return stage >= 2 ? CONF_OPTS : undefined
+  },
+
   // mini 复习轮:错字取前 3 个听音选字,3 选项(组件照常上报 wrong,进 charStats)
   buildMiniRound() {
     return {
       type: 'sound2char',
-      props: { questions: buildQuestions(this.wrongChars.slice(0, 3), this.poolFor(this.level), [3, 3, 3]) },
+      props: { questions: buildQuestions(this.wrongChars.slice(0, 3), this.poolFor(this.level), [3, 3, 3], this.distractOpts(this.level)) },
     }
   },
 })

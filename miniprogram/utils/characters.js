@@ -649,4 +649,14 @@ const pandaImage = `${ASSET_BASE}/images/panda.png`
 const TOTAL_UNITS = 67 // 终局单元数(小班1-28 中班29-51 大班52-67,各段末位为复习单元)
 const byUnit = (unit) => CHARACTERS.filter((c) => c.unit === unit)
 const byStage = (stage) => CHARACTERS.filter((c) => c.stage === stage)
-module.exports = { CHARACTERS, TOTAL_UNITS, imageOf, pandaImage, byStage, byUnit, assetName }
+
+// 形近混淆对(手工精选,双方均在字库;只收非同音的纯视觉对,同音/音近由拼音自动判定 — spec P0-3)
+const CONFUSABLE = [
+  ['日', '目'], ['日', '白'], ['日', '田'], ['月', '目'], ['白', '百'], ['石', '右'],
+  ['鸟', '乌'], ['天', '大'], ['八', '人'], ['儿', '几'], ['见', '贝'], ['半', '羊'],
+  ['山', '出'], ['左', '右'], ['木', '本'], ['爸', '爷'], ['水', '冰'], ['火', '灰'],
+  ['雨', '雷'], ['四', '西'], ['高', '亮'], ['双', '又'], ['谁', '推'], ['话', '活'],
+  ['上', '土'],
+]
+
+module.exports = { CHARACTERS, TOTAL_UNITS, imageOf, pandaImage, byStage, byUnit, assetName, CONFUSABLE }
