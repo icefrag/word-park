@@ -67,7 +67,7 @@ Page({
     const quota = r.count >= 5 ? 2 : 1
     const wrong = needImage
       ? this.wrongChars.filter((ch) => CHAR_MAP[ch] && CHAR_MAP[ch].emojiCode)
-      : [...this.wrongChars]
+      : this.wrongChars
     return mixTargets(universe.map((c) => c.char), wrong, this.oldTargets(lv, needImage, quota), r.count)
   },
 
