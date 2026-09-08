@@ -158,10 +158,9 @@ Page({
     }
   },
 
-  // 干扰策略:中班起(含复习单元)启用音近/形近,小班 undefined=纯随机
+  // 干扰策略:中班起启用音近/形近,小班 undefined=纯随机(unitStage 经 s.review 覆盖复习单元)
   distractOpts(lv) {
-    const stage = lv.type === 'review' ? lv.stage : unitStage(lv.id)
-    return stage >= 2 ? CONF_OPTS : undefined
+    return unitStage(lv.id) >= 2 ? CONF_OPTS : undefined
   },
 
   // mini 复习轮:错字取前 3 个听音选字,3 选项(组件照常上报 wrong,进 charStats)
