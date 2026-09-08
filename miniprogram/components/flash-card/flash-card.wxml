@@ -1,4 +1,5 @@
 <view class="center full">
+  <view class="round-bar"><view class="fill" style="width: {{(idx + 1) / chars.length * 100}}%"></view></view>
   <view wx:if="{{showCard}}" class="card center pop flash-box" bindtap="speak" hover-class="press">
     <text class="flash-hint">🔊</text>
     <view class="flash-char">{{chars[idx].char}}</view>

@@ -4,9 +4,31 @@
   color: #2c6e49;
 }
 .map-reset-btn {
+  position: relative;
+  overflow: hidden;
   min-height: 128rpx;
   font-size: 40rpx;
   box-shadow: 0 12rpx 0 #d96f00;
+}
+/* 长按充能填充:2s 线性从左铺满,与 JS 定时同步;松手即随 wx:if 撤销 */
+.reset-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 107, 129, 0.45);
+  border-radius: inherit;
+  transform-origin: left center;
+  animation: reset-fill 2s linear forwards;
+}
+@keyframes reset-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+/* 锁定单元:替代原生 disabled 灰显(改为可点击,给摇头+toast 反馈) */
+.unit-btn.locked {
+  filter: grayscale(0.8);
 }
 
 /* 大屏平板竖屏:rpx 随宽度放大导致头部/底部固定元素占高过多、滚动区只剩一行多。

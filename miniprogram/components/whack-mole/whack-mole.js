@@ -3,13 +3,13 @@ const { shuffle } = require('../../utils/engine')
 const { CHARACTERS } = require('../../utils/characters')
 
 const HOLE_COUNT = 9 // 3x3 九宫格地洞
-const MOLE_LIFETIME = 1300 // 地鼠冒头停留时长(ms)
-const SPAWN_INTERVAL = 1000 // 地鼠出洞间隔(ms)
 
 Component({
   properties: {
     targets: { type: Array, value: [] }, // 目标字序列(字符串数组)
     voice: { type: Boolean, value: false }, // 语音提示模式:不显示目标字,只听音
+    moleLifetime: { type: Number, value: 1300 }, // 地鼠冒头停留时长(ms),按阶段分档传入
+    moleSpawn: { type: Number, value: 1000 }, // 出洞间隔(ms),按阶段分档传入
   },
 
   data: {
@@ -27,6 +27,7 @@ Component({
       this.mistakes = 0
       this.currentTarget = ''
       this.finished = false
+      this.forceTarget = false // 目标地鼠漏敲后置位,下次出洞必刷目标作补偿
       this.timers = []
       this.intervals = []
       this.moleTimers = Array(HOLE_COUNT).fill(null)
@@ -34,7 +35,7 @@ Component({
       this.timers.push(
         setTimeout(() => {
           this.newTarget()
-          this.intervals.push(setInterval(() => this.spawn(), SPAWN_INTERVAL))
+          this.intervals.push(setInterval(() => this.spawn(), this.data.moleSpawn))
           this.spawn()
         }, 2200)
       )
@@ -80,20 +81,23 @@ Component({
       })
       if (empty.length === 0) return
       const i = empty[Math.floor(Math.random() * empty.length)] // 随机选一个空洞
-      const char =
-        Math.random() < 0.45
-          ? this.currentTarget
-          : shuffle(this.ALL.filter((c) => c !== this.currentTarget))[0] // 45% 目标字,其余干扰字
+      const wantTarget = this.forceTarget || Math.random() < 0.45
+      this.forceTarget = false
+      const char = wantTarget
+        ? this.currentTarget
+        : shuffle(this.ALL.filter((c) => c !== this.currentTarget))[0] // 45% 目标字,其余干扰字
       const moles = [...this.data.moles]
       moles[i] = { char }
       this.setData({ moles })
-      // 地鼠 1.3s 后自动缩回
       clearTimeout(this.moleTimers[i])
       this.moleTimers[i] = setTimeout(() => {
+        const cur = this.data.moles[i]
+        // 当前目标缩回未被敲中:下次必刷目标,孩子不必干等概率
+        if (cur && cur.char === this.currentTarget) this.forceTarget = true
         const next = [...this.data.moles]
         next[i] = null
         this.setData({ moles: next })
-      }, MOLE_LIFETIME)
+      }, this.data.moleLifetime)
     },
 
     whack(e) {

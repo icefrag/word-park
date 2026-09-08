@@ -1,5 +1,6 @@
 <view class="center full">
   <view class="quiz-title">这是哪个字?</view>
+  <view class="round-bar"><view class="fill" style="width: {{(qi + 1) / questions.length * 100}}%"></view></view>
   <image class="card bounce quiz-image" src="{{image}}" mode="aspectFit" bindtap="repeat" hover-class="press" />
   <view class="options-row">
     <button

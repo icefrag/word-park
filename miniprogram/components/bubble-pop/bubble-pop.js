@@ -6,6 +6,7 @@ Component({
   properties: {
     targets: { type: Array, value: [] }, // 目标字序列(字符串数组)
     voice: { type: Boolean, value: false }, // 语音提示模式:不显示目标字,只听音
+    bubbleSpawn: { type: Number, value: 1300 }, // 出泡间隔(ms),按阶段分档传入
   },
 
   data: {
@@ -22,13 +23,14 @@ Component({
       this.uid = 0
       this.mistakes = 0
       this.currentTarget = ''
+      this.finished = false // 完成后再点中目标不再触发(防双 complete,同 whack-mole)
       this.timers = []
       this.intervals = []
       playVoice('voice-instr-bubble')
       this.timers.push(
         setTimeout(() => {
           this.newTarget()
-          this.intervals.push(setInterval(() => this.spawn(), 1300))
+          this.intervals.push(setInterval(() => this.spawn(), this.data.bubbleSpawn))
           this.spawn()
         }, 2200)
       )
@@ -75,6 +77,7 @@ Component({
     },
 
     pop(e) {
+      if (this.finished) return
       const id = e.currentTarget.dataset.id
       const b = this.data.bubbles.find((x) => x.id === id)
       if (!b) return
@@ -86,6 +89,7 @@ Component({
         })
         this.showStar() // 点中目标气泡:星星粒子正反馈
         if (this.data.score >= this.data.targets.length) {
+          this.finished = true
           playPraise()
           this.intervals.forEach(clearInterval)
           this.timers.push(setTimeout(() => this.triggerEvent('complete', { mistakes: this.mistakes }), 700))

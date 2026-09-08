@@ -10,6 +10,7 @@ Component({
     charCards: [], // 左列字牌视图模型 {key, char}
     imgCards: [], // 右列图牌视图模型 {key, char, image}
     selected: '', // 当前选中的字牌 key
+    matchedN: 0, // 已配对数(进度条用)
     matchedMap: {}, // 已配对成功的 char → true(WXML 渲染用,不支持 indexOf)
     wrongPairMap: {}, // 当前错配的两张牌 key → true(shake 抖动)
     starBurst: false, // 答对星星粒子开关
@@ -83,7 +84,7 @@ Component({
       const picked = this.data.charCards.find((c) => c.key === this.data.selected)
       if (picked.char === card.char) {
         this.matchedCount++
-        this.setData({ matchedMap: { ...this.data.matchedMap, [card.char]: true }, selected: '' })
+        this.setData({ matchedMap: { ...this.data.matchedMap, [card.char]: true }, selected: '', matchedN: this.matchedCount })
         playSfx('sfx-correct')
         this.showStar() // 配对成功:星星粒子正反馈
         if (this.matchedCount === this.data.charCards.length) {

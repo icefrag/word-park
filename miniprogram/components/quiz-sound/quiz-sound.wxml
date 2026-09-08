@@ -1,5 +1,6 @@
 <view class="center full">
   <view class="quiz-title">听一听,是哪个字?</view>
+  <view class="round-bar"><view class="fill" style="width: {{(qi + 1) / questions.length * 100}}%"></view></view>
   <button class="card sound-btn-card" bindtap="playTarget">🔊</button>
   <view class="options-row">
     <button

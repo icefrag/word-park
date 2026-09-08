@@ -262,6 +262,22 @@ button::after {
   100% { transform: translate(-50%, -240rpx) scale(1.4); opacity: 0; }
 }
 
+/* 玩法进度条:8 个玩法统一的"走到哪了"可视化,负 margin 上提紧贴标题 */
+.round-bar {
+  width: 50%;
+  height: 14rpx;
+  margin-top: -24rpx;
+  background: #e8f5e9;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+.round-bar .fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #7ed957, #4caf50);
+  transition: width 0.3s;
+}
+
 /* 单元地图:已认字进度条 */
 .learned-bar {
   width: 92vw;

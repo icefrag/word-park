@@ -18,10 +18,6 @@
   font-size: 44rpx;
   opacity: 0.5;
 }
-.score-text {
-  font-size: 52rpx;
-  color: #2c6e49;
-}
 
 /* 平板大屏:尺寸缩回接近手机像素 */
 @media (min-width: 600px) {
@@ -33,8 +29,5 @@
   }
   .hint-icon {
     font-size: 30rpx;
-  }
-  .score-text {
-    font-size: 34rpx;
   }
 }

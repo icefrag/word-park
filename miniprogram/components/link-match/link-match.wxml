@@ -1,5 +1,6 @@
 <view class="center full">
   <view class="quiz-title" bindtap="speak" hover-class="press">把字和图片连起来</view>
+  <view class="round-bar"><view class="fill" style="width: {{matchedN / charCards.length * 100}}%"></view></view>
   <view class="link-board">
     <view class="link-col">
       <view

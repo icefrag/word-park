@@ -12,7 +12,7 @@
     <view
       wx:for="{{stages}}"
       wx:key="id"
-      class="stage-tab {{item.id === activeStage ? 'active' : ''}} {{item.unlocked ? '' : 'locked'}}"
+      class="stage-tab {{item.id === activeStage ? 'active' : ''}} {{item.unlocked ? '' : 'locked'}} {{shakeStage === item.id ? 'shake' : ''}}"
       data-id="{{item.id}}"
       bindtap="switchStage"
       hover-class="press"
@@ -38,9 +38,9 @@
           <button
             wx:for="{{stage.units}}"
             wx:key="id"
-            class="big-btn unit-btn {{item.green ? 'green' : ''}} {{item.review ? 'review-btn' : ''}}"
-            disabled="{{item.locked}}"
+            class="big-btn unit-btn {{item.green ? 'green' : ''}} {{item.review ? 'review-btn' : ''}} {{item.locked ? 'locked' : ''}} {{shakeId === item.id ? 'shake' : ''}}"
             data-id="{{item.id}}"
+            data-locked="{{item.locked}}"
             bindtap="play"
           >
             <view style="font-size: 40rpx">{{item.review ? '🔁 ' : ''}}{{item.theme}}</view>
@@ -53,7 +53,14 @@
       </view>
     </block>
   </scroll-view>
-  <button class="big-btn map-reset-btn" bindtap="onReset">
-    重新开始(家长按钮)
+  <button
+    class="big-btn map-reset-btn"
+    bindtap="onResetTap"
+    bindtouchstart="onResetStart"
+    bindtouchend="onResetEnd"
+    bindtouchcancel="onResetEnd"
+  >
+    <view wx:if="{{resetArming}}" class="reset-fill"></view>
+    <text>重新开始(家长按钮)</text>
   </button>
 </view>

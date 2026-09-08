@@ -3,6 +3,7 @@
     <block wx:if="{{voice}}">🔊 听一听,找出所有的字</block>
     <block wx:else>找出所有的 <text class="target-char">{{grids[gi].target.char}}</text></block>
   </view>
+  <view class="round-bar"><view class="fill" style="width: {{(gi + 1) / grids.length * 100}}%"></view></view>
   <view class="card findall-card">
     <view class="findall-board" style="width: {{boardW}}px; height: {{boardH}}px">
       <view

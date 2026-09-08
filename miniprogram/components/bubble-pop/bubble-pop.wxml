@@ -2,8 +2,8 @@
   <view class="quiz-title prompt" bindtap="speakTarget" hover-class="press">
     <block wx:if="{{voice}}">🔊 听一听,戳那个字的泡泡</block>
     <block wx:else>点<text class="target-char">{{target || '?'}}</text>泡泡<text class="hint-icon">🔊</text></block>
-    <text class="score-text">{{score}} / {{targets.length}}</text>
   </view>
+  <view class="round-bar"><view class="fill" style="width: {{score / targets.length * 100}}%"></view></view>
   <button
     wx:for="{{bubbles}}"
     wx:key="id"
