@@ -1,4 +1,4 @@
-const { LEVELS } = require('../../utils/levels')
+const { LEVELS, STAGE_RHYTHM, unitStage } = require('../../utils/levels')
 const { CHARACTERS, byUnit, byStage } = require('../../utils/characters')
 const {
   buildQuestions, buildFindAllGrid, buildMatchCards, buildBubbleTargets, shuffle, imageChars,
@@ -64,10 +64,10 @@ Page({
       case 'match':
         return { type: r.type, props: { cards: buildMatchCards(shuffle(imageChars(lvChars)).slice(0, r.pairs)) } }
       case 'bubble':
-        // 气泡目标字只用已学池;组件内部再用全字表造干扰
-        return { type: r.type, props: withVoice({ targets: buildBubbleTargets(pool, r.target) }) }
+        // 气泡目标字只用已学池;组件内部再用全字表造干扰;节奏按阶段分档(levels.STAGE_RHYTHM)
+        return { type: r.type, props: withVoice({ targets: buildBubbleTargets(pool, r.target), ...STAGE_RHYTHM[lv.stage || unitStage(lv.id)] }) }
       case 'whack':
-        return { type: r.type, props: withVoice({ targets: buildBubbleTargets(pool, r.target) }) }
+        return { type: r.type, props: withVoice({ targets: buildBubbleTargets(pool, r.target), ...STAGE_RHYTHM[lv.stage || unitStage(lv.id)] }) }
       case 'link':
         return { type: r.type, props: { cards: buildMatchCards(shuffle(imageChars(lvChars)).slice(0, r.pairs)) } }
       default:

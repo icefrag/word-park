@@ -17,6 +17,7 @@ Component({
     backFont: 0,
     flippedMap: {}, // 已翻开卡片 index → true
     matchedMap: {}, // 已配对成功的 char → true
+    matchedN: 0, // 已配对数(进度条用)
     wrongPairMap: {}, // 当前不匹配的两张牌 index → true(shake 抖动)
     starBurst: false, // 答对星星粒子开关
   },
@@ -105,6 +106,7 @@ Component({
             this.setData({
               matchedMap: { ...this.data.matchedMap, [a.char]: true },
               flippedMap: {},
+              matchedN: this.matchedCount,
             })
             this.flippedCards = []
             this.lock = false

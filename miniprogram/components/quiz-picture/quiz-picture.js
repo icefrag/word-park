@@ -56,17 +56,18 @@ Component({
       const q = this.data.questions[this.data.qi]
       if (ch === q.target) {
         playSfx('sfx-correct')
-        playPraise()
+        const last = this.data.qi >= this.data.questions.length - 1
+        if (last) playPraise() // 夸奖语音只在整轮完成时播(与其余玩法一致,防夸奖通胀)
         this.setData({ done: true })
         this.showStar() // 答对:星星粒子正反馈
         this.timers.push(
           setTimeout(() => {
-            if (this.data.qi < this.data.questions.length - 1) {
+            if (!last) {
               this.setData({ qi: this.data.qi + 1, done: false })
             } else {
               this.triggerEvent('complete', { mistakes: this.mistakes })
             }
-          }, 600)
+          }, 700)
         )
       } else {
         this.mistakes++

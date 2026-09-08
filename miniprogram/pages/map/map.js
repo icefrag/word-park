@@ -12,6 +12,9 @@ Page({
     total: CHARACTERS.length,
     learned: 0,
     learnedPct: 0,
+    shakeId: 0, // 锁定单元摇头反馈:正在抖动的单元 id
+    shakeStage: 0, // 锁定页签摇头反馈:正在抖动的阶段 id
+    resetArming: false, // 重置按钮长按充能中(填充动画开关)
   },
 
   onLoad() {
@@ -64,17 +67,48 @@ Page({
     const id = Number(e.currentTarget.dataset.id)
     if (!stageUnlocked(id)) {
       wx.showToast({ title: '通关上一阶段后解锁', icon: 'none' })
+      this.setData({ shakeStage: id })
+      clearTimeout(this.shakeStageTimer)
+      this.shakeStageTimer = setTimeout(() => this.setData({ shakeStage: 0 }), 500)
       return
     }
     this.setData({ activeStage: id })
   },
 
   play(e) {
-    wx.navigateTo({ url: `/pages/play/play?levelId=${e.currentTarget.dataset.id}` })
+    const { id, locked } = e.currentTarget.dataset
+    if (locked) {
+      // 锁定单元不再静默:摇头 + toast(儿童向语音提示属后续素材)
+      wx.showToast({ title: '先通过前面的关卡哦', icon: 'none' })
+      this.setData({ shakeId: id })
+      clearTimeout(this.shakeTimer)
+      this.shakeTimer = setTimeout(() => this.setData({ shakeId: 0 }), 500)
+      return
+    }
+    wx.navigateTo({ url: `/pages/play/play?levelId=${id}` })
   },
 
-  onReset() {
+  // 重置防误触:点按只提示长按手势,按住 2 秒填充动画走完才真正清档
+  onResetTap() {
+    if (this._resetDone) {
+      this._resetDone = false // 长按完成后的松手触发 tap,不再弹提示
+      return
+    }
+    wx.showToast({ title: '长按2秒重置全部进度', icon: 'none' })
+  },
+  onResetStart() {
+    this.setData({ resetArming: true })
+    this._resetTimer = setTimeout(() => this.doReset(), 2000)
+  },
+  onResetEnd() {
+    clearTimeout(this._resetTimer)
+    this.setData({ resetArming: false })
+  },
+  doReset() {
+    this._resetDone = true
+    this.setData({ resetArming: false })
     resetProgress()
     this.refresh()
+    wx.showToast({ title: '进度已重置', icon: 'none' })
   },
 })

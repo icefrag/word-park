@@ -101,6 +101,11 @@ const STAGE_PLAY = {
     ],
   },
 }
+// 操作类玩法节奏按阶段分档:中班反应窗口放宽,大班收紧(未配置的小班不出现这两类玩法)
+const STAGE_RHYTHM = {
+  2: { moleLifetime: 2000, moleSpawn: 1100, bubbleSpawn: 1600 },
+  3: { moleLifetime: 1700, moleSpawn: 1000, bubbleSpawn: 1300 },
+}
 // 语音提示模式:stage ≥ 2 的这三类玩法不显示目标字,只听音(spec 第 5 节)
 const VOICE_TYPES = ['findall', 'bubble', 'whack']
 // 单元内有图字不足时,图玩法替换为纯字玩法(spec 第 5 节)
@@ -161,4 +166,4 @@ const LEVELS = [
   ]),
 ]
 
-module.exports = { LEVELS, STAGES, THEMES, unitStage }
+module.exports = { LEVELS, STAGES, THEMES, STAGE_RHYTHM, unitStage }

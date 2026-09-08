@@ -20,6 +20,8 @@ for (let i = 0; i < SFX_POOL_SIZE; i++) {
 }
 
 function playSfx(name) {
+  // 答对音效伴随轻震动:多感官正反馈(机型不支持则静默失败,不影响出声)
+  if (name === 'sfx-correct') wx.vibrateShort({ type: 'light', fail: () => {} })
   const ctx = sfxPool[sfxIndex++ % SFX_POOL_SIZE]
   ctx.stop()
   ctx.src = fileUrl(name)

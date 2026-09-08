@@ -1,5 +1,6 @@
 <view class="center full">
   <view class="quiz-title" bindtap="speak" hover-class="press">字和图片配成一对</view>
+  <view class="round-bar"><view class="fill" style="width: {{matchedN / (cards.length / 2) * 100}}%"></view></view>
   <view class="match-board" style="width: {{boardW}}px; height: {{boardH}}px">
     <view
       wx:for="{{cells}}"
