@@ -19,11 +19,13 @@ Component({
     wrongCell: -1,
     gridDone: false,
     total: 0, // 当前网格中目标字出现次数
+    pulseMap: {}, // 提示脉冲的格子下标 → true(错3次起短暂高亮剩余目标)
   },
 
   lifetimes: {
     attached() {
       this.mistakes = 0
+      this.wrongCount = 0
       this.timers = []
       this.foundCount = 0
       this.calcTotal()
@@ -90,7 +92,8 @@ Component({
             setTimeout(() => {
               if (this.data.gi < this.data.grids.length - 1) {
                 this.foundCount = 0
-                this.setData({ gi: this.data.gi + 1, foundMap: {}, gridDone: false })
+                this.wrongCount = 0
+                this.setData({ gi: this.data.gi + 1, foundMap: {}, gridDone: false, pulseMap: {} })
                 this.timers.push(setTimeout(() => this.repeat(), 600))
               } else {
                 this.triggerEvent('complete', { mistakes: this.mistakes })
@@ -100,11 +103,21 @@ Component({
         }
       } else {
         this.mistakes++
+        this.wrongCount++
         this.setData({ wrongCell: i })
         playSfx('sfx-wrong')
         playVoice('voice-try-again')
         this.timers.push(setTimeout(() => this.setData({ wrongCell: -1 }), 500))
         if (this.data.voice) this.timers.push(setTimeout(() => this.repeat(), 1200))
+        // 错3次起:短暂脉冲剩余目标格,提示后收回,不打穿玩法
+        if (this.wrongCount >= 3) {
+          const pulseMap = {}
+          g.cells.forEach((c, idx) => {
+            if (c === g.target.char && !this.data.foundMap[idx]) pulseMap[idx] = true
+          })
+          this.setData({ pulseMap })
+          this.timers.push(setTimeout(() => this.setData({ pulseMap: {} }), 1500))
+        }
       }
     },
   },

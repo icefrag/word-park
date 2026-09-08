@@ -5,9 +5,22 @@ const {
 } = require('../../utils/engine')
 const { completeLevel } = require('../../utils/progress')
 
+// 轮次过渡卡文案:图标+玩法名(切换轮次前先亮 1.1s,孩子知道接下来玩什么)
+const GAME_META = {
+  flashcard: { icon: '📖', name: '认一认' },
+  pic2char: { icon: '🖼️', name: '看图选字' },
+  sound2char: { icon: '👂', name: '听音选字' },
+  findall: { icon: '🔍', name: '找一找' },
+  match: { icon: '🐼', name: '翻牌配对' },
+  bubble: { icon: '🫧', name: '戳泡泡' },
+  whack: { icon: '🔨', name: '打地鼠' },
+  link: { icon: '🔗', name: '连连看' },
+}
+
 Page({
   data: {
     round: null, // {type, props}:当前轮玩法类型与该组件所需数据
+    intro: null, // 轮次过渡卡 {icon, name},期间玩法在遮罩下已挂载开跑
   },
 
   onLoad(query) {
@@ -20,7 +33,22 @@ Page({
     this.level = level
     this.roundIndex = 0
     this.mistakes = 0
-    this.setData({ round: this.buildRound() })
+    this.showRound(this.buildRound())
+  },
+
+  onUnload() {
+    clearTimeout(this.introTimer)
+  },
+
+  showRound(round) {
+    this.setData({ round, intro: GAME_META[round.type] })
+    clearTimeout(this.introTimer)
+    this.introTimer = setTimeout(() => this.setData({ intro: null }), 1100)
+  },
+
+  skipIntro() {
+    clearTimeout(this.introTimer)
+    this.setData({ intro: null })
   },
 
   // 干扰项只用已学过的字(unit 即学习顺序)
@@ -79,7 +107,7 @@ Page({
     this.mistakes += e.detail.mistakes ?? 0
     if (this.roundIndex < this.level.rounds.length - 1) {
       this.roundIndex++
-      this.setData({ round: this.buildRound() })
+      this.showRound(this.buildRound())
     } else {
       const stars = completeLevel(this.level.id, this.mistakes)
       wx.redirectTo({ url: `/pages/reward/reward?levelId=${this.level.id}&stars=${stars}` })

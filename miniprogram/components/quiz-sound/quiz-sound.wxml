@@ -6,7 +6,7 @@
     <button
       wx:for="{{questions[qi].options}}"
       wx:key="*this"
-      class="opt-btn {{wrongPick === item ? 'shake' : ''}}"
+      class="opt-btn {{wrongPick === item ? 'shake' : ''}} {{dimMap[item] ? 'hint-dim' : ''}} {{glowPick === item ? 'hint-glow' : ''}}"
       data-ch="{{item}}"
       bindtap="pick"
     >

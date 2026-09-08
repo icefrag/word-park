@@ -84,6 +84,18 @@ check('配对:8 张含字牌图牌', cards.length === 8 &&
   cards.filter((c) => c.kind === 'char').length === 4)
 const targets = buildBubbleTargets(pool, 8)
 check('目标序列长度', targets.length === 8)
+// 渐进提示:排除项选取跳过目标与已排除项,选项耗尽返回 null
+check('提示:排除项选取', (() => {
+  const { nextDimPick } = require('./engine')
+  const opts = ['日', '月', '水']
+  const d1 = nextDimPick(opts, '月', {})
+  const d2 = nextDimPick(opts, '月', { [d1]: true })
+  return d1 !== '月' && d2 !== '月' && d2 !== d1
+})())
+check('提示:无可排除项返回 null', (() => {
+  const { nextDimPick } = require('./engine')
+  return nextDimPick(['月'], '月', {}) === null && nextDimPick(['日', '月'], '月', { 日: true }) === null
+})())
 const { imageChars } = require('./engine')
 check('有图字过滤', imageChars([{ emojiCode: '1f600' }, { emojiCode: null }, {}]).length === 1)
 

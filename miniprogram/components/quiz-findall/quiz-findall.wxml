@@ -9,7 +9,7 @@
       <view
         wx:for="{{cells}}"
         wx:key="i"
-        class="findall-cell {{wrongCell === item.i ? 'shake' : ''}} {{foundMap[item.i] ? 'found' : ''}}"
+        class="findall-cell {{wrongCell === item.i ? 'shake' : ''}} {{foundMap[item.i] ? 'found' : ''}} {{pulseMap[item.i] ? 'hint-glow' : ''}}"
         style="left: {{item.left}}px; top: {{item.top}}px; width: {{cell}}px; height: {{cell}}px; line-height: {{cell}}px"
         data-i="{{item.i}}"
         bindtap="clickCell"

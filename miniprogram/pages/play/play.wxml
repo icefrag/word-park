@@ -7,3 +7,11 @@
 <bubble-pop wx:elif="{{round.type === 'bubble'}}" targets="{{round.props.targets}}" voice="{{round.props.voice}}" bind:complete="onRoundComplete" />
 <whack-mole wx:elif="{{round.type === 'whack'}}" targets="{{round.props.targets}}" voice="{{round.props.voice}}" bind:complete="onRoundComplete" />
 <link-match wx:elif="{{round.type === 'link'}}" cards="{{round.props.cards}}" bind:complete="onRoundComplete" />
+
+<!-- 轮次过渡卡:玩法图标+名字,1.1s 自动消失,点一下立即跳过 -->
+<view wx:if="{{intro}}" class="round-intro" bindtap="skipIntro">
+  <view class="intro-card pop">
+    <view class="intro-icon bounce">{{intro.icon}}</view>
+    <view class="intro-name">{{intro.name}}</view>
+  </view>
+</view>

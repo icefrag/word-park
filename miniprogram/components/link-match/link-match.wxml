@@ -6,7 +6,7 @@
       <view
         wx:for="{{charCards}}"
         wx:key="key"
-        class="link-card {{selected === item.key ? 'selected' : ''}} {{matchedMap[item.char] ? 'done' : ''}} {{wrongPairMap[item.key] ? 'shake' : ''}}"
+        class="link-card {{selected === item.key ? 'selected' : ''}} {{matchedMap[item.char] ? 'done' : ''}} {{wrongPairMap[item.key] ? 'shake' : ''}} {{hintKeyMap[item.key] ? 'hint-glow' : ''}}"
         data-card="{{item}}"
         bindtap="pickChar"
         hover-class="cell-hover"
@@ -18,7 +18,7 @@
       <view
         wx:for="{{imgCards}}"
         wx:key="key"
-        class="link-card {{matchedMap[item.char] ? 'done' : ''}} {{wrongPairMap[item.key] ? 'shake' : ''}}"
+        class="link-card {{matchedMap[item.char] ? 'done' : ''}} {{wrongPairMap[item.key] ? 'shake' : ''}} {{hintKeyMap[item.key] ? 'hint-glow' : ''}}"
         data-card="{{item}}"
         bindtap="pickImage"
         hover-class="cell-hover"

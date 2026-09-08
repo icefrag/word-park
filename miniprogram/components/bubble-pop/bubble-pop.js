@@ -14,6 +14,7 @@ Component({
     score: 0,
     target: '', // 当前目标字(提示栏展示,可点读)
     wrongId: -1,
+    nudge: false, // 呆滞唤醒:长时间未命中,提示栏呼吸发光
     starBurst: false, // 答对星星粒子开关
   },
 
@@ -56,11 +57,17 @@ Component({
 
     newTarget() {
       this.currentTarget = this.data.targets[Math.min(this.data.score, this.data.targets.length - 1)]
+      this.lastHitAt = Date.now()
       this.setData({ target: this.currentTarget })
       this.speakTarget()
     },
 
     spawn() {
+      // 呆滞唤醒:10s 没点中目标(走神/不认得),重听目标音并让提示栏呼吸发光,命中后自动解除
+      if (!this.finished && !this.data.nudge && Date.now() - this.lastHitAt > 10000) {
+        this.setData({ nudge: true })
+        this.speakTarget()
+      }
       if (this.data.bubbles.length >= 6) return
       const char =
         Math.random() < 0.45
@@ -86,6 +93,7 @@ Component({
         this.setData({
           bubbles: this.data.bubbles.filter((x) => x.id !== id),
           score: this.data.score + 1,
+          nudge: false,
         })
         this.showStar() // 点中目标气泡:星星粒子正反馈
         if (this.data.score >= this.data.targets.length) {

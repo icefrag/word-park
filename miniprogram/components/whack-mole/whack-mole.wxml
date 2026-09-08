@@ -1,5 +1,5 @@
 <view class="center full">
-  <view class="quiz-title prompt" bindtap="speakTarget" hover-class="press">
+  <view class="quiz-title prompt {{nudge ? 'prompt-glow' : ''}}" bindtap="speakTarget" hover-class="press">
     <block wx:if="{{voice}}">🔊 听一听,敲那个字</block>
     <block wx:else>敲<text class="target-char">{{target || '?'}}</text>地鼠<text class="hint-icon">🔊</text></block>
   </view>

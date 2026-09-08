@@ -13,6 +13,7 @@ Component({
     matchedN: 0, // 已配对数(进度条用)
     matchedMap: {}, // 已配对成功的 char → true(WXML 渲染用,不支持 indexOf)
     wrongPairMap: {}, // 当前错配的两张牌 key → true(shake 抖动)
+    hintKeyMap: {}, // 提示高亮的一对牌 key → true(累错3次起)
     starBurst: false, // 答对星星粒子开关
   },
 
@@ -97,7 +98,17 @@ Component({
         this.setData({ selected: '' })
         playSfx('sfx-wrong')
         playVoice('voice-try-again')
+        if (this.mistakes >= 3) this.showHintPair()
       }
+    },
+
+    // 累错3次起:短暂高亮一对未配对的字牌+图牌,降低纯碰运气的试错成本
+    showHintPair() {
+      const charCard = this.data.charCards.find((c) => !this.data.matchedMap[c.char])
+      if (!charCard) return
+      const imgCard = this.data.imgCards.find((c) => c.char === charCard.char)
+      this.setData({ hintKeyMap: { [charCard.key]: true, [imgCard.key]: true } })
+      this.timers.push(setTimeout(() => this.setData({ hintKeyMap: {} }), 1600))
     },
   },
 })

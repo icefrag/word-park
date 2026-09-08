@@ -19,6 +19,7 @@ Component({
     matchedMap: {}, // 已配对成功的 char → true
     matchedN: 0, // 已配对数(进度条用)
     wrongPairMap: {}, // 当前不匹配的两张牌 index → true(shake 抖动)
+    hintPairMap: {}, // 提示高亮的一对牌 index → true(累错3次起)
     starBurst: false, // 答对星星粒子开关
   },
 
@@ -128,9 +129,19 @@ Component({
             this.lock = false
             playSfx('sfx-wrong')
             playVoice('voice-try-again')
+            if (this.mistakes >= 3) this.showHintPair()
           }, 900)
         )
       }
+    },
+
+    // 累错3次起:翻回后短暂高亮一对未配对的字牌+图牌,降低纯碰运气的试错成本
+    showHintPair() {
+      const charCell = this.data.cells.find((c) => !this.data.matchedMap[c.char] && c.kind === 'char')
+      if (!charCell) return
+      const imgCell = this.data.cells.find((c) => c.char === charCell.char && c.kind === 'image')
+      this.setData({ hintPairMap: { [charCell.i]: true, [imgCell.i]: true } })
+      this.timers.push(setTimeout(() => this.setData({ hintPairMap: {} }), 1600))
     },
   },
 })

@@ -1,5 +1,6 @@
-const { playVoice, playSfx, playPraise } = require('../../utils/audio')
+const { playVoice, playChar, playSfx, playPraise } = require('../../utils/audio')
 const { imageOf } = require('../../utils/characters')
+const { nextDimPick } = require('../../utils/engine')
 
 Component({
   properties: {
@@ -12,11 +13,14 @@ Component({
     done: false,
     starBurst: false, // 答对星星粒子开关
     image: '',
+    dimMap: {}, // 已排除的干扰项 char → true(错3次起)
+    glowPick: '', // 高亮引导的正确项 char(错4次起)
   },
 
   lifetimes: {
     attached() {
       this.mistakes = 0
+      this.wrongCount = 0
       this.timers = []
       this.updateImage()
       playVoice('voice-instr-pic2char')
@@ -63,7 +67,8 @@ Component({
         this.timers.push(
           setTimeout(() => {
             if (!last) {
-              this.setData({ qi: this.data.qi + 1, done: false })
+              this.wrongCount = 0
+              this.setData({ qi: this.data.qi + 1, done: false, dimMap: {}, glowPick: '' })
             } else {
               this.triggerEvent('complete', { mistakes: this.mistakes })
             }
@@ -71,10 +76,26 @@ Component({
         )
       } else {
         this.mistakes++
+        this.wrongCount++
         this.setData({ wrongPick: ch })
         playSfx('sfx-wrong')
         playVoice('voice-try-again')
         this.timers.push(setTimeout(() => this.setData({ wrongPick: '' }), 500))
+        this.applyHint()
+      }
+    },
+
+    // 渐进提示阶梯:错2次自动重听目标音,错3次排除一个干扰项,错4次起高亮正确项
+    applyHint() {
+      const q = this.data.questions[this.data.qi]
+      if (this.wrongCount === 2) {
+        // 1400ms 等「再试一次」语音播完再重听,避免叠音
+        this.timers.push(setTimeout(() => playChar(q.target), 1400))
+      } else if (this.wrongCount === 3) {
+        const dim = nextDimPick(q.options, q.target, this.data.dimMap)
+        if (dim) this.setData({ dimMap: { ...this.data.dimMap, [dim]: true } })
+      } else if (this.wrongCount >= 4) {
+        this.setData({ glowPick: q.target })
       }
     },
   },

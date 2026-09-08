@@ -18,6 +18,7 @@ Component({
     target: '', // 当前目标字(提示栏展示,可点读)
     wrongIndex: -1, // 敲错的洞索引(晃动反馈)
     hammerIndex: -1, // 锤子敲击的洞索引
+    nudge: false, // 呆滞唤醒:长时间未命中,提示栏呼吸发光
     starBurst: false, // 答对星星粒子开关
   },
 
@@ -70,11 +71,17 @@ Component({
 
     newTarget() {
       this.currentTarget = this.data.targets[Math.min(this.data.score, this.data.targets.length - 1)]
+      this.lastHitAt = Date.now()
       this.setData({ target: this.currentTarget })
       this.speakTarget()
     },
 
     spawn() {
+      // 呆滞唤醒:9s 没敲中目标(走神/不认得),重听目标音并让提示栏呼吸发光,命中后自动解除
+      if (!this.finished && !this.data.nudge && Date.now() - this.lastHitAt > 9000) {
+        this.setData({ nudge: true })
+        this.speakTarget()
+      }
       const empty = []
       this.data.moles.forEach((m, i) => {
         if (!m) empty.push(i)
@@ -110,7 +117,7 @@ Component({
         clearTimeout(this.moleTimers[i])
         const moles = [...this.data.moles]
         moles[i] = null // 敲中立即缩回
-        this.setData({ moles, score: this.data.score + 1 })
+        this.setData({ moles, score: this.data.score + 1, nudge: false })
         this.showHammer(i) // 锤子敲击动画
         this.showStar() // 敲中目标:星星粒子正反馈
         if (this.data.score >= this.data.targets.length) {

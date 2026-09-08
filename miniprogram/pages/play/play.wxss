@@ -1,1 +1,27 @@
 /* 关卡容器:玩法组件自带样式,复用 app.wxss 全局类 */
+
+/* 轮次过渡卡:全屏半透明白遮罩,玩法组件在遮罩下先挂载(指令语音照常播) */
+.round-intro {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.intro-card {
+  text-align: center;
+}
+.intro-icon {
+  font-size: 140rpx;
+}
+.intro-name {
+  margin-top: 24rpx;
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #2c6e49;
+}

@@ -5,7 +5,7 @@
     <view
       wx:for="{{cells}}"
       wx:key="i"
-      class="match-cell {{flippedMap[item.i] || matchedMap[item.char] ? 'open' : ''}} {{wrongPairMap[item.i] ? 'shake' : ''}}"
+      class="match-cell {{flippedMap[item.i] || matchedMap[item.char] ? 'open' : ''}} {{wrongPairMap[item.i] ? 'shake' : ''}} {{hintPairMap[item.i] ? 'hint-glow' : ''}}"
       style="left: {{item.left}}px; top: {{item.top}}px; width: {{cell}}px; height: {{cell}}px; line-height: {{cell}}px"
       data-cell="{{item}}"
       bindtap="flip"

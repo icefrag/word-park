@@ -55,6 +55,11 @@ function imageChars(chars) {
   return chars.filter((c) => c.emojiCode)
 }
 
+// 渐进提示:挑下一个待排除的干扰项(跳过目标与已排除项);无可排除时返回 null
+function nextDimPick(options, target, dimMap) {
+  return options.find((o) => o !== target && !dimMap[o]) || null
+}
+
 module.exports = {
   shuffle,
   pickDistractors,
@@ -64,4 +69,5 @@ module.exports = {
   buildMatchCards,
   buildBubbleTargets,
   imageChars,
+  nextDimPick,
 }

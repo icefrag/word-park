@@ -278,6 +278,29 @@ button::after {
   transition: width 0.3s;
 }
 
+/* ===== 渐进提示(答错脚手架):选择题错3次排除干扰项,错4次高亮目标 ===== */
+/* 已排除的干扰项:变暗置灰且不可再点 */
+.hint-dim {
+  opacity: 0.3;
+  filter: grayscale(0.7);
+  pointer-events: none;
+}
+/* 目标项:橙色呼吸光环引导点选(配对类短暂高亮一对、动作类高亮提示栏复用此类) */
+.hint-glow {
+  animation: hint-glow 0.9s ease-in-out infinite;
+}
+@keyframes hint-glow {
+  0%, 100% { box-shadow: 0 0 0 8rpx rgba(255, 171, 0, 0.25); }
+  50% { box-shadow: 0 0 0 22rpx rgba(255, 171, 0, 0.7); }
+}
+/* 呆滞唤醒:提示栏本体是裸文本,套白色药丸底再叠光环 */
+.prompt-glow {
+  background: #fff;
+  border-radius: 999rpx;
+  padding: 8rpx 32rpx;
+  animation: hint-glow 0.9s ease-in-out infinite;
+}
+
 /* 单元地图:已认字进度条 */
 .learned-bar {
   width: 92vw;
