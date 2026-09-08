@@ -20,7 +20,10 @@ function read() {
 }
 
 function loadProgress() {
-  return read() ?? { unlockedLevel: 1, stars: {} }
+  const p = read() ?? { unlockedLevel: 1, stars: {} }
+  // charStats 为学习效果版新增字段,旧档读取时补默认( spec 2026-09-08 P0-1)
+  if (!p.charStats || typeof p.charStats !== 'object') p.charStats = {}
+  return p
 }
 
 function saveProgress(p) {
@@ -37,11 +40,19 @@ function nextUnitId(levelId) {
   return LEVELS[i + 1]?.id ?? LEVELS[LEVELS.length - 1].id
 }
 
-function completeLevel(levelId, mistakes) {
+// 通关:记星/解锁,并刷新 charStats(本单元字 + 错字的 lastUnit,错字 wrong+1)
+function completeLevel(levelId, mistakes, wrongChars = []) {
   const p = loadProgress()
   const stars = starsForMistakes(mistakes)
   p.stars[levelId] = Math.max(p.stars[levelId] ?? 0, stars)
   p.unlockedLevel = Math.max(p.unlockedLevel, nextUnitId(levelId))
+  const wrongs = new Set(wrongChars)
+  for (const ch of new Set([...byUnit(levelId).map((c) => c.char), ...wrongs])) {
+    const s = p.charStats[ch] || { lastUnit: levelId, wrong: 0 }
+    s.lastUnit = levelId
+    if (wrongs.has(ch)) s.wrong += 1
+    p.charStats[ch] = s
+  }
   saveProgress(p)
   return stars
 }
@@ -61,7 +72,7 @@ function learnedCharCount() {
 }
 
 function resetProgress() {
-  saveProgress({ unlockedLevel: 1, stars: {} })
+  saveProgress({ unlockedLevel: 1, stars: {}, charStats: {} })
 }
 
 // 阶段解锁 = 线性解锁推进到本阶段首单元(展示层派生,不落盘)

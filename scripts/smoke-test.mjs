@@ -87,8 +87,23 @@ check('目标序列长度', targets.length === 8)
 const { imageChars } = require('./engine')
 check('有图字过滤', imageChars([{ emojiCode: '1f600' }, { emojiCode: null }, {}]).length === 1)
 
+// --- engine: 掺旧字/错字混合(P0-1/P0-2) ---
+const { pickReviewTargets, mixTargets } = require('./engine')
+const fakeOld = Array.from({ length: 20 }, (_, i) => ({ char: '伪' + i, unit: i + 1 }))
+check('旧字抽样:最久未见优先(top-3n 内)', pickReviewTargets(fakeOld, 30, 5, {}).every((c) => c.unit <= 15))
+check('旧字抽样:常错加权优先', pickReviewTargets(fakeOld, 30, 2, { 伪5: { lastUnit: 25, wrong: 9 } }).some((c) => c.char === '伪5'))
+check('旧字抽样:空池/零配额安全', pickReviewTargets([], 30, 5, {}).length === 0 && pickReviewTargets(fakeOld, 30, 0, {}).length === 0)
+const mixed = mixTargets(['a', 'b', 'c', 'd'], ['x1', 'x2'], ['o1', 'o2'], 4)
+check('mixTargets:长度=配额且无重复', mixed.length === 4 && new Set(mixed).size === 4)
+check('mixTargets:错字(≤2)优先包含', mixed.includes('x1') && mixed.includes('x2'))
+check('mixTargets:至少保留 1 个新字', mixTargets(['a', 'b', 'c'], ['x1', 'x2'], ['o1'], 3).some((c) => 'abc'.includes(c)))
+check('mixTargets:错字挤占旧字配额', (() => {
+  const t = mixTargets(['a', 'b', 'c'], ['x1', 'x2'], ['o1'], 3)
+  return t.filter((c) => !'abc'.includes(c)).length === 2
+})())
+
 // --- progress ---
-const { completeLevel, isUnlocked, learnedCharCount, resetProgress, starsForMistakes, stageUnlocked, stageProgress } = require('./progress')
+const { completeLevel, isUnlocked, learnedCharCount, resetProgress, starsForMistakes, stageUnlocked, stageProgress, loadProgress, saveProgress } = require('./progress')
 resetProgress()
 check('初始仅解锁第 1 关', isUnlocked(1) && !isUnlocked(2))
 check('初始小班解锁/中班大班锁定', stageUnlocked(1) && !stageUnlocked(2) && !stageUnlocked(3))
@@ -112,6 +127,23 @@ check('复习通关后解锁中班', stageUnlocked(2))
 check('通关最后一关安全', (() => { completeLevel(67, 0); return isUnlocked(67) })())
 resetProgress()
 check('重置回到起点', !isUnlocked(2) && !stageUnlocked(2))
+
+// --- progress: charStats(P0-1) ---
+resetProgress()
+completeLevel(1, 1, ['日'])
+const cs = loadProgress().charStats
+check('charStats:单元字刷新lastUnit+错字wrong+1', byUnit(1).every((c) => cs[c.char] && cs[c.char].lastUnit === 1)
+  && cs['日'].wrong === 1)
+completeLevel(2, 0, [])
+check('charStats:再通关不误增wrong', cs['日'].wrong === 1 && cs['日'].lastUnit === 1)
+check('charStats:无图大班单元也记录', (() => {
+  completeLevel(58, 0, [])
+  return byUnit(58).every((c) => cs[c.char] && cs[c.char].lastUnit === 58)
+})())
+saveProgress({ unlockedLevel: 3, stars: { 1: 3 } }) // 旧档(无 charStats 字段)
+check('charStats:旧档读取补默认空表', typeof loadProgress().charStats === 'object' && loadProgress().charStats !== null)
+resetProgress()
+check('charStats:重置清空', Object.keys(loadProgress().charStats).length === 0)
 
 // --- audio ---
 const { fileUrl } = require('./audio')

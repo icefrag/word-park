@@ -50,6 +50,29 @@ function buildBubbleTargets(poolChars, total) {
   return Array.from({ length: total }, () => poolChars[Math.floor(Math.random() * poolChars.length)])
 }
 
+// 旧字抽样(间隔效应):常错字必进样本(错字回流兜底);其余按"距上次出现的单元数"取 top-3n 随机抽(保多样性)
+function pickReviewTargets(oldChars, currentUnit, n, stats = {}) {
+  if (n <= 0 || oldChars.length === 0) return []
+  const score = (c) => {
+    const s = stats[c.char] || {}
+    return currentUnit - (s.lastUnit ?? c.unit) + (s.wrong ?? 0) * 10
+  }
+  const sorted = [...oldChars].sort((a, b) => score(b) - score(a))
+  const wrongs = sorted.filter((c) => (stats[c.char] || {}).wrong > 0).slice(0, n)
+  const rest = shuffle(sorted.filter((c) => !wrongs.includes(c)).slice(0, n * 3)).slice(0, n - wrongs.length)
+  return shuffle([...wrongs, ...rest])
+}
+
+// 练习目标混合:错字(≤2,打乱轮换)→ 旧字(count≥5 配 2 否则 1)→ 单元新字补足;至少保留 1 个新字
+function mixTargets(unitChars, wrongChars, oldChars, count) {
+  const wrong = shuffle([...new Set(wrongChars)]).slice(0, Math.min(2, count - 1))
+  const old = [...new Set(oldChars)]
+    .filter((c) => !wrong.includes(c) && !unitChars.includes(c))
+    .slice(0, Math.max(0, Math.min(count >= 5 ? 2 : 1, count - 1 - wrong.length)))
+  const fresh = shuffle(unitChars.filter((c) => !wrong.includes(c) && !old.includes(c)))
+  return shuffle([...wrong, ...old, ...fresh.slice(0, count - wrong.length - old.length)])
+}
+
 // 有图字(emojiCode 非空):pic2char/match/link 的目标字必须从中抽
 function imageChars(chars) {
   return chars.filter((c) => c.emojiCode)
@@ -63,5 +86,7 @@ module.exports = {
   buildFindAllGrid,
   buildMatchCards,
   buildBubbleTargets,
+  pickReviewTargets,
+  mixTargets,
   imageChars,
 }

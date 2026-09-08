@@ -33,7 +33,7 @@
 
 ### 出题(engine.js 纯函数)
 
-- `pickReviewTargets(oldChars, currentUnit, n, stats)`:得分 = `(currentUnit - lastUnit) + wrong*10`,取最高前 3n 再随机抽 n(top-3n 保证多样性,不是永远同一批)
+- `pickReviewTargets(oldChars, currentUnit, n, stats)`:得分 = `(currentUnit - lastUnit) + wrong*10`;**常错字(wrong>0)必进样本**(错字回流兜底),其余从 top-3n 高分池随机抽(保多样性,不是永远同一批)
 - `mixTargets(unitChars, wrongChars, oldChars, count)`:错字优先(≤2)→ 旧字(基础配额 count≥5?2:1,且保证至少留 1 个本单元新字)→ 新字填满,结果打乱去重
 - 旧字池:当前单元之前的已学字,池 < 6 字(开局几关)自然跳过
 - 复习单元本身就是旧字池,不再二次掺入
