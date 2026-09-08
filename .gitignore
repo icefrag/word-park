@@ -12,3 +12,6 @@ scripts/emoji-backup-*/
 
 # AI配图上云暂存目录(87MB二进制,本地产物,上云后可删)
 upload-cloud/
+
+# 音色试听小样(评审用,可由 gen-voice-audio.mjs samples 随时重生成)
+scripts/audio-samples/
