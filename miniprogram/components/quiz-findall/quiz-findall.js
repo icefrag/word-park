@@ -100,6 +100,7 @@ Component({
         }
       } else {
         this.mistakes++
+        this.triggerEvent('wrong', { char: g.target.char }) // 错字回流:混淆的诊断对象是目标字
         this.setData({ wrongCell: i })
         playSfx('sfx-wrong')
         playVoice('voice-try-again')

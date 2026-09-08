@@ -24,6 +24,8 @@ Page({
     this.roundIndex = 0
     this.mistakes = 0
     this.wrongChars = []
+    this._miniDone = false
+    this._mini = false
     this.setData({ round: this.buildRound() })
   },
 
@@ -97,14 +99,33 @@ Page({
     }
   },
 
+  // 错字回流:测验组件答错即上报目标字,跨轮累计去重(后续轮优先重现 + 关末重练)
+  onWrong(e) {
+    const ch = e.detail.char
+    if (ch && !this.wrongChars.includes(ch)) this.wrongChars.push(ch)
+  },
+
   onRoundComplete(e) {
-    this.mistakes += e.detail.mistakes ?? 0
+    if (!this._mini) this.mistakes += e.detail.mistakes ?? 0
     if (this.roundIndex < this.level.rounds.length - 1) {
       this.roundIndex++
       this.setData({ round: this.buildRound() })
+    } else if (this.wrongChars.length && !this._miniDone) {
+      // 关末 mini 复习轮:错字再练一次,该轮错误不计星级(零惩罚,只跑一次)
+      this._miniDone = true
+      this._mini = true
+      this.setData({ round: this.buildMiniRound() })
     } else {
-      const stars = completeLevel(this.level.id, this.mistakes)
+      const stars = completeLevel(this.level.id, this.mistakes, this.wrongChars)
       wx.redirectTo({ url: `/pages/reward/reward?levelId=${this.level.id}&stars=${stars}` })
+    }
+  },
+
+  // mini 复习轮:错字取前 3 个听音选字,3 选项(组件照常上报 wrong,进 charStats)
+  buildMiniRound() {
+    return {
+      type: 'sound2char',
+      props: { questions: buildQuestions(this.wrongChars.slice(0, 3), this.poolFor(this.level), [3, 3, 3]) },
     }
   },
 })

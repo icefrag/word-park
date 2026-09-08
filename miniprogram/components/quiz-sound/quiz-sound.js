@@ -58,6 +58,7 @@ Component({
         )
       } else {
         this.mistakes++
+        this.triggerEvent('wrong', { char: q.target }) // 错字回流:混淆的诊断对象是目标字
         this.setData({ wrongPick: ch })
         playSfx('sfx-wrong')
         playVoice('voice-try-again')
