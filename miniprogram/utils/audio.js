@@ -1,9 +1,9 @@
 // 音频池:语音单通道(后播打断先播),音效 3 实例轮换可叠加
 // 小程序无 speechSynthesis,网页版的 TTS 回退在此移除 — 全部音频文件已预生成
-const { ASSET_BASE } = require('../config')
+const { ASSET_BASE, ASSET_VER } = require('../config')
 const { assetName } = require('./characters')
 
-const fileUrl = (name) => `${ASSET_BASE}/audio/${assetName(name)}.wav`
+const fileUrl = (name) => `${ASSET_BASE}/audio/${assetName(name)}.wav?v=${ASSET_VER}`
 
 // 语音单例:切换 src 前 stop,保证打断语义
 const voiceCtx = wx.createInnerAudioContext()

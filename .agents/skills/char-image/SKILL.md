@@ -64,3 +64,7 @@ cloudbase storage upload upload-cloud/images assets/images -e 636c-cloudbase-d8g
 - ESM 里不能用 `require`,取 characters.js 要 `createRequire()`。
 - OpenMoji 旧管线 `gen-new-assets.mjs chars X` 会用 emoji 重覆盖 AI 图——AI 图时代禁用其图片部分,音频部分仍可用。
 - 视觉验收接口(analyze_image)只收远程 URL,本地图先 Read 触发 CDN 化再用。
+- **大批量提速**:单请求约 30s(image-01 推理本身),串行 389 张要 3h+。把剩余字写成 shard 文件分 3 份,3 个 `chars` 进程并行,吞吐 ~12s/张,3 倍提速且费用不变(脚本自带 1002 限流退避)。
+- **1026 敏感词误拦**:"小女孩+拥抱/泰迪"类组合会触发 input new_sensitive(实测「熊」「抱」)。改写为"玩偶/小朋友抱着玩偶熊"即可绕过,不必换字。
+- 语义撞图不等同于文件相同:哈希查不出(AI 每张都不同),必须视觉复核构图(实测「弯」画成弯月与「月」撞构图,重生成回拱背小猫)。
+- **同名覆盖上云后必须升版本号**:小程序 image/audio 对同 URL 缓存极顽固(开发者工具尤甚),覆盖上传后旧端仍显示旧图。`miniprogram/config.js` 的 `ASSET_VER` 统一拼在所有素材 URL 后(`?v=`),每批素材上云后改成新日期即可全端强制刷新。

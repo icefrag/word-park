@@ -34,7 +34,7 @@ check('67 个单元号', TOTAL_UNITS === 67)
 check('字不重复', new Set(CHARACTERS.map((c) => c.char)).size === 600)
 check('无 level 遗留字段', CHARACTERS.every((c) => c.level === undefined))
 check('阶段字量 150/150/300', byStage(1).length === 150 && byStage(2).length === 150 && byStage(3).length === 300)
-check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png$/.test(imageOf(c))))
+check('图片 URL 命名正确', CHARACTERS.every((c) => /^https:\/\/.+\/assets\/images\/[0-9a-f]+\.png(\?v=\d+)?$/.test(imageOf(c))))
 check('重编号抽查', byUnit(7).length === 7 && byUnit(7).some((c) => c.char === '狗')
   && byUnit(38).length === 7 && byUnit(37).length === 10 && byUnit(29).length === 8 && byUnit(8).some((c) => c.char === '五'))
 check('小班新增字全部有图', byStage(1).filter((c) => c.unit >= 10).every((c) => c.emojiCode))
@@ -129,7 +129,7 @@ check('重置回到起点', !isUnlocked(2) && !stageUnlocked(2))
 const { fileUrl } = require('./audio')
 const names = ['日', '日-word', 'voice-welcome', 'voice-praise-1', 'sfx-correct', 'voice-instr-whack', 'voice-try-again', 'voice-level-complete']
 check('音频 URL 命名正确', names.every((n) => {
-  const url = fileUrl(n)
+  const url = fileUrl(n).replace(/\?v=\d+$/, '')
   return /^https:\/\/.+\/assets\/audio\/[0-9a-z-]+\.wav$/.test(url) &&
     (n === '日' ? url.endsWith('/65e5.wav') : n === '日-word' ? url.endsWith('/65e5-word.wav') : url.endsWith(`/${n}.wav`))
 }))

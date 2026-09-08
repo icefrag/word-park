@@ -629,7 +629,7 @@ const CHARACTERS = [
   { char: '元', pinyin: 'yuán', word: '一元钱', emojiCode: '1f4b5', stage: 3, unit: 66 },
 ]
 
-const { ASSET_BASE } = require('../config')
+const { ASSET_BASE, ASSET_VER } = require('../config')
 
 // 与素材文件名一致:中文转 hex 码点(上.png -> 4e0a.png),纯 ASCII(panda)原样
 function assetName(name) {
@@ -643,10 +643,11 @@ function assetName(name) {
     .join('-')
 }
 
-const imageOf = (c) => `${ASSET_BASE}/images/${assetName(c.char)}.png`
-const pandaImage = `${ASSET_BASE}/images/panda.png`
+const imageOf = (c) => `${ASSET_BASE}/images/${assetName(c.char)}.png?v=${ASSET_VER}`
+const pandaImage = `${ASSET_BASE}/images/panda.png?v=${ASSET_VER}`
+const welcomeBgImage = `${ASSET_BASE}/images/welcome-bg.png?v=${ASSET_VER}`
 
 const TOTAL_UNITS = 67 // 终局单元数(小班1-28 中班29-51 大班52-67,各段末位为复习单元)
 const byUnit = (unit) => CHARACTERS.filter((c) => c.unit === unit)
 const byStage = (stage) => CHARACTERS.filter((c) => c.stage === stage)
-module.exports = { CHARACTERS, TOTAL_UNITS, imageOf, pandaImage, byStage, byUnit, assetName }
+module.exports = { CHARACTERS, TOTAL_UNITS, imageOf, pandaImage, welcomeBgImage, byStage, byUnit, assetName }

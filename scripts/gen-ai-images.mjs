@@ -136,6 +136,23 @@ async function renderOne(c) {
 
 // ---- CLI ----
 const args = process.argv.slice(2)
+// asset 模式:生成非字素材(logo/背景图等)。用法: asset <文件名(不含扩展名)> <宽高比> <完整提示词>
+// 9:16 等非 1:1 背景不做抠白(整幅即成品);1:1 素材按 --cutwhite 参数决定
+if (args[0] === 'asset') {
+  const [, name, ratio, ...rest] = args
+  const cut = rest.includes('--cutwhite')
+  const prompt = rest.filter((a) => a !== '--cutwhite').join(' ')
+  if (!name || !ratio || !prompt) throw new Error('用法: asset <name> <aspect_ratio> [--cutwhite] <完整提示词>')
+  const url = await generate(prompt)
+  let buf = Buffer.from(await (await fetch(url)).arrayBuffer())
+  mkdirSync(RAW_DIR, { recursive: true })
+  writeFileSync(join(RAW_DIR, `${name}-raw.png`), buf)
+  if (cut) buf = (await processImage(buf, name)).out
+  const final = await sharp(buf).png().toBuffer()
+  for (const dir of OUT_DIRS) writeFileSync(join(dir, `${name}.png`), final)
+  console.log(`✓ ${name}.png ${(final.length / 1024).toFixed(0)}KB (ratio ${ratio})`)
+  process.exit(0)
+}
 let targets, force
 if (args[0] === 'chars') {
   const wanted = [...new Set(args.slice(1))]

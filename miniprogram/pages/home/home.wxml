@@ -1,7 +1,9 @@
-<view class="center full">
-  <image class="bounce home-panda" src="{{pandaImage}}" mode="aspectFit" bindtap="speak" hover-class="press" />
-  <view class="home-title">汉字小乐园</view>
-  <view class="home-sub">和熊猫宝宝一起认汉字</view>
-  <button class="big-btn" bindtap="start">开 始</button>
-  <view class="attribution">图片素材:OpenMoji(CC BY-SA 4.0)</view>
+<view class="welcome">
+  <image class="welcome-bg" src="{{welcomeBg}}" mode="aspectFill" />
+  <view class="welcome-content center full">
+    <image class="bounce home-panda enter" src="{{pandaImage}}" mode="aspectFit" bindtap="speak" hover-class="press" />
+    <view class="home-title enter">汉字小乐园</view>
+    <view class="home-sub enter">和熊猫宝宝一起认汉字</view>
+    <button class="big-btn enter" bindtap="start">开 始</button>
+  </view>
 </view>

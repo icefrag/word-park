@@ -1,9 +1,10 @@
 const { playVoice } = require('../../utils/audio')
-const { pandaImage } = require('../../utils/characters')
+const { pandaImage, welcomeBgImage } = require('../../utils/characters')
 
 Page({
   data: {
     pandaImage,
+    welcomeBg: welcomeBgImage,
   },
 
   onLoad() {
