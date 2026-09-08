@@ -26,11 +26,11 @@ function pickDistractors(targetChar, poolChars, n, opts) {
   const near = cands.filter((c) => base && opts.pinyin[c] && stripTone(opts.pinyin[c]) === base)
   const look = cands.filter((c) => conf.includes(c) && !near.includes(c))
   const rest = cands.filter((c) => !near.includes(c) && !look.includes(c))
-  // 轮转取 near/look(防同音饱和,3选项≈1音近+1形近),不足再随机
+  // 轮转取音近/形近(防同音饱和,3选项≈1音近+1形近),不足再随机
+  const [nearQ, lookQ] = [shuffle(near), shuffle(look)]
   const mixed = []
-  const queues = [shuffle(near), shuffle(look)]
-  for (let qi = 0; mixed.length < n && queues.some((q) => q.length); qi++) {
-    const q = queues[qi % queues.length]
+  for (let i = 0; mixed.length < n && (nearQ.length || lookQ.length); i++) {
+    const q = i % 2 ? lookQ : nearQ
     if (q.length) mixed.push(q.pop())
   }
   return [...mixed, ...shuffle(rest)].slice(0, n)
@@ -86,12 +86,14 @@ function pickReviewTargets(oldChars, currentUnit, n, stats = {}) {
   return shuffle([...wrongs, ...rest])
 }
 
-// 练习目标混合:错字(≤2,打乱轮换)→ 旧字(count≥5 配 2 否则 1)→ 单元新字补足;至少保留 1 个新字
+// 练习目标混合:错字(≤2,打乱轮换)→ 旧字(配额 count≥5 配 2 否则 1)→ 单元新字补足;至少保留 1 个新字
 function mixTargets(unitChars, wrongChars, oldChars, count) {
   const wrong = shuffle([...new Set(wrongChars)]).slice(0, Math.min(2, count - 1))
+  const oldQuota = count >= 5 ? 2 : 1
+  const oldCap = Math.max(0, Math.min(oldQuota, count - 1 - wrong.length))
   const old = [...new Set(oldChars)]
     .filter((c) => !wrong.includes(c) && !unitChars.includes(c))
-    .slice(0, Math.max(0, Math.min(count >= 5 ? 2 : 1, count - 1 - wrong.length)))
+    .slice(0, oldCap)
   const fresh = shuffle(unitChars.filter((c) => !wrong.includes(c) && !old.includes(c)))
   return shuffle([...wrong, ...old, ...fresh.slice(0, count - wrong.length - old.length)])
 }
