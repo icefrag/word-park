@@ -118,6 +118,7 @@ voiceKey 取值：`tianmei`（精品甜美女声，默认）/ `xiaoling`（甜�
 
   注意：根目录 4 个 `sfx-*.wav` 会覆盖云端旧版（ASSET_VER 已升 `20260908-2`，强制全端刷缓存）。旧机械音 WAV（本地 1020 个 ×2 目录）已于 2026-09-09 清理（大王拍板不再保留回滚）；云端历史旧 WAV 已无引用，确认线上无旧版本客户端后可在控制台批量删除。
 - 两步核对：① 本地对账已通过（4×1217 mp3 + 5 根文件，upload-cloud 与 new-assets 双目录一致）；② 上云后 HEAD 抽样：各音色 `65e5.mp3`、`5973.mp3`（女，ü 正音）、`voice-welcome.mp3`，根 `sfx-correct.wav`（新文件约 338KB，旧版仅 35KB 可据此区分）、`bgm-main.mp3`，应全 200。
+- ⚠️ 踩坑记录（2026-09-09 排查）：音色目录上云后直链全 404 但控制台可见文件——**存储安全规则用了单段通配（`assets/audio/*`），`*` 不跨子目录**，根目录 sfx 能读、`tianmei/xxx.mp3` 被拒；且 CDN 缓存键忽略 query 参数，用签名地址请求过的文件裸访问会 200（Cache Hit 假象）。修复：自定义安全规则改 `{"read": true, "write": false}`。
 - `node scripts/smoke-test.mjs` 已全绿（含音色切换/非法值/URL 规则断言）。
 
 ## 10. 执行顺序与状态
