@@ -116,7 +116,7 @@ voiceKey 取值：`tianmei`（精品甜美女声，默认）/ `xiaoling`（甜�
   cloudbase storage upload upload-cloud/audio/bgm-main.mp3    assets/audio/bgm-main.mp3    -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
   ```
 
-  注意：根目录 4 个 `sfx-*.wav` 会覆盖云端旧版（ASSET_VER 已升 `20260908-2`，强制全端刷缓存）；旧的单字/字词 WAV（根目录 1221 个）暂不删，作为回滚保障，稳定后再清理。
+  注意：根目录 4 个 `sfx-*.wav` 会覆盖云端旧版（ASSET_VER 已升 `20260908-2`，强制全端刷缓存）。旧机械音 WAV（本地 1020 个 ×2 目录）已于 2026-09-09 清理（大王拍板不再保留回滚）；云端历史旧 WAV 已无引用，确认线上无旧版本客户端后可在控制台批量删除。
 - 两步核对：① 本地对账已通过（4×1217 mp3 + 5 根文件，upload-cloud 与 new-assets 双目录一致）；② 上云后 HEAD 抽样：各音色 `65e5.mp3`、`5973.mp3`（女，ü 正音）、`voice-welcome.mp3`，根 `sfx-correct.wav`（新文件约 338KB，旧版仅 35KB 可据此区分）、`bgm-main.mp3`，应全 200。
 - `node scripts/smoke-test.mjs` 已全绿（含音色切换/非法值/URL 规则断言）。
 
