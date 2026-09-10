@@ -33,15 +33,16 @@ function asciiName(name) {
 
 // 风格模板:全项目图片风格唯一事实来源,与 skill 文档保持一致
 const STYLE = [
-  '可爱Q版卡通儿童插画', '圆润饱满的造型', '糖果色明亮配色', '色彩鲜艳层次柔和',
-  '单个主体居中占满画面', '构图简洁细节少而清晰', '纯白背景',
+  '精美3D渲染卡通风格', '写实材质纹理和真实比例', '造型圆润可爱', '明亮鲜艳的高饱和色彩', '柔和光泽的质感',
+  '动物主体带可爱的大眼睛和微笑表情', '无生命物体保持真实原样绝不拟人绝不加五官表情',
+  '单个主体居中占满画面', '构图简洁无多余元素', '纯白背景',
   '画面中绝对不出现任何文字、字母、数字和汉字', '画面元素数量与描述严格一致',
 ].join(',')
 
 function buildPrompt(c) {
   const scene = SCENES[c.char]
   if (!scene) throw new Error(`ai-prompts.json 缺少「${c.char}」的场景提示词`)
-  return `儿童识字卡片插画,表达汉字「${c.char}」(${c.word})的含义:${scene}。${STYLE}`
+  return `儿童识字卡片配图,表达汉字「${c.char}」(${c.word})的含义:${scene}。${STYLE}`
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -119,7 +120,7 @@ async function processImage(buf, hexName) {
 }
 
 async function renderOne(c) {
-  const hex = asciiName(c.char)
+  const hex = asciiName(c.char) // raw 缓存沿用 hex;成品文件名用汉字(山.png)
   const prompt = buildPrompt(c)
   const url = await generate(prompt)
   const raw = Buffer.from(await (await fetch(url)).arrayBuffer())
@@ -129,7 +130,7 @@ async function renderOne(c) {
   const final = await sharp(out).resize(SIZE, SIZE).png().toBuffer()
   for (const dir of OUT_DIRS) {
     mkdirSync(dir, { recursive: true })
-    writeFileSync(join(dir, `${hex}.png`), final)
+    writeFileSync(join(dir, `${c.char}.png`), final)
   }
   return { hex, bytes: final.length }
 }
@@ -165,7 +166,7 @@ if (args[0] === 'chars') {
   targets = CHARACTERS.filter((c) => c.emojiCode)
   force = args.includes('--force')
   if (!force) {
-    targets = targets.filter((c) => !existsSync(join(OUT_DIRS[1], `${asciiName(c.char)}.png`)))
+    targets = targets.filter((c) => !existsSync(join(OUT_DIRS[1], `${c.char}.png`)))
   }
 } else {
   throw new Error('用法: gen-ai-images.mjs <chars 字...|missing|all [--force]>')
@@ -176,11 +177,11 @@ const failed = []
 let done = 0
 for (const c of targets) {
   const hex = asciiName(c.char)
-  if (!force && existsSync(join(OUT_DIRS[1], `${hex}.png`))) { console.log(`跳过 ${c.char}(已存在)`); continue }
+  if (!force && existsSync(join(OUT_DIRS[1], `${c.char}.png`))) { console.log(`跳过 ${c.char}(已存在)`); continue }
   try {
     const r = await renderOne(c)
     done++
-    console.log(`✓ ${c.char} ${r.hex}.png ${(r.bytes / 1024).toFixed(0)}KB (${done}/${targets.length})`)
+    console.log(`✓ ${c.char}.png ${(r.bytes / 1024).toFixed(0)}KB (${done}/${targets.length})`)
   } catch (e) {
     failed.push(c.char)
     console.error(`✗ ${c.char}: ${e.message}`)

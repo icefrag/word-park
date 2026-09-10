@@ -643,7 +643,8 @@ function assetName(name) {
     .join('-')
 }
 
-const imageOf = (c) => `${ASSET_BASE}/images/${assetName(c.char)}.png?v=${ASSET_VER}`
+// 图片文件名即汉字本身(山.png),URL 中做百分号编码;音频仍走 assetName 的 hex 规则
+const imageOf = (c) => `${ASSET_BASE}/images/${encodeURIComponent(c.char)}.png?v=${ASSET_VER}`
 const pandaImage = `${ASSET_BASE}/images/panda.png?v=${ASSET_VER}`
 const welcomeBgImage = `${ASSET_BASE}/images/welcome-bg.png?v=${ASSET_VER}`
 
