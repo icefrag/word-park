@@ -94,7 +94,7 @@ voiceKey 取值：`tianmei`（精品甜美女声，默认）/ `xiaoling`（甜�
 ## 8. 代码改动（外科手术式）
 
 1. `miniprogram/utils/audio.js`：`fileUrl()` 改造——播报类（字/词/voice-*）走 `audio/{voiceKey}/{名}.mp3`（voiceKey 读本地存储 `voiceKey`，无则默认 `tianmei`），音效/BGM 走根目录 `.mp3`；导出 `VOICES` 配置表（key/显示名）与 `currentVoice()/setVoice(key)`。
-2. 主页设置入口：右上角小齿轮 → 半屏弹层列出 4 个音色（当前项打勾），点选即切换并试听该音色的欢迎语，即时生效（wx.setStorageSync）。
+2. 音色设置入口(2026-09-10 从欢迎页迁至地图页):地图页右上角小齿轮 → 半屏弹层列出 4 个音色(当前项打勾),点选即切换并试听本页问候语,即时生效(wx.setStorageSync)。同批修复:首开无声(iOS src 赋值后立即 play 的加载竞态,onCanplay 补播兜底)、bgmCtx 补 obeyMuteSwitch=false。
 3. `miniprogram/utils/audio.js`：新增 BGM 管理器（`wx.createInnerAudioContext` loop 单例，导出 `playBgm()/pauseBgm()`），home/map/reward 页 onShow 播放、onHide 暂停；play 页不接。
 4. 玩法组件与页面调用方零改动——文件名规则由 `fileUrl()` 内部消化。
 

@@ -39,6 +39,9 @@ function fileUrl(name) {
 // 语音单例:切换 src 前 stop,保证打断语义
 const voiceCtx = wx.createInnerAudioContext()
 voiceCtx.obeyMuteSwitch = false
+// iOS 首开竞态:src 赋值后立即 play() 会被静默吞掉(用户实测切一次音色才出声);
+// canplay 到达时若仍处于暂停则补播,正常播放不受影响
+voiceCtx.onCanplay(() => { if (voiceCtx.paused) voiceCtx.play() })
 
 // 音效池:轮换取用,允许上一个未播完时叠加下一个
 const SFX_POOL_SIZE = 3
@@ -83,6 +86,8 @@ function playPraise() {
 
 // BGM:主页/地图/奖励页播放,玩法页静音(听音辨字玩法不被干扰);压低音量垫在播报之下
 const bgmCtx = wx.createInnerAudioContext()
+bgmCtx.obeyMuteSwitch = false // 与语音/音效一致:不被 iPhone 静音键误杀
+bgmCtx.onCanplay(() => { if (bgmCtx.paused) bgmCtx.play() })
 let bgmReady = false
 
 function playBgm() {

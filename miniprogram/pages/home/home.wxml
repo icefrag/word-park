@@ -6,14 +6,4 @@
     <view class="home-sub enter">和熊猫宝宝一起认汉字</view>
     <button class="big-btn enter" bindtap="start">开 始</button>
   </view>
-  <view class="voice-gear" bindtap="openSettings" hover-class="press">⚙</view>
-  <view class="settings-mask" wx:if="{{settingsOpen}}" bindtap="closeSettings">
-    <view class="settings-panel" catchtap="noop">
-      <view class="settings-title">换个声音陪你学</view>
-      <view class="voice-row {{voiceKey === v.key ? 'on' : ''}}" wx:for="{{voices}}" wx:for-item="v" wx:key="key" data-key="{{v.key}}" bindtap="pickVoice" hover-class="press">
-        <text>{{v.name}}</text>
-        <text wx:if="{{voiceKey === v.key}}">✓</text>
-      </view>
-    </view>
-  </view>
 </view>

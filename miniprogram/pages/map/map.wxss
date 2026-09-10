@@ -31,9 +31,73 @@
   filter: grayscale(0.8);
 }
 
+/* 音色设置:右上角齿轮(标题行右侧,导航栏下方不撞微信胶囊) + 底部弹层 */
+.voice-gear {
+  position: absolute;
+  top: 40rpx;
+  right: 40rpx;
+  z-index: 5;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  color: #2c6e49;
+}
+.settings-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.35);
+}
+.settings-panel {
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 24rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 32rpx 24rpx 40rpx;
+}
+.settings-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #2c6e49;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+.voice-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26rpx 36rpx;
+  margin: 16rpx 0;
+  border-radius: 20rpx;
+  font-size: 38rpx;
+  color: #35543f;
+  background: #f1f7f2;
+}
+.voice-row.on {
+  background: #2c6e49;
+  color: #fff;
+}
+
 /* 大屏平板竖屏:rpx 随宽度放大导致头部/底部固定元素占高过多、滚动区只剩一行多。
    收紧地图页各元素尺寸,把高度还给单元网格 */
 @media (min-width: 600px) {
+  .voice-gear {
+    width: 64rpx;
+    height: 64rpx;
+    font-size: 36rpx;
+  }
+  .settings-panel {
+    left: 20%;
+    right: 20%;
+  }
   .map-title {
     font-size: 48rpx;
   }

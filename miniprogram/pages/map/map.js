@@ -3,7 +3,7 @@ const { CHARACTERS } = require('../../utils/characters')
 const {
   loadProgress, resetProgress, learnedCharCount, isUnlocked, stageUnlocked, stageProgress,
 } = require('../../utils/progress')
-const { playVoice, playBgm, pauseBgm } = require('../../utils/audio')
+const { playVoice, playBgm, pauseBgm, VOICES, currentVoice, setVoice } = require('../../utils/audio')
 
 Page({
   data: {
@@ -15,9 +15,32 @@ Page({
     shakeId: 0, // 锁定单元摇头反馈:正在抖动的单元 id
     shakeStage: 0, // 锁定页签摇头反馈:正在抖动的阶段 id
     resetArming: false, // 重置按钮长按充能中(填充动画开关)
+    voices: VOICES,
+    voiceKey: '',
+    settingsOpen: false,
   },
 
   onLoad() {
+    this.setData({ voiceKey: currentVoice() })
+    playVoice('voice-lets-learn')
+  },
+
+  // 音色设置:点选即切换,并立即用新音色试听本页问候语
+  openSettings() {
+    this.setData({ settingsOpen: true })
+  },
+
+  closeSettings() {
+    this.setData({ settingsOpen: false })
+  },
+
+  noop() {},
+
+  pickVoice(e) {
+    const key = e.currentTarget.dataset.key
+    if (key === this.data.voiceKey) return
+    setVoice(key)
+    this.setData({ voiceKey: key })
     playVoice('voice-lets-learn')
   },
 
