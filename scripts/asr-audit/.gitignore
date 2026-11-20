@@ -1,0 +1,5 @@
+.venv/
+.venv/
+full-run.log
+result.json
+__pycache__/
