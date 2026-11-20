@@ -51,14 +51,14 @@ node gen-ai-images.mjs all --force        # 全量重生成
 - 人物字:核对年龄感与提示词设定(哥姐≠弟妹比例)。
 - 多张可比对时拼网格图一次审(`sharp composite`,参考 pilot-grid.png 做法)。
 
-### 5. 上云
+### 5. 上云(2026-11 起:ECS 自建 nginx,CloudBase 已弃用)
 
 ```bash
-cloudbase storage upload upload-cloud/images assets/images -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
-# 或云开发控制台手动上传 upload-cloud/images 到 assets/ 下
+bash scripts/ecs/sync-ecs.sh   # 增量同步 upload-cloud/ → ECS
+node scripts/check-cloud.mjs   # 全量核对,期望 5264 全 200
 ```
 
-上传后抽查 URL 200(ASSET_BASE 见 `miniprogram/config.js`)。**覆盖云端旧图前旧图即备份,误覆盖可从 `scripts/emoji-backup-*/` 回滚**(首次 AI 全量替换前已备份全部 OpenMoji 旧图)。
+**同名覆盖后必须升 `config.js` 的 `ASSET_VER`**。**覆盖云端旧图前旧图即备份,误覆盖可从 `scripts/emoji-backup-*/` 回滚**(首次 AI 全量替换前已备份全部 OpenMoji 旧图)。⚠️ 禁止远程 tar 解压传文件:Windows bsdtar 按 GBK 码页解 UTF-8 名,汉字图名冲突覆盖(踩坑:391 图只落地 183 张),一律 scp/SFTP 直传。
 
 ## 踩坑记录
 

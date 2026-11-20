@@ -17,7 +17,7 @@
 ```
 miniprogram/
 ├── app.{js,json,wxss}        # 入口:页面注册 + 全局样式(rpx 适配手机)
-├── config.js                 # 素材基地址:本地 '/assets' 或云存储直链
+├── config.js                 # 素材基地址:ECS 直链(http://47.93.245.108:8081/assets)
 ├── pages/
 │   ├── home/                 # 首页(欢迎语音 + 开始按钮)
 │   ├── map/                  # 单元地图(星级/锁定/已认字进度条/家长重置)
@@ -32,7 +32,7 @@ miniprogram/
 │   ├── engine.js             # 纯函数出题器
 │   ├── progress.js           # wx storage 进度
 │   └── audio.js              # InnerAudioContext 语音单通道 + 音效池
-└── assets/                   # 开发期本地素材(上线前上云并删除,见下方)
+└── assets/                   # (已删除;素材全量在 ECS,本地镜像为 upload-cloud/)
 ```
 
 ## 开发
@@ -47,9 +47,9 @@ node scripts/gen-new-assets.mjs  # 新增字素材生成(OpenMoji 图 + Huihui T
 
 ## 上线(真机/体验版)
 
-素材 21MB 超主包 2MB 限制,须上云存储,步骤见 `scripts/upload-assets.md`:
-开通云环境 → 上传 `miniprogram/assets` → 权限设「所有用户可读」→
-`config.js` 的 `ASSET_BASE` 改为云直链 → 删除本地 assets → 上传体验版。
+素材 248MB(391 图 + 4,873 音频)全量在阿里云 ECS 自建 nginx(CloudBase 已于 2026-11 弃用),
+`config.js` 的 `ASSET_BASE` 已指向 `http://47.93.245.108:8081/assets`。
+换图/加字后同步:`bash scripts/ecs/sync-ecs.sh`,流程与验证见 `scripts/upload-assets.md`。
 
 ## 致谢
 

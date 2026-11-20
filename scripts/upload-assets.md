@@ -1,42 +1,30 @@
-# 素材上传云存储(上线真机必需)
+# 素材同步到阿里云 ECS(上线真机必需)
 
-小程序主包上限 2MB,21MB 素材(101 图 + 221 音频)必须放云存储,通过 HTTPS 直链访问。
-模拟器开发期可直接用包内 `miniprogram/assets`(工具不受 2MB 限制),上线前完成以下步骤。
+小程序主包上限 2MB,248MB 素材(391 图 + 4,873 音频)全部放 ECS 自建 nginx,HTTP 直链访问。
+2026-11-18 从微信云开发 CloudBase 全量迁来(CloudBase 已弃用,不再续费)。
 
-## 前置:创建云环境
+## 架构速览
 
-1. 微信开发者工具顶部工具栏点「云开发」
-2. 开通并创建环境(免费基础版即可,如 `word-park-xxxx`)
-3. 记下环境 ID
+| 项 | 值 |
+|---|---|
+| 事实源 | 本地 `upload-cloud/`(= ECS `C:\www\assets` 完整镜像) |
+| 服务地址 | `http://47.93.245.108:8081/assets/...`(nginx @ Windows Server) |
+| 同步入口 | `bash scripts/ecs/sync-ecs.sh`(增量,只传新增/变更) |
+| 全量核对 | `node scripts/check-cloud.mjs`(期望 5264 全 200) |
+| 服务器配置 | `scripts/ecs/nginx.conf`;SSH 别名 `wordpark-ecs`(~/.ssh/config) |
+| nginx 目录 | `C:\Users\Administrator\Desktop\nginx-1.31.8`(开机自启:计划任务 wordpark-nginx) |
 
-## 方式一:云开发控制台手动上传(最简单,推荐)
+## 日常同步(换图/新增字后)
 
-1. 工具栏「云开发」→「存储」
-2. **权限设置** → 选「所有用户可读」(这样文件可用 HTTPS 直链访问,无需登录态)
-3. 点「上传文件夹」,选择 `miniprogram/assets` 整个文件夹
-   (等价于最终路径 `assets/images/**` 与 `assets/audio/**`)
-4. 回到文件列表,点开任意一张图,复制「下载地址」,形如:
-   `https://word-park-xxxx.tcb.qcloud.la/assets/images/65e5.png`
+1. 生成/更新素材到 `upload-cloud/`(生图脚本两目录同时写)
+2. `bash scripts/ecs/sync-ecs.sh`
+3. **同名覆盖必须升 `miniprogram/config.js` 的 `ASSET_VER`**(微信端缓存顽固,见 char-image SKILL.md 踩坑记录)
+4. `node scripts/check-cloud.mjs` 全量核验
 
-## 方式二:命令行上传(可选)
+## ⚠️ 不要用远程 tar 解压传文件
 
-```bash
-# 首次需浏览器扫码授权(交互式)
-npx -y @cloudbase/cli login
-# <envId> 换成你的环境 ID
-npx -y @cloudbase/cli storage upload miniprogram/assets assets -e <envId>
-```
-
-## 上传完成后:切换到云端地址
-
-`miniprogram/config.js` 改一行(直链前缀到 `/assets` 为止):
-
-```js
-const ASSET_BASE = 'https://<envId>.tcb.qcloud.la/assets'
-```
-
-然后**删除 `miniprogram/assets` 目录**(否则包体积超 2MB 无法上传),
-重新编译 → 真机预览 → 上传体验版。
+Windows bsdtar 按系统 GBK 码页解 UTF-8 文件名,汉字图片名解码冲突互相覆盖
+(2026-11-18 踩坑:tar 传 391 图只落地 183 张;音频全 ASCII 幸免)。一律走 scp/SFTP 直传。
 
 ## 验证清单
 

@@ -26,21 +26,11 @@
 
 ## 待办(全部用户侧,不阻塞代码)
 
-### 1. 素材上云 ⚠️ 发布硬门控
+### 1. 素材上云 ✅ 已完成(2026-11-18 存储迁移:CloudBase → 阿里云 ECS)
 
-本地 `scripts/new-assets/assets/` 有 **208 图 + 1020 音**(含 10 个换码既有字的重生成图)。**未上传前不要发版**——新单元的图题会盲图、音题会静音(不崩溃,但体验残缺)。
-
-两条路任选:
-```
-# A. CLI(需要 cloudbase login,会出确认码)
-cloudbase storage upload scripts/new-assets/assets/images assets/images -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
-cloudbase storage upload scripts/new-assets/assets/audio  assets/audio  -e 636c-cloudbase-d8gyy2qjqef096442-1471843187
-# B. 云开发控制台手动上传两个文件夹到 assets/ 下
-```
-上传后抽查 4 个 URL 应 200(ASSET_BASE 见 `miniprogram/config.js`):
-`images/6843.png`(桃)、`audio/8bf7.wav`(请)、`audio/52a0.wav`(加)、`audio/6843-word.wav`(桃组词音)
-
-**10 字重传不可漏**:`听 米 蛋 牙 河 石 夏 飞 足 木` 的 PNG 是换码后重生成版,必须覆盖云端旧图,否则与新字(耳机位保留者/饭/锅/齿/海/岩/沙/机/脚/树)线上同图异字。本地文件已是新版,正常整目录上传即含。
+素材已全量迁至 ECS 自建 nginx(`http://47.93.245.108:8081/assets`,`config.js` ASSET_BASE 已切换),
+`node scripts/check-cloud.mjs` 全量 5264/5264 齐全。后续换图/加字走 `bash scripts/ecs/sync-ecs.sh`,
+流程与踩坑见 `scripts/upload-assets.md`。CloudBase 环境不再续费。
 
 ### 2. 产品侧字表复核(可选)
 
