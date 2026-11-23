@@ -3,7 +3,9 @@
 # 用法: bash scripts/ecs/sync-ecs.sh
 # 机制: 与上次同步清单比对,逐文件 SFTP 直传新增/变更文件(不用远程 tar:
 #       Windows bsdtar 按 GBK 码页解 UTF-8 名,汉字文件名会冲突覆盖,见 2026-11-18 迁移记录)
-# 注意: 同名覆盖后微信端缓存顽固,须同步升 miniprogram/config.js 的 ASSET_VER
+# 注意: 素材版本号由 ECS 上的 version.json 下发(小程序启动时拉,见 miniprogram/utils/asset-version.js)
+#       改了素材要刷客户端,顺序是: 覆盖文件 -> node scripts/set-asset-ver.mjs <yyyyMMdd> -> 再跑本脚本
+#       这样客户端下次启动自动换 URL 重新拉图,不用重新发版小程序
 # 说明: 只增不删;远端多出的文件不清理(如需全量重建直接喊 agent 重跑迁移)
 set -euo pipefail
 cd "$(dirname "$0")/../.."
@@ -41,4 +43,4 @@ done 3<<< "$changed"
 
 mv "$STATE.new" "$STATE"
 echo "同步完成: $n 个文件已上 ECS ($REMOTE_DIR)"
-echo "提醒: 若覆盖了同名文件,记得升 miniprogram/config.js 的 ASSET_VER"
+echo "提醒: 素材改了要刷客户端,执行 node scripts/set-asset-ver.mjs <yyyyMMdd> 后再跑一次本脚本"

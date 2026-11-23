@@ -629,7 +629,8 @@ const CHARACTERS = [
   { char: '元', pinyin: 'yuán', word: '一元钱', emojiCode: '1f4b5', stage: 3, unit: 66 },
 ]
 
-const { ASSET_BASE, ASSET_VER } = require('../config')
+const { ASSET_BASE } = require('../config')
+const { getVer } = require('./asset-version')
 
 // 与素材文件名一致:中文转 hex 码点(上.png -> 4e0a.png),纯 ASCII(panda)原样
 function assetName(name) {
@@ -644,9 +645,10 @@ function assetName(name) {
 }
 
 // 图片文件名即汉字本身(山.png),URL 中做百分号编码;音频仍走 assetName 的 hex 规则
-const imageOf = (c) => `${ASSET_BASE}/images/${encodeURIComponent(c.char)}.png?v=${ASSET_VER}`
-const pandaImage = `${ASSET_BASE}/images/panda.png?v=${ASSET_VER}`
-const welcomeBgImage = `${ASSET_BASE}/images/welcome-bg.png?v=${ASSET_VER}`
+// 版本号取云端下发的素材版本(见 utils/asset-version.js),改图不用发版
+const imageOf = (c) => `${ASSET_BASE}/images/${encodeURIComponent(c.char)}.png?v=${getVer()}`
+const pandaImage = () => `${ASSET_BASE}/images/panda.png?v=${getVer()}`
+const welcomeBgImage = () => `${ASSET_BASE}/images/welcome-bg.png?v=${getVer()}`
 
 const TOTAL_UNITS = 67 // 终局单元数(小班1-28 中班29-51 大班52-67,各段末位为复习单元)
 const byUnit = (unit) => CHARACTERS.filter((c) => c.unit === unit)

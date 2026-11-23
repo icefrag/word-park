@@ -141,5 +141,16 @@ setVoice('not-a-voice')
 check('非法音色被忽略', currentVoice() === 'tong')
 check('文件名全 ASCII', assetName('日-word') === '65e5-word')
 
+// --- 素材版本(云端下发,改素材不用发版) ---
+const { ASSET_VER } = require('../config')
+const { getVer, refresh } = require('./asset-version')
+check('素材版本默认取包内 ASSET_VER', getVer() === ASSET_VER)
+globalThis.wx.request = (opts) => opts.success({ data: { ver: '20990101' } })
+await refresh()
+check('拉到云端版本后生效', getVer() === '20990101')
+check('版本写入本地缓存', wx.getStorageSync('assetVer') === '20990101')
+check('图片 URL 带上云端版本', imageOf(CHARACTERS[0]).endsWith(`?v=${getVer()}`))
+check('音频 URL 带上云端版本', fileUrl('日').endsWith(`?v=${getVer()}`))
+
 console.log(failed === 0 ? '\n全部通过' : `\n${failed} 项失败`)
 process.exit(failed === 0 ? 0 : 1)

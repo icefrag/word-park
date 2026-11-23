@@ -51,6 +51,22 @@ node scripts/gen-new-assets.mjs  # 新增字素材生成(OpenMoji 图 + Huihui T
 `config.js` 的 `ASSET_BASE` 已指向 `http://47.93.245.108:8081/assets`。
 换图/加字后同步:`bash scripts/ecs/sync-ecs.sh`,流程与验证见 `scripts/upload-assets.md`。
 
+### 改了素材怎么让客户端更新(不用发版)
+
+素材版本号由 ECS 上的 `version.json` 下发:小程序启动时拉一次存本地,所有素材 URL 带这个版本号
+(`miniprogram/utils/asset-version.js`)。改完素材按这三步:
+
+```bash
+# 1. 覆盖 upload-cloud/ 下的素材文件(图片/音频)
+# 2. 升版本号(写 version.json + 包内兜底默认值)
+node scripts/set-asset-ver.mjs 20261124
+# 3. 同步上云(含 version.json)
+bash scripts/ecs/sync-ecs.sh
+```
+
+客户端下次启动即换 URL 重新拉图。改了 nginx 配置用 `bash scripts/ecs/reload-nginx.sh` 重载
+(nginx 由计划任务以 SYSTEM 身份运行,管理员会话直接 reload 会报 Access denied)。
+
 ## 致谢
 
 - 图片:[OpenMoji](https://openmoji.org/)(CC BY-SA 4.0)

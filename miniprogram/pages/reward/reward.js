@@ -8,7 +8,7 @@ Page({
   data: {
     stars: 0,
     theme: '',
-    pandaImage,
+    pandaImage: pandaImage(),
     confetti: [],
   },
 
@@ -26,6 +26,8 @@ Page({
   },
 
   onShow() {
+    // 素材版本可能已被云端更新,重新取一次 URL(见 utils/asset-version.js)
+    this.setData({ pandaImage: pandaImage() })
     playBgm()
   },
 
