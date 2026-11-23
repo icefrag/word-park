@@ -9,6 +9,10 @@ scripts/new-assets/assets/
 scripts/.env
 scripts/ai-raw/
 scripts/emoji-backup-*/
+scripts/cartoon-backup-*/
+
+# 工具本地配置
+.zcode/
 
 # AI配图上云暂存目录(87MB二进制,本地产物,上云后可删)
 upload-cloud/
